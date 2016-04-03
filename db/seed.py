@@ -7,18 +7,12 @@ import sys
 import csv
 from yahoo_finance import *
 
-
 """
 This file seeds the database with data from Yahoo! Finance API
 """
 
 #Stocks files
 stock_files   = ["nasdaq.csv", "amex.csv", "nyse.csv"]
-#nasdaq = "nasdaq.csv"
-#amex   = "amex.csv"
-#nyse   = "nyse.csv"
-#stock_files.extend(nasdaq, amex, nyse)
-
 
 def get_ticker_list(cursor, conn):
 	"""Open the available lists of stocks, extract their tickers, and call create_stocks
@@ -103,14 +97,9 @@ def execute(cur, conn, data, SQL):
 		print(str(e) + "\n")
 		print(str(data))
 	except psycopg2.InternalError as e:
-		pass
-		#print(str(e))
-		#print(str(data))
-		#conn.rollback()
-		#cur.execute(SQL, data)
+		print(str(e))
 	except psycopg2.ProgrammingError as e:
 		print(str(e))
-		#print(str(data))
 		exit	
 
 
