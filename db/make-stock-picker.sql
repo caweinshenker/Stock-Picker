@@ -1,5 +1,6 @@
-delete from stock;
-drop table stock;
+/* Drop tables with foreign keys first to
+   maintain referential integrity
+*/
 
 delete from stock_price;
 drop table stock_price;
@@ -7,8 +8,8 @@ drop table stock_price;
 delete from stock_dividend;
 drop table stock_dividend;
 
-delete from text;
-drop table text;
+delete from stock;
+drop table stock;
 
 delete from book;
 drop table book;
@@ -22,10 +23,13 @@ drop table lyric;
 delete from custom;
 drop table custom;
 
+delete from text;
+drop table text;
+
 CREATE TABLE stock(
-  ticker         varchar(10)  NOT NULL,
-  stock_index    varchar(20)  NOT NULL DEFAULT "no index",
-  company_name   varchar(100) NOT NULL DEFAULT "no name",
+  ticker         varchar(10) UNIQUE  NOT NULL,
+  stock_index    varchar(20)  NOT NULL,
+  company_name   varchar(100) NOT NULL,
   PRIMARY KEY    (ticker, stock_index)
 );
 
@@ -52,7 +56,7 @@ CREATE TABLE text(
   file_location  varchar(100) NOT NULL PRIMARY KEY,
   description    text,
   title          varchar(100),
-  word_count     int,
+  word_count     int
 );
    
 
@@ -67,7 +71,7 @@ CREATE TABLE poem(
 
 CREATE TABLE lyric(
   song           varchar(50),
-  album          varchar(50),
+  album          varchar(50)
  )INHERITS(text);
 
 CREATE TABLE custom(
