@@ -87,4 +87,4 @@ def main():
 	get_history(ticker_list, cur)	
 	conn.close()
 
-
+main()
