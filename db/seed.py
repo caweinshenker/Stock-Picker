@@ -5,6 +5,7 @@ import psycopg2
 import getpass
 import sys
 import csv
+sys.path.append('/home/f85/caweinsh/.local/lib/python3.4/site-packages')
 from yahoo_finance import *
 
 """
@@ -21,7 +22,6 @@ def get_ticker_list(cursor, conn):
 	Returns: ticker_list (list of stock tickers)
 	"""
 	for stock_file in stock_files:
-                #stock_csv = pd.read_csv(stock_file, sep =",", header = 0)
 		ticker_list = []
 		names_list = []
 		with open(stock_file, 'r') as csvfile:
@@ -33,8 +33,6 @@ def get_ticker_list(cursor, conn):
 					continue
 				ticker_list.append(row[0])
 				names_list.append(row[1])
-		#ticker_list = stock_csv[:,0]
-                #names_list = stock_csv[:, 1]
 		create_stocks(ticker_list, names_list, stock_file.split(".")[0], cursor, conn)
 	return(ticker_list)
 	
@@ -46,9 +44,10 @@ def create_stocks(ticker_list, names_list, index, cur, conn):
 	params: ticker_list, names_list (company names), index (stock index), cursor (database cursor)
 	"""
 	for i in range(len(ticker_list)):
+		print("Creating stock entry for: {}".format(ticker_list[i]))
 		data = (ticker_list[i], names_list[i], index,)
 		if data[0] == "MSG":
-			print("NO MSG")
+			#print("NO MSG")
 			continue
 		SQL = "INSERT INTO stock (ticker, company_name, stock_index) VALUES (%s,%s,%s);"
 		execute(cur, conn, data, SQL)
@@ -79,28 +78,30 @@ def create_stock_price(ticker, history, cur, conn):
 	Enter stock prices into Stock_price relation
 	params: ticker, history (list of hashes, each hash contains data on a given date for the given stock), cur, 
 	"""
+	print("Creating stock price entry for: {}".format(ticker))
 	for date in history:
-		day = date[u'Date']
-		open_price = date[u'Open']
-		close_price = date[u'Close']
-		data = (ticker, date, float(open_price), float(close_price))
-		print(str(data))
-		SQL = "INSERT INTO stock(ticker, date, open_price, close_price) VALUES (%s, %s, %s, %s);"
+		day = date['Date']
+		open_price = date['Open']
+		close_price = date['Close']
+		data = (ticker, day, float(open_price), float(close_price))
+		#print(str(data))
+		SQL = "INSERT INTO stock_price(ticker, pdate, open_price, close_price) VALUES (%s, %s, %s, %s);"
 		execute(cur, conn, data, SQL)
 	
 
 def execute(cur, conn, data, SQL):
-	#print(str(data))
 	try:
 		cur.execute(SQL, data)
 	except psycopg2.IntegrityError as e:
 		print(str(e) + "\n")
 		print(str(data))
+		sys.exit(0)
 	except psycopg2.InternalError as e:
 		print(str(e))
+		sys.exit(0)
 	except psycopg2.ProgrammingError as e:
 		print(str(e))
-		exit	
+		sys.exit(0)	
 
 
 def main():
