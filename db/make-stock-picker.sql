@@ -36,8 +36,8 @@ CREATE TABLE stock(
 CREATE TABLE stock_price(
   ticker         varchar(10) NOT NULL,
   pdate          date        NOT NULL,
-  open_price     numeric(10),
-  close_price    numeric(10),
+  open_price     numeric(10,4),
+  close_price    numeric(10,4),
   PRIMARY KEY    (ticker, pdate),
   FOREIGN KEY (ticker) REFERENCES stock(ticker)
 );
@@ -46,7 +46,7 @@ CREATE TABLE stock_dividend(
   ticker        varchar(10) NOT NULL,
   ddate         date        NOT NULL,
   ex_date       date        NOT NULL,
-  price         numeric(10) NOT NULL,
+  price         numeric(10,4) NOT NULL,
   PRIMARY KEY   (ticker, ddate),
   FOREIGN KEY   (ticker) REFERENCES stock(ticker)
 );
