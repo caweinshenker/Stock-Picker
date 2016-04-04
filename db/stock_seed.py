@@ -145,7 +145,7 @@ def main():
 	#Rebuild database
 	bashCommand = "psql -d caweinsh_stock_picker -f make-stock-picker.sql"
 	process = subprocess.Popen(bashCommand.split(), stdout = subprocess.PIPE)
-	#output = process.communicate()[0]
+	output = process.communicate()[0]
 	#Establish database connection
 	try:
 		conn = psycopg2.connect(database = "caweinsh_stock_picker", user = "caweinsh", password = getpass.getpass())
