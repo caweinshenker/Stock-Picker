@@ -7608,3 +7608,185 @@ Traceback (most recent call last):
   File "stock_seed.py", line 85, in create_stock_price
     day = date['Date']
 KeyError: 'Date'
+Creating stock price entry for: HST
+Creating stock price entry for: HLI
+Creating stock price entry for: HSFC^B
+Creating stock price entry for: HOV
+Creating stock price entry for: HHC
+Creating stock price entry for: HPQ
+Creating stock price entry for: HRG
+Creating stock price entry for: HSBC
+Creating stock price entry for: HSBC^A
+Creating stock price entry for: HSEA
+Creating stock price entry for: HSEB
+Creating stock price entry for: HUSI^F
+Creating stock price entry for: HUSI^G
+Creating stock price entry for: HUSI^H
+Creating stock price entry for: HNP
+Creating stock price entry for: HUBB
+Creating stock price entry for: HUBS
+Creating stock price entry for: HBM
+Creating stock price entry for: HBM.WS
+Creating stock price entry for: HPP
+Creating stock price entry for: HGT
+Creating stock price entry for: HUM
+Creating stock price entry for: HII
+Creating stock price entry for: HUN
+Creating stock price entry for: H
+Creating stock price entry for: HY
+Creating stock price entry for: IAG
+Creating stock price entry for: IBN
+Creating stock price entry for: IDA
+Creating stock price entry for: IEX
+Creating stock price entry for: IDT
+Creating stock price entry for: IHS
+Creating stock price entry for: ITW
+Creating stock price entry for: IMN
+Creating stock price entry for: IMAX
+Creating stock price entry for: IMPV
+Creating stock price entry for: IMPR
+Creating stock price entry for: IMS
+Creating stock price entry for: ICD
+Creating stock price entry for: IHC
+Creating stock price entry for: IFN
+Creating stock price entry for: IBA
+Creating stock price entry for: BLOX
+Creating stock price entry for: INFY
+Creating stock price entry for: HIFR
+Creating stock price entry for: IND
+Creating stock price entry for: ING
+Creating stock price entry for: INZ
+Creating stock price entry for: ISF
+Creating stock price entry for: ISG
+Creating stock price entry for: ISP
+Creating stock price entry for: IR
+Creating stock price entry for: IM
+Creating stock price entry for: INGR
+Creating stock price entry for: IPHI
+Creating stock price entry for: NSP
+Creating stock price entry for: IBP
+Creating stock price entry for: INST
+Creating stock price entry for: I
+Creating stock price entry for: I^A
+Creating stock price entry for: ICE
+Creating stock price entry for: IHG
+Creating stock price entry for: IFF
+Creating stock price entry for: IBM
+Creating stock price entry for: IGT
+Creating stock price entry for: IP
+Creating stock price entry for: IOC
+Creating stock price entry for: IPG
+Creating stock price entry for: IPL^D
+Creating stock price entry for: INXN
+Creating stock price entry for: IL
+Creating stock price entry for: SNOW
+Creating stock price entry for: IPI
+Creating stock price entry for: XON
+Creating stock price entry for: IVC
+Creating stock price entry for: INVN
+Creating stock price entry for: VBF
+Creating stock price entry for: VCV
+Creating stock price entry for: VTA
+Creating stock price entry for: VLT
+Creating stock price entry for: IVR
+Creating stock price entry for: IVR^B
+Creating stock price entry for: IVR^A
+Creating stock price entry for: OIA
+Creating stock price entry for: VMO
+Process Process-12:
+Traceback (most recent call last):
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 254, in _bootstrap
+    self.run()
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "stock_seed.py", line 75, in get_history
+    create_stock_price(ticker, history, cur, conn)
+  File "stock_seed.py", line 85, in create_stock_price
+    day = date['Date']
+KeyError: 'Date'
+Creating stock price entry for: DDD
+Creating stock price entry for: MMM
+Creating stock price entry for: WBAI
+Creating stock price entry for: WUBA
+Creating stock price entry for: AHC
+Creating stock price entry for: ATEN
+Creating stock price entry for: AAC
+Creating stock price entry for: AIR
+Creating stock price entry for: AAN
+Creating stock price entry for: ABB
+Creating stock price entry for: ABT
+Creating stock price entry for: ABBV
+Creating stock price entry for: ANF
+Creating stock price entry for: GCH
+Creating stock price entry for: JEQ
+Creating stock price entry for: SGF
+Creating stock price entry for: ABM
+Creating stock price entry for: AKR
+Creating stock price entry for: ACN
+Creating stock price entry for: ACCO
+Creating stock price entry for: ACW
+Creating stock price entry for: ATV
+Creating stock price entry for: ATU
+Creating stock price entry for: AYI
+Creating stock price entry for: ADX
+Creating stock price entry for: PEO
+Creating stock price entry for: AGRO
+Creating stock price entry for: ADPT
+Creating stock price entry for: ADT
+Creating stock price entry for: AAP
+Creating stock price entry for: WMS
+Creating stock price entry for: ASX
+Creating stock price entry for: AAV
+Creating stock price entry for: ATE
+Creating stock price entry for: AVK
+Creating stock price entry for: AGC
+Creating stock price entry for: LCM
+Creating stock price entry for: ACM
+Creating stock price entry for: ANW
+Creating stock price entry for: AEB
+Creating stock price entry for: AED
+Creating stock price entry for: AEG
+Creating stock price entry for: AEH
+Creating stock price entry for: AEK
+Creating stock price entry for: AER
+Creating stock price entry for: HIVE
+Creating stock price entry for: AJRD
+Creating stock price entry for: ARO
+Creating stock price entry for: AET
+Creating stock price entry for: AMG
+Creating stock price entry for: MGR
+Creating stock price entry for: AFL
+Creating stock price entry for: AFSD
+Creating stock price entry for: MITT
+Creating stock price entry for: MITT^A
+Creating stock price entry for: MITT^B
+Creating stock price entry for: AGCO
+Creating stock price entry for: A
+Creating stock price entry for: GAS
+Creating stock price entry for: AEM
+Creating stock price entry for: ADC
+Creating stock price entry for: GRO
+Creating stock price entry for: AGU
+Creating stock price entry for: AL
+Creating stock price entry for: APD
+Creating stock price entry for: AYR
+Creating stock price entry for: ARG
+Creating stock price entry for: AKS
+Creating stock price entry for: ALP^O
+Creating stock price entry for: ALG
+Creating stock price entry for: AGI
+Creating stock price entry for: ALK
+Creating stock price entry for: AIN
+Creating stock price entry for: ALB
+Creating stock price entry for: AA
+Process Process-1:
+Traceback (most recent call last):
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 254, in _bootstrap
+    self.run()
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "stock_seed.py", line 75, in get_history
+    create_stock_price(ticker, history, cur, conn)
+  File "stock_seed.py", line 85, in create_stock_price
+    day = date['Date']
+KeyError: 'Date'
