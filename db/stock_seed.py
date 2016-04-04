@@ -1,6 +1,7 @@
 #import pandas as pd
 import time
 import multiprocessing
+import subprocess
 from datetime import date
 import psycopg2
 import getpass
@@ -141,6 +142,10 @@ def process_launch_dividends(processes, ticker_list, cur, conn):
 
 
 def main():
+	#Rebuild database
+	bashCommand = "make-stock-picker.sql"
+	process = subprocess.Popen(bashCommand, stdout=subprocess.PIPE)
+	output = process.communicate()[0]
 	#Establish database connection
 	try:
 		conn = psycopg2.connect(database = "caweinsh_stock_picker", user = "caweinsh", password = getpass.getpass())
