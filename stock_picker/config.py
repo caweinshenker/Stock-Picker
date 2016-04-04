@@ -1,9 +1,22 @@
-#all the imports
-from flask import Flask, request, session, g, redirect, url_for, \ 
-	abort, render_template, flash
-from flask.ext.sqlalchemy import SQLAlchemy
+import os
+basedir = os.path.abspath(os.path.dirname(__file__))
 
-#configuration
-app = Flask(__name__)
-DEBUG = True
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/caweinsh_
+class Config(object):
+	DEBUG = False
+	TESTING = False
+	CSRF_ENABLED = True
+	SECRET_KEY = ""
+	SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']	
+
+
+class Production Config(Config):
+	DEBUG = False
+
+class StagingConfig(Config):
+	DEVELOPMENT = TRUE
+	DEBUG = TRUE
+
+class TestingConfig(Config):
+	TESTING = True
+
+	

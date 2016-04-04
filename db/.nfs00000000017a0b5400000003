@@ -6741,3 +6741,47 @@ Creating stock price entry for: ZOES
 Creating stock price entry for: ZTS
 Creating stock price entry for: ZF
 Creating stock price entry for: ZTR
+Creating stock price entry for: TRQ
+Creating stock price entry for: TPC
+Creating stock price entry for: TWTR
+Creating stock price entry for: TWO
+Creating stock price entry for: TYC
+Creating stock price entry for: TYL
+Creating stock price entry for: TSN
+Creating stock price entry for: TSNU
+Creating stock price entry for: USB
+Creating stock price entry for: USB^A
+Creating stock price entry for: USB^H
+Creating stock price entry for: USB^M
+Creating stock price entry for: USB^N
+Creating stock price entry for: USB^O
+Creating stock price entry for: USPH
+Creating stock price entry for: SLCA
+Creating stock price entry for: UBS
+Creating stock price entry for: UBS^D
+Creating stock price entry for: UCP
+Creating stock price entry for: UGI
+Creating stock price entry for: UPL
+Creating stock price entry for: UGP
+Creating stock price entry for: UMH
+Creating stock price entry for: UMH^A
+Creating stock price entry for: UMH^B
+Creating stock price entry for: UA
+Process Process-23:
+Traceback (most recent call last):
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 254, in _bootstrap
+    self.run()
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "stock_seed.py", line 68, in get_history
+  File "/home/f85/caweinsh/.local/lib/python3.4/site-packages/yahoo_finance/__init__.py", line 178, in __init__
+    self.refresh()
+  File "/home/f85/caweinsh/.local/lib/python3.4/site-packages/yahoo_finance/__init__.py", line 142, in refresh
+    self.data_set = self._fetch()
+  File "/home/f85/caweinsh/.local/lib/python3.4/site-packages/yahoo_finance/__init__.py", line 181, in _fetch
+    data = super(Share, self)._fetch()
+  File "/home/f85/caweinsh/.local/lib/python3.4/site-packages/yahoo_finance/__init__.py", line 134, in _fetch
+    data = self._request(query)
+  File "/home/f85/caweinsh/.local/lib/python3.4/site-packages/yahoo_finance/__init__.py", line 120, in _request
+    _, results = response['query']['results'].popitem()
+AttributeError: 'NoneType' object has no attribute 'popitem'
