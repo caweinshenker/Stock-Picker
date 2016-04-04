@@ -6785,3 +6785,125 @@ Traceback (most recent call last):
   File "/home/f85/caweinsh/.local/lib/python3.4/site-packages/yahoo_finance/__init__.py", line 120, in _request
     _, results = response['query']['results'].popitem()
 AttributeError: 'NoneType' object has no attribute 'popitem'
+Creating stock price entry for: AEO
+Creating stock price entry for: AEP
+Creating stock price entry for: AEL
+Creating stock price entry for: AXP
+Creating stock price entry for: AFA
+Creating stock price entry for: AFG
+Creating stock price entry for: AFGE
+Creating stock price entry for: AFGH
+Creating stock price entry for: AFW
+Creating stock price entry for: AMH
+Creating stock price entry for: AMH^A
+Creating stock price entry for: AMH^B
+Creating stock price entry for: AMH^C
+Creating stock price entry for: AIG
+Creating stock price entry for: AIG.WS
+Creating stock price entry for: AMID
+Creating stock price entry for: ARL
+Creating stock price entry for: AWR
+Creating stock price entry for: AMT
+Creating stock price entry for: AMT^A
+Creating stock price entry for: AMT^B
+Creating stock price entry for: AVD
+Creating stock price entry for: AWK
+Creating stock price entry for: APU
+Creating stock price entry for: AMP
+Creating stock price entry for: ABC
+Creating stock price entry for: ANFI
+Creating stock price entry for: AHS
+Creating stock price entry for: AP
+Creating stock price entry for: APH
+Creating stock price entry for: BETR
+Creating stock price entry for: AXR
+Creating stock price entry for: AME
+Creating stock price entry for: AFSI^A
+Creating stock price entry for: AFSI^B
+Creating stock price entry for: AFSI^C
+Creating stock price entry for: AFSI^D
+Creating stock price entry for: AFSI^E
+Creating stock price entry for: AFSS
+Creating stock price entry for: AFST
+Creating stock price entry for: AEUA
+Creating stock price entry for: APC
+Creating stock price entry for: AU
+Creating stock price entry for: BUD
+Creating stock price entry for: AXE
+Creating stock price entry for: NLY
+Creating stock price entry for: NLY^A
+Creating stock price entry for: NLY^C
+Creating stock price entry for: NLY^D
+Creating stock price entry for: AM
+Creating stock price entry for: AR
+Creating stock price entry for: ANTM
+Creating stock price entry for: ANTX
+Creating stock price entry for: ANH
+Creating stock price entry for: ANH^A
+Creating stock price entry for: ANH^B
+Creating stock price entry for: ANH^C
+Creating stock price entry for: AON
+Creating stock price entry for: APA
+Creating stock price entry for: AIV
+Creating stock price entry for: AIV^A
+Creating stock price entry for: AIV^Z
+Creating stock price entry for: ARI
+Creating stock price entry for: ARI^A
+Creating stock price entry for: APO
+Creating stock price entry for: AIB
+Creating stock price entry for: AIY
+Creating stock price entry for: AMTG
+Creating stock price entry for: AMTG^A
+Creating stock price entry for: AFT
+Creating stock price entry for: AIF
+Creating stock price entry for: APLE
+Creating stock price entry for: AIT
+Creating stock price entry for: ATR
+Creating stock price entry for: WTR
+Creating stock price entry for: ARMK
+Creating stock price entry for: ABR
+Creating stock price entry for: ABR^A
+Creating stock price entry for: ABR^B
+Creating stock price entry for: ABR^C
+Creating stock price entry for: ABRN
+Creating stock price entry for: ARC
+Creating stock price entry for: ARCX
+Creating stock price entry for: MT
+Creating stock price entry for: ARH^C
+Creating stock price entry for: ADM
+Creating stock price entry for: AROC
+Creating stock price entry for: ARCO
+Creating stock price entry for: ASC
+Creating stock price entry for: AFC
+Creating stock price entry for: ARU
+Creating stock price entry for: ACRE
+Creating stock price entry for: ARDC
+Creating stock price entry for: ARES
+Creating stock price entry for: AGX
+Creating stock price entry for: ANET
+Creating stock price entry for: AI
+Creating stock price entry for: AIC
+Creating stock price entry for: AIW
+Creating stock price entry for: AHH
+Creating stock price entry for: ARR
+Creating stock price entry for: ARR^A
+Creating stock price entry for: ARR^B
+Process Process-2:
+Traceback (most recent call last):
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 254, in _bootstrap
+    self.run()
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "stock_seed.py", line 68, in get_history
+    stock = Share(ticker)
+  File "/home/f85/caweinsh/.local/lib/python3.4/site-packages/yahoo_finance/__init__.py", line 178, in __init__
+    self.refresh()
+  File "/home/f85/caweinsh/.local/lib/python3.4/site-packages/yahoo_finance/__init__.py", line 142, in refresh
+    self.data_set = self._fetch()
+  File "/home/f85/caweinsh/.local/lib/python3.4/site-packages/yahoo_finance/__init__.py", line 181, in _fetch
+    data = super(Share, self)._fetch()
+  File "/home/f85/caweinsh/.local/lib/python3.4/site-packages/yahoo_finance/__init__.py", line 134, in _fetch
+    data = self._request(query)
+  File "/home/f85/caweinsh/.local/lib/python3.4/site-packages/yahoo_finance/__init__.py", line 120, in _request
+    _, results = response['query']['results'].popitem()
+AttributeError: 'NoneType' object has no attribute 'popitem'
