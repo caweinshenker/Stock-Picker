@@ -46,7 +46,7 @@ def create_stocks(ticker_list, names_list, index, cur, conn):
 	params: ticker_list, names_list (company names), index (stock index), cursor (database cursor)
 	"""
 	for i in range(len(ticker_list)):
-		print("Creating stock entry for: {}".format(ticker_list[i]))
+		#print("Creating stock entry for: {}".format(ticker_list[i]))
 		data = (ticker_list[i], names_list[i], index,)
 		if data[0] == "MSG":
 			#print("NO MSG")
@@ -80,7 +80,7 @@ def create_stock_price(ticker, history, cur, conn):
 	Enter stock prices into Stock_price relation
 	params: ticker, history (list of hashes, each hash contains data on a given date for the given stock), cur, 
 	"""
-	print("Creating stock price entry for: {}".format(ticker))
+	#print("Creating stock price entry for: {}".format(ticker))
 	for date in history:
 		day = date['Date']
 		open_price = date['Open']
@@ -145,7 +145,7 @@ def main():
 	#Rebuild database
 	bashCommand = "psql -d caweinsh_stock_picker -f make-stock-picker.sql"
 	process = subprocess.Popen(bashCommand.split(), stdout = subprocess.PIPE)
-	output = process.communicate()[0]
+	#output = process.communicate()[0]
 	#Establish database connection
 	try:
 		conn = psycopg2.connect(database = "caweinsh_stock_picker", user = "caweinsh", password = getpass.getpass())
