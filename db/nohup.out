@@ -1,6 +1,0 @@
-duplicate key value violates unique constraint "stock_pkey"
-DETAIL:  Key (ticker, stock_index)=(TFSC, nasdaq) already exists.
-
-
-('TFSC', '1347 Capital Corp.', 'nasdaq')
-psql: fe_sendauth: no password supplied
