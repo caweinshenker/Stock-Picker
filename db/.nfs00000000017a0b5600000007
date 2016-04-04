@@ -1210,3 +1210,108 @@ Traceback (most recent call last):
   File "stock_seed.py", line 103, in execute
     cur.execute(SQL, data)
 KeyboardInterrupt
+Process Process-10:
+Traceback (most recent call last):
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 254, in _bootstrap
+    self.run()
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "stock_seed.py", line 75, in get_history
+    create_stock_price(ticker, history, cur, conn)
+  File "stock_seed.py", line 85, in create_stock_price
+    day = date['Date']
+KeyError: 'Date'
+Process Process-23:
+Traceback (most recent call last):
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 254, in _bootstrap
+    self.run()
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "stock_seed.py", line 68, in get_history
+    stock = Share(ticker)
+  File "/home/f85/caweinsh/.local/lib/python3.4/site-packages/yahoo_finance/__init__.py", line 178, in __init__
+    self.refresh()
+  File "/home/f85/caweinsh/.local/lib/python3.4/site-packages/yahoo_finance/__init__.py", line 142, in refresh
+    self.data_set = self._fetch()
+  File "/home/f85/caweinsh/.local/lib/python3.4/site-packages/yahoo_finance/__init__.py", line 181, in _fetch
+    data = super(Share, self)._fetch()
+  File "/home/f85/caweinsh/.local/lib/python3.4/site-packages/yahoo_finance/__init__.py", line 134, in _fetch
+    data = self._request(query)
+  File "/home/f85/caweinsh/.local/lib/python3.4/site-packages/yahoo_finance/__init__.py", line 120, in _request
+    _, results = response['query']['results'].popitem()
+AttributeError: 'NoneType' object has no attribute 'popitem'
+Process Process-2:
+Traceback (most recent call last):
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 254, in _bootstrap
+    self.run()
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "stock_seed.py", line 68, in get_history
+    stock = Share(ticker)
+  File "/home/f85/caweinsh/.local/lib/python3.4/site-packages/yahoo_finance/__init__.py", line 178, in __init__
+    self.refresh()
+  File "/home/f85/caweinsh/.local/lib/python3.4/site-packages/yahoo_finance/__init__.py", line 142, in refresh
+    self.data_set = self._fetch()
+  File "/home/f85/caweinsh/.local/lib/python3.4/site-packages/yahoo_finance/__init__.py", line 181, in _fetch
+    data = super(Share, self)._fetch()
+  File "/home/f85/caweinsh/.local/lib/python3.4/site-packages/yahoo_finance/__init__.py", line 134, in _fetch
+    data = self._request(query)
+  File "/home/f85/caweinsh/.local/lib/python3.4/site-packages/yahoo_finance/__init__.py", line 120, in _request
+    _, results = response['query']['results'].popitem()
+AttributeError: 'NoneType' object has no attribute 'popitem'
+NO MSG
+Process Process-15:
+Traceback (most recent call last):
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 254, in _bootstrap
+    self.run()
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "stock_seed.py", line 75, in get_history
+    create_stock_price(ticker, history, cur, conn)
+  File "stock_seed.py", line 85, in create_stock_price
+    day = date['Date']
+KeyError: 'Date'
+Process Process-17:
+Traceback (most recent call last):
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 254, in _bootstrap
+    self.run()
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "stock_seed.py", line 75, in get_history
+    create_stock_price(ticker, history, cur, conn)
+  File "stock_seed.py", line 85, in create_stock_price
+    day = date['Date']
+KeyError: 'Date'
+Process Process-1:
+Traceback (most recent call last):
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 254, in _bootstrap
+    self.run()
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "stock_seed.py", line 75, in get_history
+    create_stock_price(ticker, history, cur, conn)
+  File "stock_seed.py", line 85, in create_stock_price
+    day = date['Date']
+KeyError: 'Date'
+Process Process-16:
+Traceback (most recent call last):
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 254, in _bootstrap
+    self.run()
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "stock_seed.py", line 75, in get_history
+    create_stock_price(ticker, history, cur, conn)
+  File "stock_seed.py", line 85, in create_stock_price
+    day = date['Date']
+KeyError: 'Date'
+Process Process-13:
+Traceback (most recent call last):
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 254, in _bootstrap
+    self.run()
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "stock_seed.py", line 75, in get_history
+    create_stock_price(ticker, history, cur, conn)
+  File "stock_seed.py", line 85, in create_stock_price
+    day = date['Date']
+KeyError: 'Date'
