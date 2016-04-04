@@ -1,5 +1,6 @@
 #import pandas as pd
 import time
+import multiprocessing
 from datetime import date
 import psycopg2
 import getpass
@@ -51,7 +52,7 @@ def create_stocks(ticker_list, names_list, index, cur, conn):
 			continue
 		SQL = "INSERT INTO stock (ticker, company_name, stock_index) VALUES (%s,%s,%s);"
 		execute(cur, conn, data, SQL)
-	
+	conn.commit()
 	 
 def get_history(ticker_list, cur, conn):
 	"""
@@ -87,6 +88,13 @@ def create_stock_price(ticker, history, cur, conn):
 		#print(str(data))
 		SQL = "INSERT INTO stock_price(ticker, pdate, open_price, close_price) VALUES (%s, %s, %s, %s);"
 		execute(cur, conn, data, SQL)
+	conn.commit()
+
+
+#def create_dividends(ticker_list, cur, conn):
+	#SQL = "INSERT INTO stock_dividend(ticker
+	#for i in range(ticker_list):
+		
 	
 
 def execute(cur, conn, data, SQL):
@@ -101,7 +109,35 @@ def execute(cur, conn, data, SQL):
 		sys.exit(0)
 	except psycopg2.ProgrammingError as e:
 		print(str(e))
-		sys.exit(0)	
+		sys.exit(0)
+
+def process_launch_stocks(processes, ticker_list, cur, conn):
+	"""
+	Pass the ticker list in chunks to the API for processing.
+	Leverage multiprocessing.
+	"""
+	chunk_size = int(len(ticker_list) / processes)
+	processes = []
+	for i in range(0, len(ticker_list), chunk_size):
+		chunk = ticker_list[i: i + chunk_size]
+		p = multiprocessing.Process(target=get_history, args=(chunk, cur, conn,))
+		processes.append(p)
+		p.start()
+	for process in processes:
+		process.join()
+
+
+def process_launch_dividends(processes, ticker_list, cur, conn):
+	chunk_size = int(len(ticker_list) / processes)
+	processes = []
+	for i in range(0, len(ticker_list), chunk_size):
+		chunk = ticker_list[i: i + chunk_size]
+		p = multiprocessing.Process(target=create_dividends, args=(chunk, cur, conn,))
+		processes.append(p)
+		p.start()
+	for process in processes:
+		process.join()
+
 
 
 def main():
@@ -113,7 +149,9 @@ def main():
 		exit
 	cur = conn.cursor()
 	ticker_list = get_ticker_list(cur, conn)
-	get_history(ticker_list, cur, conn)	
+	#Launch multithreading to handle  API data
+	process_launch_stocks(24, ticker_list, cur, conn)
+	cur.close()	
 	conn.close()
 
 main()
