@@ -6701,17 +6701,3 @@ Creating stock entry for: ZOES
 Creating stock entry for: ZTS
 Creating stock entry for: ZF
 Creating stock entry for: ZTR
-Creating stock price entry for: DDD
-Creating stock price entry for: MMM
-Creating stock price entry for: WBAI
-Creating stock price entry for: WUBA
-Traceback (most recent call last):
-  File "seed.py", line 122, in <module>
-    main()
-  File "seed.py", line 119, in main
-    get_history(ticker_list, cur, conn)	
-  File "seed.py", line 76, in get_history
-    create_stock_price(ticker, history, cur, conn)
-  File "seed.py", line 86, in create_stock_price
-    day = date[u'Date']
-KeyError: 'Date'

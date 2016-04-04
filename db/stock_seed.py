@@ -143,8 +143,8 @@ def process_launch_dividends(processes, ticker_list, cur, conn):
 
 def main():
 	#Rebuild database
-	bashCommand = "make-stock-picker.sql"
-	process = subprocess.Popen(bashCommand, stdout=subprocess.PIPE)
+	bashCommand = "psql -d caweinsh_stock_picker -f make-stock-picker.sql"
+	process = subprocess.Popen(bashCommand.split(), stdout = subprocess.PIPE)
 	output = process.communicate()[0]
 	#Establish database connection
 	try:
