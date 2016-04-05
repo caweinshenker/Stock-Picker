@@ -148,7 +148,7 @@ def main():
 	output = process.communicate()[0]
 	#Establish database connection
 	try:
-		conn = psycopg2.connect(database = "caweinsh_stock_picker", user = "caweinsh", password = getpass.getpass())
+		conn = psycopg2.connect(database = "caweinsh_sp", user = "caweinsh", password = getpass.getpass())
 	except StandardError as e:
 		print(str(e))
 		exit
