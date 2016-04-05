@@ -1,0 +1,175 @@
+Process Process-1:
+Traceback (most recent call last):
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 254, in _bootstrap
+    self.run()
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+TypeError: get_history() missing 1 required positional argument: 'argv'
+Process Process-2:
+Traceback (most recent call last):
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 254, in _bootstrap
+    self.run()
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+TypeError: get_history() missing 1 required positional argument: 'argv'
+Process Process-3:
+Traceback (most recent call last):
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 254, in _bootstrap
+    self.run()
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+TypeError: get_history() missing 1 required positional argument: 'argv'
+Process Process-4:
+Traceback (most recent call last):
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 254, in _bootstrap
+    self.run()
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+TypeError: get_history() missing 1 required positional argument: 'argv'
+Process Process-5:
+Traceback (most recent call last):
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 254, in _bootstrap
+    self.run()
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+TypeError: get_history() missing 1 required positional argument: 'argv'
+Process Process-6:
+Traceback (most recent call last):
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 254, in _bootstrap
+    self.run()
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+TypeError: get_history() missing 1 required positional argument: 'argv'
+Process Process-7:
+Traceback (most recent call last):
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 254, in _bootstrap
+    self.run()
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+TypeError: get_history() missing 1 required positional argument: 'argv'
+Process Process-8:
+Traceback (most recent call last):
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 254, in _bootstrap
+    self.run()
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+TypeError: get_history() missing 1 required positional argument: 'argv'
+Process Process-9:
+Traceback (most recent call last):
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 254, in _bootstrap
+    self.run()
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+TypeError: get_history() missing 1 required positional argument: 'argv'
+Process Process-10:
+Traceback (most recent call last):
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 254, in _bootstrap
+    self.run()
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+TypeError: get_history() missing 1 required positional argument: 'argv'
+Process Process-11:
+Traceback (most recent call last):
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 254, in _bootstrap
+    self.run()
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+TypeError: get_history() missing 1 required positional argument: 'argv'
+Process Process-12:
+Traceback (most recent call last):
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 254, in _bootstrap
+    self.run()
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+TypeError: get_history() missing 1 required positional argument: 'argv'
+Process Process-13:
+Traceback (most recent call last):
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 254, in _bootstrap
+    self.run()
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+TypeError: get_history() missing 1 required positional argument: 'argv'
+Process Process-14:
+Traceback (most recent call last):
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 254, in _bootstrap
+    self.run()
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+TypeError: get_history() missing 1 required positional argument: 'argv'
+Process Process-15:
+Traceback (most recent call last):
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 254, in _bootstrap
+    self.run()
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+TypeError: get_history() missing 1 required positional argument: 'argv'
+Process Process-16:
+Traceback (most recent call last):
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 254, in _bootstrap
+    self.run()
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+TypeError: get_history() missing 1 required positional argument: 'argv'
+Process Process-17:
+Traceback (most recent call last):
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 254, in _bootstrap
+    self.run()
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+TypeError: get_history() missing 1 required positional argument: 'argv'
+Process Process-18:
+Traceback (most recent call last):
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 254, in _bootstrap
+    self.run()
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+TypeError: get_history() missing 1 required positional argument: 'argv'
+Process Process-19:
+Traceback (most recent call last):
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 254, in _bootstrap
+    self.run()
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+TypeError: get_history() missing 1 required positional argument: 'argv'
+Process Process-20:
+Traceback (most recent call last):
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 254, in _bootstrap
+    self.run()
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+TypeError: get_history() missing 1 required positional argument: 'argv'
+Process Process-21:
+Traceback (most recent call last):
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 254, in _bootstrap
+    self.run()
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+TypeError: get_history() missing 1 required positional argument: 'argv'
+Process Process-22:
+Traceback (most recent call last):
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 254, in _bootstrap
+    self.run()
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+TypeError: get_history() missing 1 required positional argument: 'argv'
+Process Process-23:
+Traceback (most recent call last):
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 254, in _bootstrap
+    self.run()
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+TypeError: get_history() missing 1 required positional argument: 'argv'
+Process Process-24:
+Traceback (most recent call last):
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 254, in _bootstrap
+    self.run()
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+TypeError: get_history() missing 1 required positional argument: 'argv'
+Process Process-25:
+Traceback (most recent call last):
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 254, in _bootstrap
+    self.run()
+  File "/usr/lib64/python3.4/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+TypeError: get_history() missing 1 required positional argument: 'argv'

@@ -39,7 +39,7 @@ def get_ticker_list(cursor, conn):
 
 
  
-def get_history(ticker_list, cur, conn):
+def get_history(ticker_list, cur, conn, argv):
 	"""
 	Use Yahoo API to get stock data for past 40 years and pass data to create_stock_price
         Params: ticker_list, names_list (stock names), index (stock index), cursor (database cursor)
@@ -48,11 +48,13 @@ def get_history(ticker_list, cur, conn):
 		#Deal w/ data-cleaning issue
 		if ticker == "MSG":
 			continue
-		stock = Share(ticker)
-		today = date(2016,4,4)
-		year_difference = timedelta(days=(-365 * 5))
-		history_date = today + year_difference
-		history = stock.get_historical(str(history_date), str(today))
+		try:
+			stock = Share(ticker)
+		except AttributeError:
+			continue
+		date1 = argv[1]
+		date2 = argv[2]
+		history = stock.get_historical(str(date1), str(date2))
 		create_stock_price(ticker, history, cur, conn)
 
 
@@ -63,9 +65,18 @@ def create_stock_price(ticker, history, cur, conn):
 	"""
 	#print("Creating stock price entry for: {}".format(ticker))
 	for date in history:
-		day = date['Date']
-		open_price = date['Open']
-		close_price = date['Close']
+		try:
+			day = date['Date']
+		except KeyError:
+			continue
+		try:
+			open_price = date['Open']
+		except KeyError:
+			continue
+		try:
+			close_price = date['Close']
+		except KeyError:
+			continue
 		data = (ticker, day, float(open_price), float(close_price))
 		#print(str(data))
 		SQL = "INSERT INTO stock_price(ticker, pdate, open_price, close_price) VALUES (%s, %s, %s, %s);"
@@ -86,7 +97,7 @@ def execute(cur, conn, data, SQL):
 		print(str(e))
 		sys.exit(0)
 
-def process_launch_stocks(processes, ticker_list, cur, conn):
+def process_launch_stocks(processes, ticker_list, cur, conn, argv):
 	"""
 	Pass the ticker list in chunks to the API for processing.
 	Leverage multiprocessing.
@@ -95,24 +106,24 @@ def process_launch_stocks(processes, ticker_list, cur, conn):
 	processes = []
 	for i in range(0, len(ticker_list), chunk_size):
 		chunk = ticker_list[i: i + chunk_size]
-		p = multiprocessing.Process(target=get_history, args=(chunk, cur, conn,))
+		p = multiprocessing.Process(target=get_history, args=(chunk, cur, conn,argv,))
 		processes.append(p)
 		p.start()
 	for process in processes:
 		process.join()
 
 
-def main():
+def main(argv):
 	try:
-		conn = psycopg2.connect(database = "caweinsh_stock_picker2", user = "caweinsh", password = getpass.getpass())
+		conn = psycopg2.connect(database = "caweinsh_sp", user = "caweinsh", password = 'f6nt0d')
 	except StandardError as e:
 		print(str(e))
 		exit
 	cur = conn.cursor()
 	ticker_list = get_ticker_list(cur, conn)
 	#Launch multithreading to handle  API data
-	process_launch_stocks(24, ticker_list, cur, conn)
+	process_launch_stocks(24, ticker_list, cur, conn, argv)
 	cur.close()	
 	conn.close()
 
-main()
+main(sys.argv)

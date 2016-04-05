@@ -49,7 +49,7 @@ def create_stocks(ticker_list, names_list, index, cur, conn):
 			continue
 		SQL = "INSERT INTO stock (ticker, company_name, stock_index) VALUES (%s,%s,%s);"
 		execute(cur, conn, data, SQL)
-	 	
+	conn.commit() 	
 	 
 def execute(cur, conn, data, SQL):
 	try:
@@ -68,7 +68,7 @@ def execute(cur, conn, data, SQL):
 def main():
 	#Establish database connection
 	try:
-		conn = psycopg2.connect(database = "caweinsh_stock_picker2", user = "caweinsh", password = getpass.getpass())
+		conn = psycopg2.connect(database = "caweinsh_sp", user = "caweinsh", password = 'f6nt0d')
 	except StandardError as e:
 		print(str(e))
 		exit
