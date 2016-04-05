@@ -14,7 +14,7 @@ from yahoo_finance import *
 """
 This file seeds the database with data from Yahoo! Finance API
 
-UPDATED: 2006-04-04 2016-04-04
+UPDATED: 2013-04-04 2016-04-04
 """
 
 #Stocks files
@@ -117,7 +117,7 @@ def process_launch_stocks(processes, ticker_list, cur, conn, argv):
 
 def main(argv):
 	try:
-		conn = psycopg2.connect(database = "caweinsh_sp", user = "caweinsh", password = 'f6nt0d')
+		conn = psycopg2.connect(database = "caweinsh_sp2", user = "caweinsh", password = getpass.getpass())
 	except StandardError as e:
 		print(str(e))
 		exit
