@@ -13,6 +13,8 @@ from yahoo_finance import *
 
 """
 This file seeds the database with data from Yahoo! Finance API
+
+UPDATED: 2006-04-04 2016-04-04
 """
 
 #Stocks files
