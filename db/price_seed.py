@@ -3,6 +3,7 @@ import time
 import multiprocessing
 import subprocess
 from datetime import date
+from datetime import timedelta
 import psycopg2
 import getpass
 import sys
@@ -12,7 +13,6 @@ from yahoo_finance import *
 
 """
 This file seeds the database with data from Yahoo! Finance API
-Last update: 4/4/2014-4/4/2016
 """
 
 #Stocks files
@@ -24,9 +24,8 @@ def get_ticker_list(cursor, conn):
 	Params: cursor (database cursor)
 	Returns: ticker_list (list of stock tickers)
 	"""
+	ticker_list = []
 	for stock_file in stock_files:
-		ticker_list = []
-		names_list = []
 		with open(stock_file, 'r') as csvfile:
 			firstline = True
 			reader = csv.reader(csvfile, delimiter =",")
@@ -35,29 +34,25 @@ def get_ticker_list(cursor, conn):
 					firstline = False
 					continue
 				ticker_list.append(row[0])
-				names_list.append(row[1])
 	return(ticker_list)
 	
-	
-	 
-def get_history(ticker_list, cur, conn, argv):
+
+
+ 
+def get_history(ticker_list, cur, conn):
 	"""
-	Use Yahoo API to get stock data for date range specified in 
-	argv and pass data to create_stock_price
-        Params: ticker_list, names_list (stock names), index (stock index), 
-	cursor (database cursor)
+	Use Yahoo API to get stock data for past 40 years and pass data to create_stock_price
+        Params: ticker_list, names_list (stock names), index (stock index), cursor (database cursor)
 	"""
 	for ticker in ticker_list:
 		#Deal w/ data-cleaning issue
-		if ticker == "MSG" or ticker == "PBB":
+		if ticker == "MSG":
 			continue
-		try:
-			stock = Share(ticker)
-		except AttributeError:
-			continue
-		start_date = argv[1]
-		end_date = argv[2]
-		history = stock.get_historical(start_date, end_date)
+		stock = Share(ticker)
+		today = date(2016,4,4)
+		year_difference = timedelta(days=(-365 * 5))
+		history_date = today + year_difference
+		history = stock.get_historical(str(history_date), str(today))
 		create_stock_price(ticker, history, cur, conn)
 
 
@@ -72,12 +67,12 @@ def create_stock_price(ticker, history, cur, conn):
 		open_price = date['Open']
 		close_price = date['Close']
 		data = (ticker, day, float(open_price), float(close_price))
-		print(str(data))
+		#print(str(data))
 		SQL = "INSERT INTO stock_price(ticker, pdate, open_price, close_price) VALUES (%s, %s, %s, %s);"
-		execute_insert(cur, conn, data, SQL)
+		execute(cur, conn, data, SQL)	
 	conn.commit()
 
-def execute_insert(cur, conn, data, SQL):
+def execute(cur, conn, data, SQL):
 	try:
 		cur.execute(SQL, data)
 	except psycopg2.IntegrityError as e:
@@ -91,7 +86,7 @@ def execute_insert(cur, conn, data, SQL):
 		print(str(e))
 		sys.exit(0)
 
-def process_launch_stocks(processes, ticker_list, cur, conn, argv):
+def process_launch_stocks(processes, ticker_list, cur, conn):
 	"""
 	Pass the ticker list in chunks to the API for processing.
 	Leverage multiprocessing.
@@ -100,15 +95,14 @@ def process_launch_stocks(processes, ticker_list, cur, conn, argv):
 	processes = []
 	for i in range(0, len(ticker_list), chunk_size):
 		chunk = ticker_list[i: i + chunk_size]
-		p = multiprocessing.Process(target=get_history, args=(chunk, cur, conn, argv))
+		p = multiprocessing.Process(target=get_history, args=(chunk, cur, conn,))
 		processes.append(p)
 		p.start()
 	for process in processes:
 		process.join()
-	#DO NOT COMMIT BEFORE ALL THREADS FINISH. MONDO PSQL PROBLEMS WILL HAPPEN
 
 
-def main(argv):
+def main():
 	try:
 		conn = psycopg2.connect(database = "caweinsh_stock_picker2", user = "caweinsh", password = getpass.getpass())
 	except StandardError as e:
@@ -117,8 +111,8 @@ def main(argv):
 	cur = conn.cursor()
 	ticker_list = get_ticker_list(cur, conn)
 	#Launch multithreading to handle  API data
-	process_launch_stocks(24, ticker_list, cur, conn, argv)
+	process_launch_stocks(24, ticker_list, cur, conn)
 	cur.close()	
 	conn.close()
 
-main(sys.argv)
+main()

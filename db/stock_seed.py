@@ -1,8 +1,6 @@
 #import pandas as pd
 import time
 import multiprocessing
-import subprocess
-from datetime import date
 import psycopg2
 import getpass
 import sys
@@ -24,8 +22,8 @@ def get_ticker_list(cursor, conn):
 	Returns: ticker_list (list of stock tickers)
 	"""
 	for stock_file in stock_files:
-		ticker_list = []
-		names_list = []
+		index_tickers = []
+		names_list  = []
 		with open(stock_file, 'r') as csvfile:
 			firstline = True
 			reader = csv.reader(csvfile, delimiter =",")
@@ -33,10 +31,9 @@ def get_ticker_list(cursor, conn):
 				if firstline:
 					firstline = False
 					continue
-				ticker_list.append(row[0])
+				index_tickers.append(row[0])
 				names_list.append(row[1])
-		create_stocks(ticker_list, names_list, stock_file.split(".")[0], cursor, conn)
-	return(ticker_list)
+		create_stocks(index_tickers, names_list, stock_file.split(".")[0], cursor, conn)
 	
 
 
@@ -52,7 +49,7 @@ def create_stocks(ticker_list, names_list, index, cur, conn):
 			continue
 		SQL = "INSERT INTO stock (ticker, company_name, stock_index) VALUES (%s,%s,%s);"
 		execute(cur, conn, data, SQL)
-
+	 	
 	 
 def execute(cur, conn, data, SQL):
 	try:
@@ -68,8 +65,8 @@ def execute(cur, conn, data, SQL):
 		print(str(e))
 		sys.exit(0)
 
-
 def main():
+	#Establish database connection
 	try:
 		conn = psycopg2.connect(database = "caweinsh_stock_picker2", user = "caweinsh", password = getpass.getpass())
 	except StandardError as e:
@@ -77,7 +74,6 @@ def main():
 		exit
 	cur = conn.cursor()
 	get_ticker_list(cur, conn)
-	conn.commit()
 	cur.close()	
 	conn.close()
 
