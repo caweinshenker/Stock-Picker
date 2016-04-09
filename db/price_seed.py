@@ -53,6 +53,7 @@ def get_history(ticker_list, cur, conn, argv):
 		try:
 			stock = Share(ticker)
 		except AttributeError:
+			print(str(e))
 			continue
 		date1 = argv[1]
 		date2 = argv[2]
@@ -69,15 +70,18 @@ def create_stock_price(ticker, history, cur, conn):
 	for date in history:
 		try:
 			day = date['Date']
-		except KeyError:
+		except KeyError as e:
+			print(str(e))
 			continue
 		try:
 			open_price = date['Open']
 		except KeyError:
+			print(str(e))
 			continue
 		try:
 			close_price = date['Close']
 		except KeyError:
+			print(str(e))
 			continue
 		data = (ticker, day, float(open_price), float(close_price))
 		#print(str(data))
@@ -98,6 +102,10 @@ def execute(cur, conn, data, SQL):
 	except psycopg2.ProgrammingError as e:
 		print(str(e))
 		sys.exit(0)
+	except YQLQueryError as e:
+		print(str(e))
+		pass
+		
 
 def process_launch_stocks(processes, ticker_list, cur, conn, argv):
 	"""

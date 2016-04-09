@@ -68,7 +68,7 @@ def execute(cur, conn, data, SQL):
 def main():
 	#Establish database connection
 	try:
-		conn = psycopg2.connect(database = "caweinsh_sp2", user = "caweinsh", password = getpass.getpass())
+		conn = psycopg2.connect(database = "caweinsh_sp3", user = "caweinsh", password = getpass.getpass())
 	except StandardError as e:
 		print(str(e))
 		exit
