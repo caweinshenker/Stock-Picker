@@ -15,16 +15,19 @@
 	</head>
 	
 	<body>
+		
 		<div class="col-md-2">
 		</div>
 		<div class="col-md-8">
 			<div class="container">
-				<img class="main-image" src="https://news.artnet.com/wp-content/news-upload/2015/03/troutstomb.jpg">
-				<h1>Stock Picker</h1>
-				<ul class="nav">
-					<li><a href = "{{ url_for('index')}}">Browse</a></li>
-					<li><a href="{{ url_for('pick')}}">Pick</a></li>
-					<li><a href="{{ url_for('about')}}">About</a></li>
+				<h1>Entries</h1>
+				<ul class="entries">
+				{% block body %}
+				{% for entry in entries %}
+					<li><h3>{{entry.ticker}}</h3>
+					{{ entry.company|safe}}
+				{% endfor %}
+				{% endblock %}
 				</ul>
 			</div>
 		</div>

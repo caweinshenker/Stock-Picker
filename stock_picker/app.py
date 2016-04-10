@@ -21,11 +21,24 @@ def homepage():
 	return render_template('home.html')
 	
 
-@app.route('/stocks')
+@app.route('/index')
 def show_stocks():
+	init_db()
+	connect_db()
 	cur = g.db_conn.execute('SELECT ticker, company_name FROM stock order by ticker;')
 	entries = [dict(ticker = row[0], company = row[1]) for row in cur.fetchall()]
+	close_db()
 	return render_template('templates/stock_index.html', entries=entries)
+
+
+@app.route('/pick')
+def show_picker():
+	pass
+
+
+@app.route('about')
+def show_about():
+	return render_template('templates/about.html)
 
 #@app.teardown_appcontext
 #def shutdown_session(exception=None):
@@ -56,9 +69,12 @@ def init_db():
 		sys.exit(0)
 	
 
-def connect_db(conn):
+def connect_db():
 	cur = conn.cursor()
-	return cur
+
+def close_db():
+	cur.close()
+	conn.close()
 
 
 if __name__=='__main__':
