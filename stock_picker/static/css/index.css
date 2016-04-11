@@ -22,6 +22,10 @@
 	color: blue;
 }
 
+ul, li{
+	list-style-type: none;
+}
+
 
 h1{
 	position: relative;

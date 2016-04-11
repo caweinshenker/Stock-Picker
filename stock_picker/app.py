@@ -1,24 +1,22 @@
 #!flask/bin/python
 
 #all the imports
-from flask import Flask, g, request, session, redirect, url_for, abort, render_template, flash
-from flask.ext.sqlalchemy import SQLAlchemy
-from sqlalchemy import create_engine, MetaData
+from flask import Flask, g, request, session, redirect, url_for, abort, render_template, flash, send_file
 import matplotlib.pyplot as plt, mpld3
+import matplotlib.patches as mpatches
 import os
+import datetime
 import numpy
 import psycopg2
+import StringIO
 import psycopg2.extras
 import getpass
+
 
 #configuration
 app = Flask(__name__)
 DEBUG = True
 app.config.from_object(__name__)
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://caweinsh:f6n60d@localhost:5432/caweinsh_sp3'
-#db = SQLAlchemy(app)
-cur = None
-conn = None
 PER_PAGE = 30
 
 @app.route('/')
@@ -39,6 +37,10 @@ def show_stocks():
 
 @app.route('/index/<ticker>')
 def show_stock(ticker = None):
+	return render_template('stock.html', ticker = ticker) 
+
+@app.route('/index/<ticker>/fig')
+def fig(ticker = None):
 	conn = init_db()
 	cur = connect_db(conn)
 	cur.execute("SELECT * FROM stock_price WHERE ticker='" + str(ticker) + "'ORDER BY pdate")
@@ -47,16 +49,30 @@ def show_stock(ticker = None):
 	opens = []
 	closes = []
 	for day in prices:
-		dates.append(day[pdate])
-		opens.append(day[open_price])
-		closes.append(day[close])
-	plt.plot(dates, opens, 'r--', dates, closes, 'bs')
-	plt.xlabel('date')
-	plt.ylabel('prices')
-	fig = plt.figure()
-	fig_html = mpld3.fig_to_html(fig)
-	return render_template('stock.html', dates = dates, opens=opens, closes=closes, prices = prices, fig_html = fig_html) 
-
+		dates.append(day["pdate"])
+		opens.append(day["open_price"])
+		closes.append(day["close"])
+	close_db(cur, conn)
+	mindate = min(dates)
+	maxdate = max(dates)
+	minopen = min(opens)
+	maxopen = max(opens)
+	minclose = min(closes)
+	maxclose = max(closes)
+	plt.rcParams.update({'font.size': 12})
+	plt.plot(dates, opens, 'r-', dates, closes, 'b-')
+	plt.xlabel('Date')
+	plt.ylabel('Price')
+	red_patch = mpatches.Patch(color = 'red', label = 'Open price')
+	blue_patch = mpatches.Patch(color = 'blue', label = 'Close price')
+	plt.legend(handles=[red_patch, blue_patch])
+	fig = plt.gcf()
+	img = StringIO.StringIO()
+	fig.savefig(img)
+	img.seek(0)
+	plt.close()
+	close_db(cur, conn)
+	return send_file(img, mimetype='image/png') 
 
 @app.route('/pick')
 def show_picker():	
@@ -64,6 +80,26 @@ def show_picker():
 	conn= init_db()
 	cur = connect_db(conn)
 
+
+def init_db():
+	try:
+		connectionString = 'dbname = caweinsh_sp3 user=caweinsh password=f6nt0d host=localhost'
+		conn = psycopg2.connect(connectionString)
+	except Exception as e:
+		print(str(e))
+	return conn
+
+def connect_db(conn):
+	return conn.cursor()
+
+
+def close_db(cur, conn):
+	cur.close()
+	conn.close()
+
+
+if __name__=='__main__':
+	app.run()
 
 #@app.route('/about')
 #def show_about():
@@ -93,23 +129,4 @@ def show_picker():
 #		conn.commit()
 #		conn.close()
 
-def init_db():
-	try:
-		connectionString = 'dbname = caweinsh_sp3 user=caweinsh password=f6nt0d host=localhost'
-		print(connectionString)
-		conn = psycopg2.connect(connectionString)
-	except Exception as e:
-		print(str(e))
-	return conn
 
-def connect_db(conn):
-	return conn.cursor()
-
-
-def close_db(cur, conn):
-	cur.close()
-	conn.close()
-
-
-if __name__=='__main__':
-	app.run()

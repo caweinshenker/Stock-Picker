@@ -29,7 +29,7 @@ TASKS IN DECREASING ORDER OF IMPORTANCE -- WITH DEADLINES
 
 
 
-
+XXXX
 2. HTML/Jinja2 template for viewing a list of all the stocks in the database
 
 	DELIVERABLES:
@@ -43,7 +43,7 @@ TASKS IN DECREASING ORDER OF IMPORTANCE -- WITH DEADLINES
 		
 	DEADLINE:
 		4/10/2016
-
+XXXX
 
 
 3. HTML/Jinja2 template for an HTML form that lets users upload a text file for parsing or choose a file from the database

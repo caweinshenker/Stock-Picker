@@ -29,11 +29,10 @@
 			</div>	
 		</div>
 		<div class="col-md-8">
-			<img src="http://htmlgiant.com/wp-content/uploads/2011/04/vonnegut.jpg">	
 			<div class="container-fluid">
-				<h1>{{entries[0].ticker}}</h1>
-				<div class="price-graph">
-				{{mpld3.show()}}	
+				<h1>{{ticker}}</h1>
+				<div id="price-graph">
+					<img src="{{url_for('fig',dates = dates, opens = opens, closes = closes, ticker = ticker)}}" alt="Image placeholder" height = "500px">
 				</div>
 			</div>
 		</div>
