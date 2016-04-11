@@ -11,31 +11,37 @@
 		<!-- Latest compiled JavaScript -->
 		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 		<link rel="stylesheet" type="text/css" href="../static/css/styles.css">
-		<link rel="stylesheet" type="text/css" href="../static/css/home.css">
+		<link rel="stylesheet" type="text/css" href="../static/css/stock_index.css">
 		
 	</head>
-	
-	<body>
+
+	{% block body %}	
+	<body>	
 		<div class="col-md-2">
+			<div class="navbar navbar-default">
+				<div class="navbar-header">
+					<ul>
+						
+						<li><a href= {{url_for('homepage')}}>Home</a></li>
+						<li><a href= {{url_for('show_picker')}}>Pick</a></li>	
+					</ul>
+				</div>
+			</div>	
 		</div>
 		<div class="col-md-8">
-			<div class="container">
-				<img class="main-image" src="https://news.artnet.com/wp-content/news-upload/2015/03/troutstomb.jpg">
-				<h1>Stock Picker</h1>
-				<ul class="nav">
-				{% block body %}
-					<li><a href="{{url_for('show_stocks')}}">Browse</a></li>
-				{% endblock %}	
-					<li><a href="#">Pick</a></li>
-					<li><a href="#">About</a></li>
-				</ul>
+			<img src="http://htmlgiant.com/wp-content/uploads/2011/04/vonnegut.jpg">	
+			<div class="container-fluid">
+				<h1>{{entries[0].ticker}}</h1>
+				<div class="price-graph">
+				{{mpld3.show()}}	
+				</div>
 			</div>
 		</div>
 		<div class = "col-md-8 footer">
 		</div>
 		<div class="col-md-2">
 		</div>
-	</body>
-
+	</body>	
+	{% endblock %}
 </html>
 
