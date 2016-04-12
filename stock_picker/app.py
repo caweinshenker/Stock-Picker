@@ -2,6 +2,7 @@
 
 #all the imports
 from flask import Flask, g, request, session, redirect, url_for, abort, render_template, flash, send_file
+from flask.ext.uploads import UploadSet, configure_uploads
 from forms import *
 import matplotlib.pyplot as plt, mpld3
 import matplotlib.patches as mpatches
@@ -14,11 +15,14 @@ import psycopg2.extras
 import getpass
 
 
-#configurationi
-UPLOAD_FOLDER = 'uploads/'
-app = Flask(__name__)
+#configuration
 DEBUG = True
+UPLOAD_FOLDER = 'uploads/'
+txtfiles = UploadSet('text', ('txt',))
+app = Flask(__name__)
 app.secret_key = 'secret'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+configure_uploads(app, (txtfiles,))
 app.config.from_object(__name__)
 PER_PAGE = 30
 
@@ -84,12 +88,12 @@ def show_picker():
 		conn= init_db()
 		cur = connect_db(conn)
 		filename = secure_filename(form.upload.data.filename)
-		form.upload.data.save(UPLOAD_FOlDER + filename)
-		SQL =  'INSERT INTO text (file_location, type, description, title, author, pub_date, album) VALUES (%s %s %s %s %s %s %s)'
-		data = (filename, form.textType, form.description, filename.split(".")[0], str(form.pub_date), form.album)
+		form.upload.data.save(UPLOAD_FOLDER + filename)
+		SQL =  'INSERT INTO text (author_name, file_location, description, title, text_type, pub_date) VALUES (%s %s %s %s %s %s)'
+		data = (form.author, filename, form.textType, form.description, form.title, form.textType, str(form.pub_date))
 		cur.execute(SQL, data)
 		close_db(cur, conn)
-		return redirect(url_for('results', form = form))		
+		return redirect(url_for('results.html', form = form))		
 	else:
 		filename = None
 	return render_template('pick.html', form=form, filename=filename)
