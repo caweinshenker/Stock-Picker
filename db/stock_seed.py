@@ -1,4 +1,3 @@
-#import pandas as pd
 import time
 import multiprocessing
 import psycopg2

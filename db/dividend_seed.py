@@ -42,21 +42,6 @@ def input_data_to_database(dividend_data, cur, conn):
 def execute(cur, conn, data, SQL):
 	try:
 		cur.execute(SQL, data)
-	#except psycopg2.IntegrityError as e:
-	#	print(str(e))
-	#	print(str(data))
-	#	sys.exit(0)
-	#except psycopg2.DataError as e:
-	#	print(str(e))
-	#	print(data)
-	#except psycopg2.InternalError as e:
-	#	print(str(e))
-	#	sys.exit(0)
-	#except psycopg2.ProgrammingError as e:
-	#	print(str(e))
-	#	sys.exit(0)
-	#except KeyError as e:
-	#	print(str(e))
 	except Exception as e:
 		print(str(e))
 		pass
@@ -64,7 +49,7 @@ def execute(cur, conn, data, SQL):
 def main(argv):
 	
 	try:
-		conn = psycopg2.connect(database = "max_stock", user = "maxmir", password = getpass.getpass())
+		conn = psycopg2.connect(database = "caweinsh_sp3", user = "caweinsh", password = getpass.getpass())
 	except StandardError as e:
 		print(str(e))
 		exit
