@@ -53,16 +53,15 @@ def get_history(ticker_list, cur, conn, argv):
 			continue
 		try:
 			stock = Share(ticker)
-		except AttributeError:
+		except Exception as e:
 			print(str(e))
 			continue
 		date1 = argv[1]
 		date2 = argv[2]
 		try:
 			history = stock.get_historical(str(date1), str(date2))
-		except yahoo_finance.YQLQueryError as e:
+		except Exception as e:
 			print(e)
-			print("Ticker missed: " + ticker + " for range: " + argv[1] + " " + argv[2])
 			continue
 		create_stock_price(ticker, history, cur, conn)
 
@@ -76,17 +75,17 @@ def create_stock_price(ticker, history, cur, conn):
 	for date in history:
 		try:
 			day = date['Date']
-		except KeyError as e:
+		except Exception as e:
 			print(str(e))
 			continue
 		try:
 			open_price = date['Open']
-		except KeyError as e:
+		except Exception as e:
 			print(str(e))
 			continue
 		try:
 			close_price = date['Close']
-		except KeyError as e:
+		except Exception as e:
 			print(str(e))
 			continue
 		data = (ticker, day, float(open_price), float(close_price))
