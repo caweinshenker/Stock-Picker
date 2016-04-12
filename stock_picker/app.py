@@ -16,12 +16,11 @@ import getpass
 
 
 #configuration
-DEBUG = True
-UPLOAD_FOLDER = 'uploads/'
-txtfiles = UploadSet('text', ('txt',))
 app = Flask(__name__)
+app.config['UPLOADED_TEXT_DEST'] = 'uploads/'
+DEBUG = True
+txtfiles = UploadSet('text', ('txt',))
 app.secret_key = 'secret'
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 configure_uploads(app, (txtfiles,))
 app.config.from_object(__name__)
 PER_PAGE = 30
@@ -85,16 +84,19 @@ def fig(ticker = None):
 def show_picker():	
 	form = PickForm()
 	if form.validate_on_submit():
+		flash('TXT registered')
+		print(str(form.title))
 		conn= init_db()
 		cur = connect_db(conn)
 		filename = secure_filename(form.upload.data.filename)
-		form.upload.data.save(UPLOAD_FOLDER + filename)
-		SQL =  'INSERT INTO text (author_name, file_location, description, title, text_type, pub_date) VALUES (%s %s %s %s %s %s)'
-		data = (form.author, filename, form.textType, form.description, form.title, form.textType, str(form.pub_date))
+		form.upload.data.save(os.path.join(app.config['UPLOADED_TEXT_DEST'], filename))
+		SQL =  'INSERT INTO text (author_name, file_location, description, title, text_type, pub_date) VALUES (%s, %s, %s, %s, %s, %s)'
+		data = (form.author.data, "uploads/" + form.upload.data.filename, form.description.data, form.title.data, form.textType.data, form.pub_date.data)
 		cur.execute(SQL, data)
 		close_db(cur, conn)
-		return redirect(url_for('results.html', form = form))		
+		return redirect(url_for('show_stocks'))		
 	else:
+		print("WHY AM I PERSECUTED???!?!")
 		filename = None
 	return render_template('pick.html', form=form, filename=filename)
 	
@@ -112,6 +114,7 @@ def connect_db(conn):
 
 
 def close_db(cur, conn):
+	conn.commit()
 	cur.close()
 	conn.close()
 

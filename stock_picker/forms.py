@@ -9,9 +9,9 @@ text = UploadSet('text', TEXT)
 
 class PickForm(Form):
 	textType = SelectField('Type', choices=[('book', 'BOOK'), ('poem', 'POEM'), ('lyric', 'LYRIC'), ('custom', 'CUSTOM')], validators=[DataRequired()])
-	title = TextField('Title', validators=[DataRequired(), validators.Length(min = 1, max = 200)])
-	author = TextField('Author', validators=[DataRequired(), validators.Length(min=4, max = 60)])
+	title = StringField('Title', validators=[DataRequired(), validators.Length(min = 1, max = 200)])
+	author = StringField('Author', validators=[DataRequired(), validators.Length(min=4, max = 60)])
+	description = StringField('Description')
 	pub_date = DateField('Publication date')
-	album = TextField('Album', validators=[validators.Length(min=2, max = 100)]) 
 	upload = FileField('Your text file', validators=[FileRequired(), FileAllowed(text, "Text only!")])
 	submit = SubmitField("Submit")
