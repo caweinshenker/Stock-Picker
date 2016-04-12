@@ -16,6 +16,8 @@
 	</head>
 	
 	<body>
+	{% block body %}
+
 		<div class="col-md-2">
 		</div>
 		<div class="col-md-8">
@@ -23,10 +25,8 @@
 				<img class="main-image" src="https://news.artnet.com/wp-content/news-upload/2015/03/troutstomb.jpg">
 				<h1>Stock Picker</h1>
 				<ul class="nav">
-				{% block body %}
 					<li><a href="{{url_for('show_stocks')}}">Browse</a></li>
-				{% endblock %}	
-					<li><a href="#">Pick</a></li>
+					<li><a href="{{url_for('show_picker')}}">Pick</a></li>
 					<li><a href="#">About</a></li>
 				</ul>
 			</div>
@@ -35,6 +35,7 @@
 		</div>
 		<div class="col-md-2">
 		</div>
+	{% endblock %}	
 	</body>
 
 </html>

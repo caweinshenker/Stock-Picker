@@ -2,6 +2,7 @@
 
 #all the imports
 from flask import Flask, g, request, session, redirect, url_for, abort, render_template, flash, send_file
+from forms import *
 import matplotlib.pyplot as plt, mpld3
 import matplotlib.patches as mpatches
 import os
@@ -13,9 +14,11 @@ import psycopg2.extras
 import getpass
 
 
-#configuration
+#configurationi
+UPLOAD_FOLDER = 'uploads/'
 app = Flask(__name__)
 DEBUG = True
+app.secret_key = 'secret'
 app.config.from_object(__name__)
 PER_PAGE = 30
 
@@ -74,12 +77,23 @@ def fig(ticker = None):
 	close_db(cur, conn)
 	return send_file(img, mimetype='image/png') 
 
-@app.route('/pick')
+@app.route('/pick', methods=['GET', 'POST'])
 def show_picker():	
-	#TODO
-	conn= init_db()
-	cur = connect_db(conn)
-
+	form = PickForm()
+	if form.validate_on_submit():
+		conn= init_db()
+		cur = connect_db(conn)
+		filename = secure_filename(form.upload.data.filename)
+		form.upload.data.save(UPLOAD_FOlDER + filename)
+		SQL =  'INSERT INTO text (file_location, type, description, title, author, pub_date, album) VALUES (%s %s %s %s %s %s %s)'
+		data = (filename, form.textType, form.description, filename.split(".")[0], str(form.pub_date), form.album)
+		cur.execute(SQL, data)
+		close_db(cur, conn)
+		return redirect(url_for('results', form = form))		
+	else:
+		filename = None
+	return render_template('pick.html', form=form, filename=filename)
+	
 
 def init_db():
 	try:

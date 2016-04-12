@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+		<!-- jQuery library -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+
+		<!-- Latest compiled JavaScript -->
+		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../static/css/styles.css">
+		<link rel="stylesheet" type="text/css" href="../static/css/pick.css">	
+	</head>
+
+	{% block body %}	
+	<body>
+		<div class = "container-fluid">		
+			<div class="col-md-2">
+				<div class="navbar navbar-default">
+					<div class="navbar-header">
+						<ul>
+							
+							<li><a href= {{url_for('homepage')}}>Home</a></li>
+							<li><a href= {{url_for('show_stocks')}}>Browse</a></li>	
+							</ul>
+						</div>
+					</div>	
+				</div>
+				<div class="col-md-8">
+					<div class="container form">
+						<h1>Pick</h1>
+						<form action="{{url_for('show_picker')}}" method='post' enctype = "multipart/form-data">
+							{{form.hidden_tag()}}
+							{{form.textType.label}}: {{form.textType}}<br/>
+							{{form.author.label}}: {{form.author}}<br/>
+							{{form.pub_date.label}}: {{form.pub_date}}<br/>
+							{{form.album.label}}: {{form.album}}<br/>
+							{{form.upload.label}}: {{form.upload}}<br/>
+							{{form.submit.label}}: {{form.submit}}<br/>
+						</form> 
+					</div>
+				</div>
+			<div class = "col-md-8 footer">
+			</div>
+			<div class="col-md-2">
+			</div>
+		</div>
+	</body>	
+	{% endblock %}
+</html>
+

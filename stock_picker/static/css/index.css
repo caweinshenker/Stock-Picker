@@ -3,6 +3,11 @@
  =============
 */
 
+.container-fluid{
+	width: inherit;
+}
+	
+
 .container{
 	width: 80%;
 	margin: 50px 250px 0 200px;
