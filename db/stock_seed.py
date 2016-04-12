@@ -5,8 +5,6 @@ import psycopg2
 import getpass
 import sys
 import csv
-sys.path.append('/home/f85/caweinsh/.local/lib/python3.4/site-packages')
-from yahoo_finance import *
 
 """
 This file seeds the database with stock entities from csv files
@@ -68,7 +66,7 @@ def execute(cur, conn, data, SQL):
 def main():
 	#Establish database connection
 	try:
-		conn = psycopg2.connect(database = "caweinsh_sp3", user = "caweinsh", password = getpass.getpass())
+		conn = psycopg2.connect(database = "max_stock", user = "maxmir", password = getpass.getpass())
 	except StandardError as e:
 		print(str(e))
 		exit

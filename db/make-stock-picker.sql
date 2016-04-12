@@ -45,8 +45,7 @@ CREATE TABLE stock_price(
 CREATE TABLE stock_dividend(
   ticker        varchar(10) NOT NULL,
   ddate         date        NOT NULL,
-  ex_date       date        NOT NULL,
-  price         numeric(12,4) NOT NULL,
+  price         numeric(14,6) NOT NULL,
   PRIMARY KEY   (ticker, ddate),
   FOREIGN KEY   (ticker) REFERENCES stock(ticker)
 );
@@ -56,27 +55,10 @@ CREATE TABLE text(
   file_location  varchar(100) NOT NULL PRIMARY KEY,
   description    text,
   title          varchar(100),
-  word_count     int
+  text_type      varchar(100),
+  pub_date       varchar(100), 
+  von_value      numeric(3)
 );
-   
-
-CREATE TABLE book(
-  pub_date       date,
-  ISBN           numeric(13)
-)INHERITS(text);
-
-CREATE TABLE poem(
-  pub_date       date
-)INHERITS(text);
-
-CREATE TABLE lyric(
-  song           varchar(50),
-  album          varchar(50)
- )INHERITS(text);
-
-CREATE TABLE custom(
- )INHERITS(text);
-
   
   
 
