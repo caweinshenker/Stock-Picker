@@ -3,9 +3,7 @@
 #all the imports
 from flask import Flask, g, request, session, redirect, url_for, abort, render_template, flash, send_file
 from flask.ext.uploads import UploadSet, configure_uploads
-from forms import *
-import matplotlib.pyplot as plt, mpld3
-import matplotlib.patches as mpatches
+import sys
 import os
 import datetime
 import numpy
@@ -13,7 +11,9 @@ import psycopg2
 import StringIO
 import psycopg2.extras
 import getpass
-
+sys.path.insert(0, 'helpers/')
+from graphs import Open_Close_Graph
+from forms  import PickForm
 
 #configuration
 app = Flask(__name__)
@@ -22,8 +22,8 @@ DEBUG = True
 txtfiles = UploadSet('text', ('txt',))
 app.secret_key = 'secret'
 configure_uploads(app, (txtfiles,))
-app.config.from_object(__name__)
 PER_PAGE = 30
+app.config.from_object(__name__)
 
 @app.route('/')
 def homepage():
@@ -45,38 +45,20 @@ def show_stocks():
 def show_stock(ticker = None):
 	return render_template('stock.html', ticker = ticker) 
 
+
+@app.route('/pick/<filename>/results')
+def show_results(ticker = None, filename= None, form = None):
+	#TODO
+	return render_template('results.html', filename = filename, form = form)
+
 @app.route('/index/<ticker>/fig')
 def fig(ticker = None):
 	conn = init_db()
 	cur = connect_db(conn)
 	cur.execute("SELECT * FROM stock_price WHERE ticker='" + str(ticker) + "'ORDER BY pdate")
-	prices = [dict(ticker = row[0], pdate = row[1], open_price = row[2], close = row[3]) for row in cur.fetchall()]
-	dates = []
-	opens = []
-	closes = []
-	for day in prices:
-		dates.append(day["pdate"])
-		opens.append(day["open_price"])
-		closes.append(day["close"])
-	close_db(cur, conn)
-	mindate = min(dates)
-	maxdate = max(dates)
-	minopen = min(opens)
-	maxopen = max(opens)
-	minclose = min(closes)
-	maxclose = max(closes)
-	plt.rcParams.update({'font.size': 12})
-	plt.plot(dates, opens, 'r-', dates, closes, 'b-')
-	plt.xlabel('Date')
-	plt.ylabel('Price')
-	red_patch = mpatches.Patch(color = 'red', label = 'Open price')
-	blue_patch = mpatches.Patch(color = 'blue', label = 'Close price')
-	plt.legend(handles=[red_patch, blue_patch])
-	fig = plt.gcf()
-	img = StringIO.StringIO()
-	fig.savefig(img)
-	img.seek(0)
-	plt.close()
+	open_close = Open_Close_Graph(ticker, cur)
+	open_close.make_graph()
+	img = open_close.get_fig()
 	close_db(cur, conn)
 	return send_file(img, mimetype='image/png') 
 
@@ -85,7 +67,6 @@ def show_picker():
 	form = PickForm()
 	if form.validate_on_submit():
 		flash('TXT registered')
-		print(str(form.title))
 		conn= init_db()
 		cur = connect_db(conn)
 		filename = secure_filename(form.upload.data.filename)
@@ -93,12 +74,21 @@ def show_picker():
 		SQL =  'INSERT INTO text (author_name, file_location, description, title, text_type, pub_date) VALUES (%s, %s, %s, %s, %s, %s)'
 		data = (form.author.data, "uploads/" + form.upload.data.filename, form.description.data, form.title.data, form.textType.data, form.pub_date.data)
 		cur.execute(SQL, data)
+		conn.commit()
 		close_db(cur, conn)
-		return redirect(url_for('show_stocks'))		
+		return redirect(url_for('show_results', ticker = ticker, filename = filename, form = form))
+		#return redirect(url_for('show_stocks'))		
 	else:
-		print("WHY AM I PERSECUTED???!?!")
 		filename = None
 	return render_template('pick.html', form=form, filename=filename)
+
+	
+@app.route('/about')
+def show_about():
+	#TODO
+	return render_template('templates/about.html')
+
+
 	
 
 def init_db():
@@ -121,12 +111,6 @@ def close_db(cur, conn):
 
 if __name__=='__main__':
 	app.run()
-
-#@app.route('/about')
-#def show_about():
-#	return render_template('templates/about.html')
-
-#'''
 
 
 #@app.teardown_appcontext

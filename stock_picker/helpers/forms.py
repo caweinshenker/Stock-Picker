@@ -15,3 +15,8 @@ class PickForm(Form):
 	pub_date = DateField('Publication date')
 	upload = FileField('Your text file', validators=[FileRequired(), FileAllowed(text, "Text only!")])
 	submit = SubmitField("Submit")
+
+	#def save_file():
+	#	filename = secure_filename(form.upload.data.filename)
+	#	form.upload.save(os.path.join(app.config['UPLOADED_TEXT_DEST'], filename))
+	#	
