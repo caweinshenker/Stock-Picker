@@ -15,7 +15,7 @@ UPDATED: 2013-04-04 2016-04-04
 """
 
 #Stocks files
-stock_files   = ["nasdaq.csv", "amex.csv", "nyse.csv"]
+stock_files   = ["csvs/nasdaq.csv", "csvs/amex.csv", "csvs/nyse.csv"]
 
 def get_ticker_list(cursor, conn):
 	"""Open the available lists of stocks, extract their tickers, and call create_stocks

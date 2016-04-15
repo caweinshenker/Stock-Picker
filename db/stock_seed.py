@@ -1,4 +1,3 @@
-import time
 import multiprocessing
 import psycopg2
 import getpass
@@ -13,7 +12,7 @@ This file seeds the database with stock entities from csv files
 """
 
 #Stocks files
-stock_files   = ["nasdaq.csv", "amex.csv", "nyse.csv"]
+stock_files   = ["csvs/nasdaq.csv", "csvs/amex.csv", "csvs/nyse.csv"]
 
 def get_tickers_indices_names(cursor, conn):
 	"""Open the available lists of stocks, extract their tickers, and call create_stocks
@@ -33,18 +32,27 @@ def get_tickers_indices_names(cursor, conn):
 					firstline = False
 					continue
 				tickers.append(row[0])
-				indices.append(stock_file.split(".")[0])
+				indices.append(stock_file.split(".")[0].split("/")[1])
 				names.append(row[1])
 	return(tickers, indices, names)	
 
 
-def create_stock(ticker, name, index,  info, cur, conn):
+def create_stock(tickers, names, indices,  info, cur, conn):
 	"""
 	Enter stocks into stocks relation
 	params: ticker_list, names_list (company names), index (stock index), cursor (database cursor)
-	"""
+	"""		
 	if ticker == "MSG":
 		return
+	for j in range(len(tickers_chunk)):
+		try:
+			stock = Share(tickers_chunk[i])
+		except Exception as e:
+			continue
+		try:
+			info = stock.get_info()
+		except Exception as e:
+			continue
 	start = None
 	end = None
 	try: 
@@ -61,30 +69,25 @@ def create_stock(ticker, name, index,  info, cur, conn):
 	data = (ticker, index, name, start, end)
 	SQL = "INSERT INTO stocks (ticker, stock_index, company_name, start_date, end_date) VALUES (%s, %s, %s, %s, %s);"
 	execute(cur, conn, data, SQL)
-	
-def create_company(ticker, name, info, cur, conn):
-	if ticker == "MSG":
-		return
-	sector = None
-	full_time = None
-	industry = None
-	try:
-		sector = info['Sector']
-	except Exception as e:
-		pass
-	try:
-		full_time = int(info['FullTimeEmployees'])
-	except Exception as e:
-		pass
-	try:
-		industry = info['Industry']
-	except Exception as e:
-		pass
-	data = (ticker, name, sector, industry, full_time)
-	SQL = "INSERT INTO companies (ticker, name, sector, industry, full_time_emps) VALUES (%s, %s, %s, %s, %s);"
-	execute(cur, conn, data, SQL)
- 
-def execute(cur, conn, data, SQL):
+
+
+def process_launch_stocks(processes, tickers, indices, names):
+	"""
+	Return a 1/number_of_processes chunk of the ticker list
+	"""
+	chunk_size = len(tickers) / processes
+	processes = []
+	for process_no in range(processes):
+		ticker_chunk = tickers[process_no * chunk_size: (process_no * chunk_size) + chunk_size]
+		names_chunk  = names[process_no * chunk_size: (process_no * chunk_size) + chunk_size]
+		indices_chunk = indices[process_no * chunk_size: (process_no * chunk_size) + chunk_size]
+		p = multiprocessing.Process(target=create_stock, args=(ticker_chunk, name_chunk, indices_chunk, info,  cur, conn))
+			processes.append(p)
+			p.start()
+	for process in processes:
+		process.join()	
+
+def execute (cur, conn, data, SQL):
 	try:
 		cur.execute(SQL, data)
 	except psycopg2.IntegrityError as e:
@@ -98,6 +101,7 @@ def execute(cur, conn, data, SQL):
 		print(str(e))
 		sys.exit(0)
 
+
 def main():
 	#Establish database connection
 	try:
@@ -110,17 +114,10 @@ def main():
 	tickers = tickers_indices_names[0]
 	indices = tickers_indices_names[1]
 	names = tickers_indices_names[2]
-	for i in range(len(tickers)):
-		try:
-			stock = Share(tickers[i])
-		except Exception as e:
-			continue
-		try:
-			info = stock.get_info()
-		except Exception as e:
-			continue
-		create_stock(tickers[i], names[i], indices[i], info, cur, conn)
-		conn.commit()	
+	chunk_size = len(tickers) / 24
+	processes = []
+		
+	conn.commit()	
 	cur.close()	
 	conn.close()
 
