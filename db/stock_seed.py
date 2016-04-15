@@ -38,7 +38,7 @@ def get_tickers_indices_names(cursor, conn):
 	return(tickers, indices, names)	
 
 
-def create_stock(ticker, index, info, cur, conn):
+def create_stock(ticker, name, index,  info, cur, conn):
 	"""
 	Enter stocks into stocks relation
 	params: ticker_list, names_list (company names), index (stock index), cursor (database cursor)
@@ -58,8 +58,8 @@ def create_stock(ticker, index, info, cur, conn):
 	if ((start != None) and (end != None)) and ('NaN' in start or 'NaN' in end):
 		start = None
 		end = None
-	data = (ticker, index, start, end)
-	SQL = "INSERT INTO stocks (ticker, stock_index, start_date, end_date) VALUES (%s,%s,%s,%s);"
+	data = (ticker, index, name, start, end)
+	SQL = "INSERT INTO stocks (ticker, stock_index, company_name, start_date, end_date) VALUES (%s, %s, %s, %s, %s);"
 	execute(cur, conn, data, SQL)
 	
 def create_company(ticker, name, info, cur, conn):
@@ -111,10 +111,15 @@ def main():
 	indices = tickers_indices_names[1]
 	names = tickers_indices_names[2]
 	for i in range(len(tickers)):
-		stock = Share(tickers[i])
-		info = stock.get_info()
-		create_stock(tickers[i], indices[i], info, cur, conn)
-		create_company(tickers[i], names[i], info, cur, conn)
+		try:
+			stock = Share(tickers[i])
+		except Exception as e:
+			continue
+		try:
+			info = stock.get_info()
+		except Exception as e:
+			continue
+		create_stock(tickers[i], names[i], indices[i], info, cur, conn)
 		conn.commit()	
 	cur.close()	
 	conn.close()
