@@ -61,7 +61,7 @@ def get_history(ticker_list, cur, conn, argv):
 			continue
 		create_stock_price_volumes(ticker, history, cur, conn)
 
-def create_stock_price(ticker, history, cur, conn):
+def create_stock_price_volumes(ticker, history, cur, conn):
 	"""
 	Enter stock prices into stock_price relation and volumes into volume relation
 	params: ticker, history (list of hashes, each hash contains data on a given date for the given stock), cur, 
@@ -95,13 +95,13 @@ def create_stock_price(ticker, history, cur, conn):
 			continue
 		try: 
 			volume = date['Volume']
-		exept Exception as e:
+		except Exception as e:
 			print(str(e))
 			continue
 		price_data = (ticker, day, float(open_price), float(close_price), float(high), float(low))
 		volume_data = (ticker, day, volume)
 		price_SQL = "INSERT INTO stock_prices(ticker, pdate, open_price, close_price, high, low) VALUES (%s, %s, %s, %s, %s, %s);"
-		volume_SQL = "INSERT INTO stock_volumes(ticker, vdate, volume) VALUES (%s, %s, %d);"
+		volume_SQL = "INSERT INTO stock_volumes(ticker, vdate, volume) VALUES (%s, %s, %s);"
 		execute(cur, conn, price_data, price_SQL)
 		execute(cur, conn, volume_data, volume_SQL)	
 	conn.commit()

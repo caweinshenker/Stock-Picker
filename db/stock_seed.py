@@ -37,24 +37,23 @@ def get_tickers_indices_names(cursor, conn):
 	return(tickers, indices, names)	
 
 
-def create_stock(tickers, names, indices,  info, cur, conn):
+def create_stock(ticker, name, index, cur, conn):
 	"""
 	Enter stocks into stocks relation
 	params: ticker_list, names_list (company names), index (stock index), cursor (database cursor)
 	"""		
+	start = None
+	end   = None
 	if ticker == "MSG":
 		return
-	for j in range(len(tickers_chunk)):
-		try:
-			stock = Share(tickers_chunk[i])
-		except Exception as e:
-			continue
-		try:
-			info = stock.get_info()
-		except Exception as e:
-			continue
-	start = None
-	end = None
+	try:
+		stock = Share(ticker)
+	except Exception as e:
+		return
+	try:
+		info = stock.get_info()
+	except Exception as e:
+		pass
 	try: 
 		start = info['start']
 	except Exception as e:
@@ -69,24 +68,8 @@ def create_stock(tickers, names, indices,  info, cur, conn):
 	data = (ticker, index, name, start, end)
 	SQL = "INSERT INTO stocks (ticker, stock_index, company_name, start_date, end_date) VALUES (%s, %s, %s, %s, %s);"
 	execute(cur, conn, data, SQL)
-
-
-def process_launch_stocks(processes, tickers, indices, names):
-	"""
-	Return a 1/number_of_processes chunk of the ticker list
-	"""
-	chunk_size = len(tickers) / processes
-	processes = []
-	for process_no in range(processes):
-		ticker_chunk = tickers[process_no * chunk_size: (process_no * chunk_size) + chunk_size]
-		names_chunk  = names[process_no * chunk_size: (process_no * chunk_size) + chunk_size]
-		indices_chunk = indices[process_no * chunk_size: (process_no * chunk_size) + chunk_size]
-		p = multiprocessing.Process(target=create_stock, args=(ticker_chunk, name_chunk, indices_chunk, info,  cur, conn))
-			processes.append(p)
-			p.start()
-	for process in processes:
-		process.join()	
-
+	print("Committing")
+	conn.commit()
 
 
 def execute(cur, conn, data, SQL):
@@ -116,10 +99,10 @@ def main():
 	tickers = tickers_indices_names[0]
 	indices = tickers_indices_names[1]
 	names = tickers_indices_names[2]
-	chunk_size = len(tickers) / 24
-	processes = []
-		
-	conn.commit()	
+	for i in range(len(tickers)):
+		#print(tickers[i])
+		create_stock(tickers[i], names[i], indices[i], cur, conn)	
+	conn.commit()
 	cur.close()	
 	conn.close()
 
