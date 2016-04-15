@@ -4,23 +4,27 @@ import psycopg2
 import getpass
 import sys
 import csv
+from yahoo_finance import *
 
 """
+MUST RUN IN PYTHON3!!!!
+
 This file seeds the database with stock entities from csv files
 """
 
 #Stocks files
 stock_files   = ["nasdaq.csv", "amex.csv", "nyse.csv"]
 
-def get_ticker_list(cursor, conn):
+def get_tickers_indices_names(cursor, conn):
 	"""Open the available lists of stocks, extract their tickers, and call create_stocks
 
 	Params: cursor (database cursor)
 	Returns: ticker_list (list of stock tickers)
 	"""
+	tickers = []
+	indices = []
+	names = []
 	for stock_file in stock_files:
-		index_tickers = []
-		names_list  = []
 		with open(stock_file, 'r') as csvfile:
 			firstline = True
 			reader = csv.reader(csvfile, delimiter =",")
@@ -28,26 +32,58 @@ def get_ticker_list(cursor, conn):
 				if firstline:
 					firstline = False
 					continue
-				index_tickers.append(row[0])
-				names_list.append(row[1])
-		create_stocks(index_tickers, names_list, stock_file.split(".")[0], cursor, conn)
-	
+				tickers.append(row[0])
+				indices.append(stock_file.split(".")[0])
+				names.append(row[1])
+	return(tickers, indices, names)	
 
 
-def create_stocks(ticker_list, names_list, index, cur, conn):
+def create_stock(ticker, index, info, cur, conn):
 	"""
-	Enter stocks into Stock relation
+	Enter stocks into stocks relation
 	params: ticker_list, names_list (company names), index (stock index), cursor (database cursor)
 	"""
-	for i in range(len(ticker_list)):
-		#print("Creating stock entry for: {}".format(ticker_list[i]))
-		data = (ticker_list[i], names_list[i], index,)
-		if data[0] == "MSG":
-			continue
-		SQL = "INSERT INTO stock (ticker, company_name, stock_index) VALUES (%s,%s,%s);"
-		execute(cur, conn, data, SQL)
-	conn.commit() 	
-	 
+	if ticker == "MSG":
+		return
+	start = None
+	end = None
+	try: 
+		start = info['start']
+	except Exception as e:
+		pass
+	try:	
+		end = info['end']
+	except Exception as e:
+		pass
+	if ((start != None) and (end != None)) and ('NaN' in start or 'NaN' in end):
+		start = None
+		end = None
+	data = (ticker, index, start, end)
+	SQL = "INSERT INTO stocks (ticker, stock_index, start_date, end_date) VALUES (%s,%s,%s,%s);"
+	execute(cur, conn, data, SQL)
+	
+def create_company(ticker, name, info, cur, conn):
+	if ticker == "MSG":
+		return
+	sector = None
+	full_time = None
+	industry = None
+	try:
+		sector = info['Sector']
+	except Exception as e:
+		pass
+	try:
+		full_time = int(info['FullTimeEmployees'])
+	except Exception as e:
+		pass
+	try:
+		industry = info['Industry']
+	except Exception as e:
+		pass
+	data = (ticker, name, sector, industry, full_time)
+	SQL = "INSERT INTO companies (ticker, name, sector, industry, full_time_emps) VALUES (%s, %s, %s, %s, %s);"
+	execute(cur, conn, data, SQL)
+ 
 def execute(cur, conn, data, SQL):
 	try:
 		cur.execute(SQL, data)
@@ -65,12 +101,21 @@ def execute(cur, conn, data, SQL):
 def main():
 	#Establish database connection
 	try:
-		conn = psycopg2.connect(database = "max_stock", user = "maxmir", password = getpass.getpass())
+		conn = psycopg2.connect(database = "caweinsh_sp3", user = "caweinsh", password = getpass.getpass())
 	except StandardError as e:
 		print(str(e))
-		exit
+		sys.exit(1)
 	cur = conn.cursor()
-	get_ticker_list(cur, conn)
+	tickers_indices_names = get_tickers_indices_names(cur, conn)
+	tickers = tickers_indices_names[0]
+	indices = tickers_indices_names[1]
+	names = tickers_indices_names[2]
+	for i in range(len(tickers)):
+		stock = Share(tickers[i])
+		info = stock.get_info()
+		create_stock(tickers[i], indices[i], info, cur, conn)
+		create_company(tickers[i], names[i], info, cur, conn)
+		conn.commit()	
 	cur.close()	
 	conn.close()
 

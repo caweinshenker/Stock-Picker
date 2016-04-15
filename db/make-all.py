@@ -14,7 +14,7 @@ def main(argv):
 	os.system('python3 stock_seed.py')
 
 	print('Populating stock price table')
-	os.system('python3 price_seed.py')
+	os.system('nohup python3 price_seed.py 1996-04-04 2016-04-04')
 
 	print('Populating dividend table')
 	os.system('python3 dividend_seed.py')

@@ -1,15 +1,11 @@
 #import pandas as pd
 import time
 import multiprocessing
-import subprocess
-from datetime import date
-from datetime import timedelta
 import psycopg2
 import getpass
 import sys
 import csv
 import yahoo_finance
-#sys.path.append('/home/f85/caweinsh/.local/lib/python3.4/site-packages')
 from yahoo_finance import *
 
 """
@@ -51,24 +47,23 @@ def get_history(ticker_list, cur, conn, argv):
 		#Deal w/ data-cleaning issue
 		if ticker == "MSG":
 			continue
+		date1 = argv[1]
+		date2 = argv[2]
 		try:
 			stock = Share(ticker)
 		except Exception as e:
 			print(str(e))
 			continue
-		date1 = argv[1]
-		date2 = argv[2]
 		try:
 			history = stock.get_historical(str(date1), str(date2))
 		except Exception as e:
 			print(e)
 			continue
-		create_stock_price(ticker, history, cur, conn)
-
+		create_stock_price_volumes(ticker, history, cur, conn)
 
 def create_stock_price(ticker, history, cur, conn):
 	"""
-	Enter stock prices into Stock_price relation
+	Enter stock prices into stock_price relation and volumes into volume relation
 	params: ticker, history (list of hashes, each hash contains data on a given date for the given stock), cur, 
 	"""
 	#print("Creating stock price entry for: {}".format(ticker))
@@ -88,12 +83,19 @@ def create_stock_price(ticker, history, cur, conn):
 		except Exception as e:
 			print(str(e))
 			continue
-		data = (ticker, day, float(open_price), float(close_price))
-		#print(str(data))
-		SQL = "INSERT INTO stock_price(ticker, pdate, open_price, close_price) VALUES (%s, %s, %s, %s);"
-		execute(cur, conn, data, SQL)	
+		try: 
+			volume = date['Volume']
+		exept Exception as e:
+			print(str(e))
+			continue
+		price_data = (ticker, day, float(open_price), float(close_price))
+		volume_data = (ticker, day, volume)
+		price_SQL = "INSERT INTO stock_prices(ticker, pdate, open_price, close_price) VALUES (%s, %s, %s, %s);"
+		volume_SQL = "INSERT INTO stock_volumes(ticker, vdate, volume) VALUES (%s, %s, %d);"
+		execute(cur, conn, price_data, price_SQL)
+		execute(cur, conn, volume_data, volume_SQL)	
 	conn.commit()
-
+	
 def execute(cur, conn, data, SQL):
 	try:
 		cur.execute(SQL, data)
@@ -115,7 +117,6 @@ def process_launch_stocks(processes, ticker_list, cur, conn, argv):
 		p.start()
 	for process in processes:
 		process.join()
-
 
 def main(argv):
 	try:
