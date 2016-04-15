@@ -13,7 +13,7 @@ This file seeds the database with stock entities from csv files
 """
 
 #Stocks files
-stock_files   = ["nasdaq.csv", "amex.csv", "nyse.csv"]
+stock_files   = ["csvs/nasdaq.csv", "csvs/amex.csv", "csvs/nyse.csv"]
 
 def get_tickers_indices_names(cursor, conn):
 	"""Open the available lists of stocks, extract their tickers, and call create_stocks
@@ -33,7 +33,7 @@ def get_tickers_indices_names(cursor, conn):
 					firstline = False
 					continue
 				tickers.append(row[0])
-				indices.append(stock_file.split(".")[0])
+				indices.append(stock_file.split(".")[0].split("/")[1])
 				names.append(row[1])
 	return(tickers, indices, names)	
 
@@ -62,28 +62,7 @@ def create_stock(ticker, name, index,  info, cur, conn):
 	SQL = "INSERT INTO stocks (ticker, stock_index, company_name, start_date, end_date) VALUES (%s, %s, %s, %s, %s);"
 	execute(cur, conn, data, SQL)
 	
-def create_company(ticker, name, info, cur, conn):
-	if ticker == "MSG":
-		return
-	sector = None
-	full_time = None
-	industry = None
-	try:
-		sector = info['Sector']
-	except Exception as e:
-		pass
-	try:
-		full_time = int(info['FullTimeEmployees'])
-	except Exception as e:
-		pass
-	try:
-		industry = info['Industry']
-	except Exception as e:
-		pass
-	data = (ticker, name, sector, industry, full_time)
-	SQL = "INSERT INTO companies (ticker, name, sector, industry, full_time_emps) VALUES (%s, %s, %s, %s, %s);"
-	execute(cur, conn, data, SQL)
- 
+
 def execute(cur, conn, data, SQL):
 	try:
 		cur.execute(SQL, data)

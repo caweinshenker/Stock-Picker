@@ -54,7 +54,7 @@ def main(argv):
 		print(str(e))
 		exit
 	cur = conn.cursor()
-	dividend_data = parse_dividend_csv("dividend_info.csv")
+	dividend_data = parse_dividend_csv("csvs/dividend_info.csv")
 	input_data_to_database(dividend_data, cur, conn)	
 	cur.close()	
 	conn.close()
