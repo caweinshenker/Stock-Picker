@@ -16,7 +16,8 @@ class PickForm(Form):
 	upload = FileField('Your text file', validators=[FileRequired(), FileAllowed(text, "Text only!")])
 	submit = SubmitField("Submit")
 
-	#def save_file():
-	#	filename = secure_filename(form.upload.data.filename)
-	#	form.upload.save(os.path.join(app.config['UPLOADED_TEXT_DEST'], filename))
-	#	
+
+class SearchForm(Form):
+	search = StringField('Search by ticker or company name', validators = [DataRequired(), validators.Length(min = 1, max = 100)])
+	submit = SubmitField("Submit")
+
