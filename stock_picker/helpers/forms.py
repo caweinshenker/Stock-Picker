@@ -4,6 +4,7 @@ from wtforms.validators import DataRequired
 from werkzeug import secure_filename
 from flask.ext.uploads import UploadSet, IMAGES, TEXT
 from flask_wtf.file import FileField, FileAllowed, FileRequired
+from datetime import datetime, date
 
 text = UploadSet('text', TEXT)
 
@@ -21,3 +22,6 @@ class SearchForm(Form):
 	search = StringField('Search by ticker or company name', validators = [DataRequired(), validators.Length(min = 1, max = 100)])
 	submit = SubmitField("Submit")
 
+
+class StockForm(Form):
+	date_field  = DateField('See stock information for a given day (YYYY-MM-DD)', validators = [DataRequired()])

@@ -3,6 +3,7 @@
 #all the imports
 from flask import Flask, g, request, session, redirect, url_for, abort, render_template, flash, send_file
 from flask.ext.uploads import UploadSet, configure_uploads
+from math import ceil
 import sys
 import os
 import datetime
@@ -13,7 +14,9 @@ import psycopg2.extras
 import getpass
 sys.path.insert(0, 'helpers/')
 from graphs import Open_Close_Graph
-from forms  import PickForm, SearchForm
+from forms  import PickForm, StockForm, SearchForm
+from pagination import Pagination
+
 
 #configuration
 app = Flask(__name__)
@@ -34,11 +37,11 @@ def homepage():
 #@app.route('/stocks/page/<int:page>')
 @app.route('/index/<searchterm>', methods = ['GET', 'POST'])
 @app.route('/index')
-def show_stocks(searchterm = ''):
+def show_stocks(searchterm = '', page = None):
 	search = SearchForm()
 	conn = init_db()
 	cur = connect_db(conn)
-	SQL = "SELECT ticker, company_name FROM stock WHERE ticker LIKE %s OR company_name LIKE %s ORDER BY ticker;"
+	SQL = "SELECT ticker, company_name FROM stocks WHERE ticker LIKE %s OR company_name LIKE %s ORDER BY ticker;"
 	data =  ('%', '%')	
 	if search.validate_on_submit():
 		search_data = search.search.data
@@ -56,7 +59,17 @@ def show_stocks(searchterm = ''):
 
 @app.route('/index/stock/<ticker>')
 def show_stock(ticker = None):
-	return render_template('stock.html', ticker = ticker) 
+	form = StockForm()
+	conn = init_db()
+	cur  = connect_db(conn)
+	if form.validate_on_submit():
+		data = (ticker, str(form.date_field.data))
+		SQL = "SELECT open_price, close_price, high, low, volume FROM stock_prices where ticker = %s AND pdate = %s"
+		cur.execute(SQL, data)
+		tup = cur.fetchall[0]
+		close_db(cur, conn)
+		return render_template('stock.html', form = StockForm(), ticker = ticker, open_price = tup[0], close_price = tup[1], high = tup[2], low = tup[3], volume = tup[4])
+	return render_template('stock.html', form = form, ticker = ticker) 
 
 
 @app.route('/pick/<filename>/results')
@@ -68,7 +81,7 @@ def show_results(ticker = None, filename= None, form = None):
 def fig(ticker = None):
 	conn = init_db()
 	cur = connect_db(conn)
-	cur.execute("SELECT * FROM stock_price WHERE ticker='" + str(ticker) + "'ORDER BY pdate")
+	cur.execute("SELECT * FROM stock_prices WHERE ticker='" + str(ticker) + "'ORDER BY pdate")
 	open_close = Open_Close_Graph(ticker, cur)
 	open_close.make_graph()
 	img = open_close.get_fig()
