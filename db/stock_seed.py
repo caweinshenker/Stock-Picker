@@ -87,7 +87,9 @@ def process_launch_stocks(processes, tickers, indices, names):
 	for process in processes:
 		process.join()	
 
-def execute (cur, conn, data, SQL):
+
+
+def execute(cur, conn, data, SQL):
 	try:
 		cur.execute(SQL, data)
 	except psycopg2.IntegrityError as e:
