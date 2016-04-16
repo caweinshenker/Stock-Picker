@@ -14,6 +14,9 @@ import getpass
 sys.path.insert(0, 'helpers/')
 from graphs import Open_Close_Graph
 from forms  import PickForm, SearchForm
+from helpers import buy_stocks_from_portfolio.py as stockBuyer
+from helpers import parse_text_for_portfolio.py as textParser
+from helpers import construct_trie_from_tickers.py as trieMaker
 
 #configuration
 app = Flask(__name__)
@@ -101,7 +104,11 @@ def show_about():
 	#TODO
 	return render_template('templates/about.html')
 
-
+@app.route('/text_result')
+def show_text_result():
+	#TODO
+	
+	return render_template('templates/text_result.html')
 	
 
 def init_db():
