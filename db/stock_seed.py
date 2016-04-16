@@ -68,7 +68,6 @@ def create_stock(ticker, name, index, cur, conn):
 	data = (ticker, index, name, start, end)
 	SQL = "INSERT INTO stocks (ticker, stock_index, company_name, start_date, end_date) VALUES (%s, %s, %s, %s, %s);"
 	execute(cur, conn, data, SQL)
-	print("Committing")
 	conn.commit()
 
 

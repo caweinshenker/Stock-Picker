@@ -99,7 +99,7 @@ def create_stock_price_volumes(ticker, history, cur, conn):
 			print(str(e))
 			continue
 		price_data = (ticker, day, float(open_price), float(close_price), float(high), float(low))
-		volume_data = (ticker, day, volume)
+		volume_data = (ticker, day, int(volume))
 		price_SQL = "INSERT INTO stock_prices(ticker, pdate, open_price, close_price, high, low) VALUES (%s, %s, %s, %s, %s, %s);"
 		volume_SQL = "INSERT INTO stock_volumes(ticker, vdate, volume) VALUES (%s, %s, %s);"
 		execute(cur, conn, price_data, price_SQL)
