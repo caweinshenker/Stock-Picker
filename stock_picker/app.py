@@ -1,5 +1,4 @@
 #!flask/bin/python
-
 #all the imports
 from flask import Flask, g, request, session, redirect, url_for, abort, render_template, flash, send_file
 from flask.ext.uploads import UploadSet, configure_uploads
@@ -14,9 +13,9 @@ import psycopg2.extras
 import getpass
 sys.path.insert(0, 'helpers/')
 from graphs import Open_Close_Graph
-from forms  import PickForm, StockForm, SearchForm
+from forms  import UploadForm, PickForm, StockForm, SearchForm
 from pagination import Pagination
-
+from database import Db
 
 #configuration
 app = Flask(__name__)
@@ -57,19 +56,25 @@ def show_stocks(searchterm = '', page = None):
 		close_db(cur, conn)
 		return render_template('index.html',search = search, entries=entries)
 
-@app.route('/index/stock/<ticker>')
+@app.route('/index/stock/<ticker>', methods = ['GET', 'POST'])
 def show_stock(ticker = None):
 	form = StockForm()
 	conn = init_db()
 	cur  = connect_db(conn)
 	if form.validate_on_submit():
+		print("Validated!")
 		data = (ticker, str(form.date_field.data))
-		SQL = "SELECT open_price, close_price, high, low, volume FROM stock_prices where ticker = %s AND pdate = %s"
+		SQL = "SELECT open_price, close_price, high, low FROM stock_prices WHERE ticker = %s AND pdate = %s"
 		cur.execute(SQL, data)
-		tup = cur.fetchall[0]
+		tup = cur.fetchall()[0]
 		close_db(cur, conn)
-		return render_template('stock.html', form = StockForm(), ticker = ticker, open_price = tup[0], close_price = tup[1], high = tup[2], low = tup[3], volume = tup[4])
-	return render_template('stock.html', form = form, ticker = ticker) 
+		return render_template('stock.html', date = str(form.date_field.data), validated = True, form = StockForm(), ticker = ticker, open_price = tup[0], close_price = tup[1], high = tup[2], low = tup[3])
+	else:
+		print("Nope")
+		return render_template('stock.html', form = form, ticker = ticker) 
+
+
+
 
 
 @app.route('/pick/<filename>/results')
@@ -88,9 +93,9 @@ def fig(ticker = None):
 	close_db(cur, conn)
 	return send_file(img, mimetype='image/png') 
 
-@app.route('/pick', methods=['GET', 'POST'])
-def show_picker():	
-	form = PickForm()
+@app.route('/upload', methods=['GET', 'POST'])
+def upload():	
+	form = UploadForm()
 	if form.validate_on_submit():
 		flash('TXT registered')
 		conn= init_db()
@@ -102,17 +107,25 @@ def show_picker():
 		cur.execute(SQL, data)
 		conn.commit()
 		close_db(cur, conn)
-		return redirect(url_for('show_results', ticker = ticker, filename = filename, form = form))
-		#return redirect(url_for('show_stocks'))		
+		return redirect(url_for('homepage', ticker = ticker, filename = filename, form = form))
 	else:
 		filename = None
-	return render_template('pick.html', form=form, filename=filename)
+	return render_template('upload.html', form=form, filename=filename)
+
+
+@app.route('/pick', methods = ['GET', 'POST'])
+def pick():
+	form = PickForm()
+	if form.validate_on_submit():
+		flash('Pick complete')
+		return redirect(url_for('show_results')) 
+	return render_template('pick.html', form = form)   	
 
 	
 @app.route('/about')
-def show_about():
+def about():
 	#TODO
-	return render_template('templates/about.html')
+	return render_template('about.html')
 
 
 	

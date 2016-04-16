@@ -22,13 +22,15 @@
 			</div>
 				<div class="col-md-8">
 					<div class="container form">
-						<h1>Pick</h1>
+						<h1>Upload</h1>
 						<form action="{{url_for('upload')}}" method='post' enctype = "multipart/form-data">
 							{{form.hidden_tag()}}
-							{{form.text.label}}: {{form.text}}</br>
-							{{form.money.label}}: {{form.money}}</br>
-							{{form.start_date.label}}: {{form.start_date}}<br/>
-							{{form.end_date.label}}: {{form.end_date}}<br/>
+							{{form.textType.label}}: {{form.textType}}<br/>
+							{{form.title.label}}: {{form.title}}</br>
+							{{form.description.label}}: {{form.description}}</br>
+							{{form.author.label}}: {{form.author}}<br/>
+							{{form.pub_date.label}}: {{form.pub_date}}<br/>
+							{{form.upload.label}}: {{form.upload}}<br/>
 							{{form.submit.label}}: {{form.submit}}<br/>
 						</form> 
 					</div>
