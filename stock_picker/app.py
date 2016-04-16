@@ -56,25 +56,27 @@ def show_stocks(searchterm = '', page = None):
 		close_db(cur, conn)
 		return render_template('index.html',search = search, entries=entries)
 
+
 @app.route('/index/stock/<ticker>', methods = ['GET', 'POST'])
 def show_stock(ticker = None):
 	form = StockForm()
 	conn = init_db()
 	cur  = connect_db(conn)
 	if form.validate_on_submit():
-		print("Validated!")
-		data = (ticker, str(form.date_field.data))
+		date = str(form.date_field.data).split()[0]	
+		data = (ticker, date)
 		SQL = "SELECT open_price, close_price, high, low FROM stock_prices WHERE ticker = %s AND pdate = %s"
 		cur.execute(SQL, data)
-		tup = cur.fetchall()[0]
-		close_db(cur, conn)
-		return render_template('stock.html', date = str(form.date_field.data), validated = True, form = StockForm(), ticker = ticker, open_price = tup[0], close_price = tup[1], high = tup[2], low = tup[3])
+		results = cur.fetchall()
+		if len(results) < 1:
+			close_db(cur, conn)
+			return render_template('stock.html', date = date, no_results = True, form = StockForm(), ticker = ticker)
+		else:
+			tup = results[0]
+			close_db(cur, conn)
+			return render_template('stock.html', no_results = False, date = str(form.date_field.data), validated = True, form = StockForm(), ticker = ticker, open_price = tup[0], close_price = tup[1], high = tup[2], low = tup[3])
 	else:
-		print("Nope")
 		return render_template('stock.html', form = form, ticker = ticker) 
-
-
-
 
 
 @app.route('/pick/<filename>/results')

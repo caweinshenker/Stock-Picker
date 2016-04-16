@@ -27,7 +27,9 @@
 					<img src="{{url_for('fig',dates = dates, opens = opens, closes = closes, ticker = ticker)}}" alt="Image placeholder" height = "500px">
 				</div>
 				<div id = "non-graph" class = "container-fluid">
-					{% if validated %}
+					{% if no_results %}
+						<h3>No results for {{date}}</h3>
+					{% elif validated %}
 					<div id = "stock-info">
 						<h3> {{date}}</h3>
 						<ul class="info">
