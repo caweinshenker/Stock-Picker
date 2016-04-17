@@ -44,12 +44,14 @@ Keyframes
 */
 
 .container{
-	width: 80%;
+	width: 100%;
 	margin: 50px 250px 0 200px;
 	height: 100%;
 }
 
 .container h1{
+	position: relative;
+	left: 15px;
 	font-size: 80px;
 }
 
@@ -69,6 +71,7 @@ Keyframes
 
 .container ul{
 	position: relative;
+	left: -75px;
 	margin-top: 20px;
 	margin: 30px 50px;	
 }

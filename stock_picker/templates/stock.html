@@ -11,7 +11,7 @@
 		<!-- Latest compiled JavaScript -->
 		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 		<link rel="stylesheet" type="text/css" href="../static/css/styles.css">
-		<link rel="stylesheet" type="text/css" href="../static/css/stock_index.css">
+		<link rel="stylesheet" type="text/css" href="../static/css/stock.css">
 		
 	</head>
 
@@ -25,6 +25,28 @@
 				<h1>{{ticker}}</h1>
 				<div id="price-graph">
 					<img src="{{url_for('fig',dates = dates, opens = opens, closes = closes, ticker = ticker)}}" alt="Image placeholder" height = "500px">
+				</div>
+				<div id = "non-graph" class = "container-fluid">
+					{% if no_results %}
+						<h3>No results for {{date}}</h3>
+					{% elif validated %}
+					<div id = "stock-info">
+						<h3> {{date}}</h3>
+						<ul class="info">
+							<li> Open: {{open_price}} </li>
+							<li> Close: {{close_price}} </li>
+							<li> High: {{high}} </li>
+							<li> Low: {{low}} </li>
+						</ul>
+					</div>
+					{% endif %}
+					<div id = "results-form">
+						<form action = "{{url_for('show_stock', ticker = ticker)}}" method = "post" enctype = 'multipart/form-data'>
+							{{form.hidden_tag()}}
+							{{form.date_field.label}}: {{form.date_field}}
+							{{form.submit}}
+						</form>
+					</div>
 				</div>
 			</div>
 		</div>

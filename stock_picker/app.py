@@ -1,8 +1,8 @@
 #!flask/bin/python
-
 #all the imports
 from flask import Flask, g, request, session, redirect, url_for, abort, render_template, flash, send_file
 from flask.ext.uploads import UploadSet, configure_uploads
+from math import ceil
 import sys
 import os
 import datetime
@@ -17,6 +17,9 @@ from forms  import PickForm, SearchForm
 from helpers import buy_stocks_from_portfolio.py as stockBuyer
 from helpers import parse_text_for_portfolio.py as textParser
 from helpers import construct_trie_from_tickers.py as trieMaker
+from forms  import UploadForm, PickForm, StockForm, SearchForm
+from pagination import Pagination
+from database import Db
 
 #configuration
 app = Flask(__name__)
@@ -37,11 +40,11 @@ def homepage():
 #@app.route('/stocks/page/<int:page>')
 @app.route('/index/<searchterm>', methods = ['GET', 'POST'])
 @app.route('/index')
-def show_stocks(searchterm = ''):
+def show_stocks(searchterm = '', page = None):
 	search = SearchForm()
 	conn = init_db()
 	cur = connect_db(conn)
-	SQL = "SELECT ticker, company_name FROM stock WHERE ticker LIKE %s OR company_name LIKE %s ORDER BY ticker;"
+	SQL = "SELECT ticker, company_name FROM stocks WHERE ticker LIKE %s OR company_name LIKE %s ORDER BY ticker;"
 	data =  ('%', '%')	
 	if search.validate_on_submit():
 		search_data = search.search.data
@@ -57,9 +60,27 @@ def show_stocks(searchterm = ''):
 		close_db(cur, conn)
 		return render_template('index.html',search = search, entries=entries)
 
-@app.route('/index/stock/<ticker>')
+
+@app.route('/index/stock/<ticker>', methods = ['GET', 'POST'])
 def show_stock(ticker = None):
-	return render_template('stock.html', ticker = ticker) 
+	form = StockForm()
+	conn = init_db()
+	cur  = connect_db(conn)
+	if form.validate_on_submit():
+		date = str(form.date_field.data).split()[0]	
+		data = (ticker, date)
+		SQL = "SELECT open_price, close_price, high, low FROM stock_prices WHERE ticker = %s AND pdate = %s"
+		cur.execute(SQL, data)
+		results = cur.fetchall()
+		if len(results) < 1:
+			close_db(cur, conn)
+			return render_template('stock.html', date = date, no_results = True, form = StockForm(), ticker = ticker)
+		else:
+			tup = results[0]
+			close_db(cur, conn)
+			return render_template('stock.html', no_results = False, date = str(form.date_field.data), validated = True, form = StockForm(), ticker = ticker, open_price = tup[0], close_price = tup[1], high = tup[2], low = tup[3])
+	else:
+		return render_template('stock.html', form = form, ticker = ticker) 
 
 
 @app.route('/pick/<filename>/results')
@@ -71,16 +92,16 @@ def show_results(ticker = None, filename= None, form = None):
 def fig(ticker = None):
 	conn = init_db()
 	cur = connect_db(conn)
-	cur.execute("SELECT * FROM stock_price WHERE ticker='" + str(ticker) + "'ORDER BY pdate")
+	cur.execute("SELECT * FROM stock_prices WHERE ticker='" + str(ticker) + "'ORDER BY pdate")
 	open_close = Open_Close_Graph(ticker, cur)
 	open_close.make_graph()
 	img = open_close.get_fig()
 	close_db(cur, conn)
 	return send_file(img, mimetype='image/png') 
 
-@app.route('/pick', methods=['GET', 'POST'])
-def show_picker():	
-	form = PickForm()
+@app.route('/upload', methods=['GET', 'POST'])
+def upload():	
+	form = UploadForm()
 	if form.validate_on_submit():
 		flash('TXT registered')
 		conn= init_db()
@@ -92,17 +113,25 @@ def show_picker():
 		cur.execute(SQL, data)
 		conn.commit()
 		close_db(cur, conn)
-		return redirect(url_for('show_results', ticker = ticker, filename = filename, form = form))
-		#return redirect(url_for('show_stocks'))		
+		return redirect(url_for('homepage', ticker = ticker, filename = filename, form = form))
 	else:
 		filename = None
-	return render_template('pick.html', form=form, filename=filename)
+	return render_template('upload.html', form=form, filename=filename)
+
+
+@app.route('/pick', methods = ['GET', 'POST'])
+def pick():
+	form = PickForm()
+	if form.validate_on_submit():
+		flash('Pick complete')
+		return redirect(url_for('show_results')) 
+	return render_template('pick.html', form = form)   	
 
 	
 @app.route('/about')
-def show_about():
+def about():
 	#TODO
-	return render_template('templates/about.html')
+	return render_template('about.html')
 
 @app.route('/text_result')
 def show_text_result():
