@@ -14,7 +14,7 @@ def query_database_for_tickers():
 	except StandardError as e:
 		print(str(e))
 	cur = conn.cursor()
-	query = "SELECT * FROM stock"
+	query = "SELECT * FROM stocks"
 
 	try:
 		cur.execute(query)
@@ -32,6 +32,7 @@ def query_database_for_tickers():
 '''
 def main():
 	tickerTrie = query_database_for_tickers()
+	print(tickerTrie)
 
 main()
 '''
