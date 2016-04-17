@@ -1,4 +1,3 @@
-#import pandas as pd
 import time
 import multiprocessing
 import psycopg2
@@ -11,7 +10,9 @@ from yahoo_finance import *
 """
 This file seeds the database with data from Yahoo! Finance API
 
-UPDATED: 2013-04-04 2016-04-04
+UPDATED: 2006-04-04 2016-04-04
+
+Unsure how to resolve threading problems
 """
 
 #Stocks files

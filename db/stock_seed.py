@@ -62,6 +62,7 @@ def create_stock(ticker, name, index, cur, conn):
 		end = info['end']
 	except Exception as e:
 		pass
+	#Special check to handle ways YF passes back data
 	if ((start != None) and (end != None)) and ('NaN' in start or 'NaN' in end):
 		start = None
 		end = None
@@ -72,6 +73,11 @@ def create_stock(ticker, name, index, cur, conn):
 
 
 def execute(cur, conn, data, SQL):
+	"""
+	Execute given SQL statement with given data
+	
+	params: cursor, database connection, data for query, SQL statement
+	"""
 	try:
 		cur.execute(SQL, data)
 	except psycopg2.IntegrityError as e:
@@ -99,7 +105,6 @@ def main():
 	indices = tickers_indices_names[1]
 	names = tickers_indices_names[2]
 	for i in range(len(tickers)):
-		#print(tickers[i])
 		create_stock(tickers[i], names[i], indices[i], cur, conn)	
 	conn.commit()
 	cur.close()	

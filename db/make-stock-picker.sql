@@ -33,6 +33,8 @@ CREATE TABLE stocks(
 );
 
 /*
+Add this table if Yahoo Finance actually cooperates
+
 CREATE TABLE companies(
   ticker         varchar(10) NOT NULL,
   name           varchar(200) NOT NULL,
@@ -82,6 +84,11 @@ CREATE TABLE text(
   pub_date       varchar(100), 
   von_value      numeric(3)
 );
+
+
+/*
+Add indices to speed up stock lookup
+*/
   
 CREATE INDEX STOCK_TICKER
 ON stocks(ticker);

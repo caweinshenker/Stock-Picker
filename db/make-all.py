@@ -1,7 +1,10 @@
 import os
 import sys
 
-
+"""
+NOTE: this will take a LONG time
+Run all the seed files to build a full stock-picker database.
+"""
 
 def main(argv):
 

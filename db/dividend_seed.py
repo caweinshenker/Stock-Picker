@@ -30,10 +30,7 @@ def parse_dividend_csv(filename):
 
 def input_data_to_database(dividend_data, cur, conn):
 	for entry in dividend_data:
-		#SQL = "select ticker from dividend_price where ticker = (%s)"
-		#execute(cur, conn, entry[0], SQL) 
-		#if len(cur.fetchall() == 0):
-		SQL = "INSERT INTO stock_dividend(ticker, ddate, price) VALUES (%s, %s, %s)"
+		SQL = "INSERT INTO stock_dividends(ticker, ddate, price) VALUES (%s, %s, %s)"
 		execute(cur, conn, entry, SQL)
 		conn.commit()
 		
