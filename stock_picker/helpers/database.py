@@ -6,7 +6,7 @@ class Db():
 
 	def __init__(self):
 		self.conn = self.__init_db()
-		self.cur = self.__connect_db(self.conn)
+		self.cur = self.__connect_db()
 			
 	def __init_db(self): 
 		 try:  
@@ -15,15 +15,18 @@ class Db():
 		 except Exception as e: 
 			 print(str(e))
 		 return conn
+		
+	def __del__(self):
+		self.conn.commit()
+		self.cur.close()
+		self.conn.close()
 
-	def __connect_db(self, conn):
-		return conn.cursor()
-
-	def __close_db(self, cur, conn):
-		conn.commit()
-		cur.close()
-		conn.close()
-
+	def __connect_db(self):
+		return self.conn.cursor()
+	
+	def fetchall(self):
+		return self.cur.fetchall()
+		
 	def get_cur(self):
 		return self.cur
 
