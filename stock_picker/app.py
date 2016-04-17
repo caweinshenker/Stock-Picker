@@ -85,8 +85,10 @@ def show_results(ticker = None, filename= None, form = None):
 @app.route('/index/<ticker>/fig')
 def fig(ticker = None):
 	db = Db()
-	db.execute("SELECT * FROM stock_prices WHERE ticker='" + str(ticker) + "'ORDER BY pdate;")
-	open_close = Open_Close_Graph(ticker, db.get_cur())
+	SQL = ("SELECT * FROM stock_prices WHERE ticker=%s ORDER BY pdate;")
+	data = (ticker,)
+	db.execute(SQL, data)
+	open_close = Open_Close_Graph(ticker, db.fetchall())
 	open_close.make_graph()
 	img = open_close.get_fig()
 	return send_file(img, mimetype='image/png') 

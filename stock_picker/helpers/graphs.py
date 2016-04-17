@@ -7,13 +7,13 @@ import datetime
 
 class Open_Close_Graph:
 	
-	def __init__(self, ticker = None, cur = None):
+	def __init__(self, ticker = None, data = None):
 		self.ticker = ticker
-		self.cur = cur
+		self.data = data
 		self.img = None
 
 	def make_graph(self):
-		prices = [dict(ticker = row[0], pdate = row[1], open_price = row[2], close = row[3]) for row in self.cur.fetchall()]
+		prices = [dict(ticker = row[0], pdate = row[1], open_price = row[2], close = row[3]) for row in self.data]
 		dates = []
 		opens = []
 		closes = []
