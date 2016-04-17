@@ -13,10 +13,7 @@ import psycopg2.extras
 import getpass
 sys.path.insert(0, 'helpers/')
 from graphs import Open_Close_Graph
-from forms  import PickForm, SearchForm
-from helpers import buy_stocks_from_portfolio.py as stockBuyer
-from helpers import parse_text_for_portfolio.py as textParser
-from helpers import construct_trie_from_tickers.py as trieMaker
+from parser import Parser
 from forms  import UploadForm, PickForm, StockForm, SearchForm
 from pagination import Pagination
 from database import Db
@@ -120,7 +117,7 @@ def pick():
 	form = PickForm()
 	if form.validate_on_submit():
 		flash('Pick complete')
-		return redirect(url_for('show_text_result')) 
+		return redirect(url_for('show_text_result', form.text.data, form)) 
 	return render_template('pick.html', form = form)   	
 	
 @app.route('/about')
@@ -129,7 +126,7 @@ def about():
 	return render_template('about.html')
 
 @app.route('/pick/<textname>/text_result')
-def show_text_result(textname = None):
+def show_text_result(textname = None, form = None):
 	#TODO
 	
 	return render_template('templates/text_result.html')

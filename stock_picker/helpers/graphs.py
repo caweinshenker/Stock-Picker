@@ -6,6 +6,10 @@ import psycopg2.extras
 import datetime
 
 class Open_Close_Graph:
+
+	"""
+	Create a graph of a stock's open and close prices
+	"""
 	
 	def __init__(self, ticker = None, data = None):
 		self.ticker = ticker
