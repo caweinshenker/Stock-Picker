@@ -62,21 +62,25 @@ def show_stock(ticker = None):
 	form = StockForm()
 	conn = init_db()
 	cur  = connect_db(conn)
+	SQL = "SELECT company_name FROM stocks where ticker = %s;"
+	data = (ticker,)
+	cur.execute(SQL, data)
+	company = cur.fetchall()[0][0]
 	if form.validate_on_submit():
 		date = str(form.date_field.data).split()[0]	
 		data = (ticker, date)
-		SQL = "SELECT open_price, close_price, high, low FROM stock_prices WHERE ticker = %s AND pdate = %s"
+		SQL = "SELECT open_price, close_price, high, low FROM stock_prices WHERE ticker = %s AND pdate = %s;"
 		cur.execute(SQL, data)
 		results = cur.fetchall()
 		if len(results) < 1:
 			close_db(cur, conn)
-			return render_template('stock.html', date = date, no_results = True, form = StockForm(), ticker = ticker)
+			return render_template('stock.html', date = date, company = company, no_results = True, form = StockForm(), ticker = ticker)
 		else:
 			tup = results[0]
 			close_db(cur, conn)
-			return render_template('stock.html', no_results = False, date = str(form.date_field.data), validated = True, form = StockForm(), ticker = ticker, open_price = tup[0], close_price = tup[1], high = tup[2], low = tup[3])
+			return render_template('stock.html', no_results = False, company = company, date = str(form.date_field.data).split()[0], validated = True, form = StockForm(), ticker = ticker, open_price = tup[0], close_price = tup[1], high = tup[2], low = tup[3])
 	else:
-		return render_template('stock.html', form = form, ticker = ticker) 
+		return render_template('stock.html', form = form, company = company, ticker = ticker) 
 
 
 @app.route('/pick/<filename>/results')
@@ -88,7 +92,7 @@ def show_results(ticker = None, filename= None, form = None):
 def fig(ticker = None):
 	conn = init_db()
 	cur = connect_db(conn)
-	cur.execute("SELECT * FROM stock_prices WHERE ticker='" + str(ticker) + "'ORDER BY pdate")
+	cur.execute("SELECT * FROM stock_prices WHERE ticker='" + str(ticker) + "'ORDER BY pdate;")
 	open_close = Open_Close_Graph(ticker, cur)
 	open_close.make_graph()
 	img = open_close.get_fig()
@@ -104,7 +108,7 @@ def upload():
 		cur = connect_db(conn)
 		filename = secure_filename(form.upload.data.filename)
 		form.upload.data.save(os.path.join(app.config['UPLOADED_TEXT_DEST'], filename))
-		SQL =  'INSERT INTO text (author_name, file_location, description, title, text_type, pub_date) VALUES (%s, %s, %s, %s, %s, %s)'
+		SQL =  'INSERT INTO text (author_name, file_location, description, title, text_type, pub_date) VALUES (%s, %s, %s, %s, %s, %s);'
 		data = (form.author.data, "uploads/" + form.upload.data.filename, form.description.data, form.title.data, form.textType.data, form.pub_date.data)
 		cur.execute(SQL, data)
 		conn.commit()

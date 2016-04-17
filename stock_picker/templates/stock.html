@@ -22,7 +22,7 @@
 		</div>
 		<div class="col-md-8">
 			<div class="container-fluid">
-				<h1>{{ticker}}</h1>
+				<h1>{{ticker}}--{{company}}</h1>
 				<div id="price-graph">
 					<img src="{{url_for('fig',dates = dates, opens = opens, closes = closes, ticker = ticker)}}" alt="Image placeholder" height = "500px">
 				</div>
