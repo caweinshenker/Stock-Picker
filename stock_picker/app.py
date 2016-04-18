@@ -3,6 +3,7 @@
 from flask import Flask, g, request, session, redirect, url_for, abort, render_template, flash, send_file
 from flask.ext.uploads import UploadSet, configure_uploads
 from math import ceil
+from werkzeug import secure_filename
 import sys
 import os
 import datetime
@@ -78,11 +79,6 @@ def show_stock(ticker = None):
 		return render_template('stock.html', form = form, company = company, ticker = ticker) 
 
 
-@app.route('/pick/<filename>/results')
-def show_results(ticker = None, filename= None, form = None):
-	#TODO
-	return render_template('results.html', filename = filename, form = form)
-
 @app.route('/index/<ticker>/fig')
 def fig(ticker = None):
 	db = Db()
@@ -116,20 +112,32 @@ def upload():
 def pick():
 	form = PickForm()
 	if form.validate_on_submit():
-		flash('Pick complete')
-		return redirect(url_for('show_text_result', form.text.data, form)) 
-	return render_template('pick.html', form = form)   	
+		textname = form.text.data.split("/")[1].split(".")[0]
+		textfile  = form.text.data
+		start_date = str(form.start_date.data).split()[0]
+		end_date = str(form.end_date.data).split()[0]
+		investment = form.money.data
+		#print(textname)
+		#print(textfile)
+		#print(start_date)
+		#print(end_date)
+		#return redirect(url_for('show_text_result', textname=textname, textfile = textfile, start_date = start_date, end_date = end_date, investment = investment,))
+		parser = Parser(textfile, investment, start_date, end_date)
+		return render_template('text_result.html', parser = parser)
+	else:
+		print("Nope")
+		return render_template('pick.html', form = form)   	
 	
 @app.route('/about')
 def about():
 	#TODO
 	return render_template('about.html')
 
-@app.route('/pick/<textname>/text_result')
-def show_text_result(textname = None, form = None):
-	#TODO
-	
-	return render_template('templates/text_result.html')
+@app.route('/pick/<textname>')
+def show_text_result(textname = None, textfile = None, start_date = None, end_date = None, investment = None):
+	parser = Parser(textfile, investment, start_date, end_date)	
+	return render_template('templates/text_result.html', parser = parser)
+
 	
 if __name__=='__main__':
 	app.run()

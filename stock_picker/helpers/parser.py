@@ -1,6 +1,6 @@
 from pytrie import SortedStringTrie
 from database import Db
-from date_parse import Date_Parser
+from date_parser import Date_Parser
 import psycopg2
 import sys
 import csv
@@ -10,17 +10,17 @@ import random
 
 
 class Parser:
-	
+
 	def __init__(self, text, investment, start_date, end_date):
 		self.db = Db()
-		self.trie = self.build_trie() 
+		self.trie = self.__build_trie() 
 		self.text = text
 		self.investment = investment
 		self.start_date = start_date
 		self.end_date = end_date
-		self.tickerDict = self.parse_text(self.text, self.trie)
-		self.portfolio = self.make_portfolio(investment, start_date, end_date)
-		self.portfolio_growth = self.portfolio_growth()
+		self.tickerDict = self.__parse_text()
+		self.portfolio = self.__make_portfolio(self.investment, self.start_date, self.end_date)
+		#self.portfolio_growth = self.__portfolio_growth()
 
 	def __build_trie(self):
 		''' 
@@ -32,11 +32,12 @@ class Parser:
 		tickerRawData = self.db.fetchall()
 		tickerList = [row[0] for row in tickerRawData]
 		trie = SortedStringTrie.fromkeys(tickerList, 0)
+		print("Trie built")
 		return trie
 
-	def __parse_text(self, text, trie): 
+	def __parse_text(self): 
         	tickerDict = {} 
-        	with open(text, "r") as text:
+        	with open(self.text, "r") as text:
                 	for line in text:
                         	line = re.sub('[^A-Za-z0-9]+', '', line)
                         	line = line.replace(" ", "")
@@ -48,7 +49,7 @@ class Parser:
 					endOfWord = False
 					successfulParse = True
 					while(len(subString) > 0 & endOfWord == False):
-						while(subString in trie):
+						while(subString in self.trie):
 							successfulParse = True
 							if (subString in tickerDict):
 								tickerDict[subString] += 1
@@ -70,14 +71,16 @@ class Parser:
 									endOfWord = True
 							subString = "" + word[index]
 						successfulParse = False
+		print("File parsed")
 		return tickerDict
 
 	
-	def __make_portfolio( capitalInvested, buyDate, sellDate):
+	def __make_portfolio(self, capitalInvested, buyDate, sellDate):
 		portfolio = {}
 		budget = capitalInvested
 		canBuyMoreStocks = True
 		while((budget > 0) and (canBuyMoreStocks)):
+			print(budget)
 			randomTicker = random.choice(list(self.tickerDict.keys()))
 			randomTicker = re.sub('[^A-Za-z0-9]+', '', randomTicker)
 			curTickerBuyDate = buyDate
@@ -114,7 +117,7 @@ class Parser:
 		return portfolio
 		
 
-	def portfolio_growth():
+	def __portfolio_growth(self):
 		dp = Date_Parser(self.start_date, self.end_date)
 		date_range = dp.get_date_range()
 		value_at_date = {}
@@ -124,9 +127,13 @@ class Parser:
 			for ticker in self.portfolio.keys():
 				data = (ticker, date)
 				self.db.execute(SQL, data)
-				if len(db.fetchall()) > 0:
-					open_price = db.fetchall()[0][0]
+				if len(self.db.fetchall()) > 0:
+					print(self.db.fetchall())
+					open_price = self.db.fetchall()[0][0]
 					portfolio_value += open_price * portfolio[ticker]
-			value_at_date[date] = portfolio_value 
+			if portfolio_value != 0:				
+				value_at_date[date] = portfolio_value
+			else:
+				date_range.remove(date) 
 		return value_at_date		
 					

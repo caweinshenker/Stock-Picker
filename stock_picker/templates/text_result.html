@@ -22,10 +22,15 @@
 		</div>
 		<div class="col-md-8">
 			<div class="container-fluid">
-				<h1>{{ticker}}</h1>
-				<div id="price-graph">
-					<img src="{{url_for('fig',dates = dates, opens = opens, closes = closes, ticker = ticker)}}" alt="Image placeholder" height = "500px">
+				<h1>Portfolio for {{parser.text.split("/")[1].split(".")[0].capitalize()}}: {{parser.start_date}}--{{parser.end_date}}</h1>
+				<div id="portfolio-graph">
 				</div>
+				{% for stock, count in parser.portfolio.items() %}
+					<div id= "portfolio-info">
+						<h4>{{stock}}</h4>
+						<h6>{{count}}</h6>					
+					</div>
+				{% endfor %}
 			</div>
 		</div>
 		<div class = "col-md-8 footer">

@@ -8,8 +8,8 @@ class Date_Parser:
 		self.start = None
 		self.end = None
 		self.date_range = []
-		self.create_datetimes()
-		self.create_date_range()
+		self.__create_datetimes()
+		self.__create_date_range()
 
 	def __create_datetimes(self):
 		start_split = self.start_date.split("-")
