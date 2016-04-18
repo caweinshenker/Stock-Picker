@@ -19,7 +19,12 @@ class Parser:
 		self.start_date = start_date
 		self.end_date = end_date
 		self.tickerDict = self.__parse_text()
+		self.proportionate_list = self.__build_proportionate_list()
+		self.start_value = 0
+		self.end_value = 0
 		self.portfolio = self.__make_portfolio(self.investment, self.start_date, self.end_date)
+		self.net_change = self.__net_change()
+
 		#self.portfolio_growth = self.__portfolio_growth()
 
 	def __build_trie(self):
@@ -32,7 +37,6 @@ class Parser:
 		tickerRawData = self.db.fetchall()
 		tickerList = [row[0] for row in tickerRawData]
 		trie = SortedStringTrie.fromkeys(tickerList, 0)
-		print("Trie built")
 		return trie
 
 	def __parse_text(self): 
@@ -71,17 +75,26 @@ class Parser:
 									endOfWord = True
 							subString = "" + word[index]
 						successfulParse = False
-		print("File parsed")
 		return tickerDict
 
+	def __build_proportionate_list(self):
+		proportionate_list = []
+		for key in self.tickerDict:
+			count = self.tickerDict[key]
+			while (count > 0):
+				count -= 1
+				proportionate_list.append(key)
+		return proportionate_list
+
+
 	
-	def __make_portfolio(self, capitalInvested, buyDate, sellDate):
+	def __make_portfolio(self, capitalInvested, buyDate, sellDate):	
+		random.seed(0)
 		portfolio = {}
 		budget = capitalInvested
 		canBuyMoreStocks = True
 		while((budget > 0) and (canBuyMoreStocks)):
-			print(budget)
-			randomTicker = random.choice(list(self.tickerDict.keys()))
+			randomTicker = random.choice(self.proportionate_list)
 			randomTicker = re.sub('[^A-Za-z0-9]+', '', randomTicker)
 			curTickerBuyDate = buyDate
 			selectTickerSatisfyingQuery = "SELECT ticker FROM stock_prices WHERE ticker = %s AND pdate = %s"
@@ -90,7 +103,7 @@ class Parser:
 			selectTickerSatisfying = self.db.fetchall()
 			canBuyTicker = (len(selectTickerSatisfying) > 0)
 			while(canBuyTicker == False):
-				randomTicker = random.choice(list(self.tickerDict.keys()))
+				randomTicker = random.choice(self.proportionate_list)
 				randomTicker = re.sub('[^A-Za-z0-9]+', '', randomTicker)
 				data = (randomTicker, curTickerBuyDate)
 				self.db.execute(selectTickerSatisfyingQuery, data)
@@ -117,6 +130,15 @@ class Parser:
 		return portfolio
 		
 
+	def __net_change(self):
+		self.start_value = 0
+		self.end_value = 0
+		for ticker in self.portfolio:
+			self.start_value += self.portfolio[ticker][2] * self.portfolio[ticker][4]
+			self.end_value += self.portfolio[ticker][3] * self.portfolio[ticker][4]
+		self.net_change = self.end_value - self.start_value
+		
+
 	def __portfolio_growth(self):
 		dp = Date_Parser(self.start_date, self.end_date)
 		date_range = dp.get_date_range()
@@ -128,7 +150,6 @@ class Parser:
 				data = (ticker, date)
 				self.db.execute(SQL, data)
 				if len(self.db.fetchall()) > 0:
-					print(self.db.fetchall())
 					open_price = self.db.fetchall()[0][0]
 					portfolio_value += open_price * portfolio[ticker]
 			if portfolio_value != 0:				

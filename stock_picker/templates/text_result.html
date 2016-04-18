@@ -23,6 +23,9 @@
 		<div class="col-md-8">
 			<div class="container-fluid">
 				<h1>Portfolio for {{parser.text.split("/")[1].split(".")[0].capitalize()}}: {{parser.start_date}}--{{parser.end_date}}</h1>
+				<h1> Start value: {{parser.start_value}}</h1>
+				<h1> End value: {{parser.end_value}}</h1>
+				<h1> Net change: {{parser.net_change}}</h1>
 				<div id="portfolio-graph">
 				</div>
 				{% for stock, count in parser.portfolio.items() %}
