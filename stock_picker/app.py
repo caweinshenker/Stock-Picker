@@ -13,7 +13,7 @@ import StringIO
 import psycopg2.extras
 import getpass
 sys.path.insert(0, 'helpers/')
-from graphs import Open_Close_Graph
+from graphs import Open_Close_Graph, Volume_Graph
 from parser import Parser
 from forms  import UploadForm, PickForm, StockForm, SearchForm
 from pagination import Pagination
@@ -67,20 +67,22 @@ def show_stock(ticker = None):
 	if form.validate_on_submit():
 		date = str(form.date_field.data).split()[0]	
 		data = (ticker, date)
-		SQL = "SELECT open_price, close_price, high, low FROM stock_prices WHERE ticker = %s AND pdate = %s;"
-		db.execute(SQL, data)
-		results = db.fetchall()
+		price_SQL = "SELECT open_price, close_price, high, low FROM stock_prices WHERE ticker = %s AND pdate = %s;"
+		volume_SQL = "SELECT volume FROM stock_volumes where ticker = %s AND vdate = %s;"
+		db.execute(price_SQL, data)
+		results = list(db.fetchall()[0])
+		db.execute(volume_SQL, data)
+		results.append(db.fetchall()[0][0])
 		if len(results) < 1:
 			return render_template('stock.html', date = date, company = company, no_results = True, form = StockForm(), ticker = ticker)
 		else:
-			tup = results[0]
-			return render_template('stock.html', no_results = False, company = company, date = str(form.date_field.data).split()[0], validated = True, form = StockForm(), ticker = ticker, open_price = tup[0], close_price = tup[1], high = tup[2], low = tup[3])
+			return render_template('stock.html', no_results = False, company = company, date = str(form.date_field.data).split()[0], validated = True, form = StockForm(), ticker = ticker, open_price = results[0], close_price = results[1], high = results[2], low = results[3], volume = results[4])
 	else:
 		return render_template('stock.html', form = form, company = company, ticker = ticker) 
 
 
 @app.route('/index/<ticker>/fig')
-def fig(ticker = None):
+def prices_fig(ticker = None):
 	db = Db()
 	SQL = ("SELECT * FROM stock_prices WHERE ticker=%s ORDER BY pdate;")
 	data = (ticker,)
@@ -89,6 +91,18 @@ def fig(ticker = None):
 	open_close.make_graph()
 	img = open_close.get_fig()
 	return send_file(img, mimetype='image/png') 
+
+@app.route('/index/<ticker>/volume_fig')
+def volume_fig(ticker = None):
+	db = Db()
+	SQL = ("Select vdate, volume FROM stock_volumes WHERE ticker = %s ORDER BY vdate;")
+	data = (ticker,)
+	db.execute(SQL, data)
+	volume_graph = Volume_Graph(ticker, db.fetchall())
+	volume_graph.make_graph()
+	img = volume_graph.get_fig()
+	return send_file(img, mimetype='image/png')
+
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():	
@@ -117,11 +131,6 @@ def pick():
 		start_date = str(form.start_date.data).split()[0]
 		end_date = str(form.end_date.data).split()[0]
 		investment = form.money.data
-		#print(textname)
-		#print(textfile)
-		#print(start_date)
-		#print(end_date)
-		#return redirect(url_for('show_text_result', textname=textname, textfile = textfile, start_date = start_date, end_date = end_date, investment = investment,))
 		parser = Parser(textfile, investment, start_date, end_date)
 		return render_template('text_result.html', parser = parser)
 	else:

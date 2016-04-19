@@ -17,18 +17,18 @@ class Open_Close_Graph:
 		self.img = None
 
 	def make_graph(self):
-		prices = [dict(ticker = row[0], pdate = row[1], open_price = row[2], close = row[3]) for row in self.data]
 		dates = []
 		opens = []
 		closes = []
-		for day in prices:
-			dates.append(day["pdate"])
-			opens.append(day["open_price"])
-			closes.append(day["close"])
-		plt.rcParams.update({'font.size': 12})
+		for row in self.data:
+			dates.append(row[1])
+			opens.append(row[2])
+			closes.append(row[3])
+		plt.rcParams.update({'font.size': 10})
+		plt.title('Open/Close Prices')
 		plt.plot(dates, opens, 'r-', dates, closes, 'b-')
 		plt.xlabel('Date')
-		plt.ylabel('Price')
+		plt.ylabel('Price (USD)')
 		red_patch = mpatches.Patch(color = 'red', label = 'Open price')
 		blue_patch = mpatches.Patch(color = 'blue', label = 'Close price')
 		plt.legend(handles=[red_patch, blue_patch])
@@ -44,4 +44,26 @@ class Open_Close_Graph:
 			return self.img
 		else:
 			return None
+
+
+class Volume_Graph(Open_Close_Graph):
+	
+	def make_graph(self):
+		print("here!")
+		dates = []
+		volumes = []
+		for row in self.data:
+			print(row)
+			dates.append(row[0])
+			volumes.append(row[1])
+		plt.rcParams.update({'font.size': 10})
+		plt.title('Trade Volume')
+		plt.plot(dates, volumes, 'gs', markersize=2)
+		plt.xlabel('Date')
+		plt.ylabel('Volume')
+		fig = plt.gcf()
+		self.img = StringIO.StringIO()
+		fig.savefig(self.img)
+		self.img.seek(0)
+		plt.close()
 
