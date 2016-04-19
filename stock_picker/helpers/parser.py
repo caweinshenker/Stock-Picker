@@ -25,7 +25,7 @@ class Parser:
 		self.portfolio = self.__make_portfolio(self.investment, self.start_date, self.end_date)
 		self.net_change = self.__net_change()
 
-		#self.portfolio_growth = self.__portfolio_growth()
+		self.portfolio_growth = self.__portfolio_growth()
 
 	def __build_trie(self):
 		''' 
@@ -149,7 +149,7 @@ class Parser:
 			for ticker in self.portfolio.keys():
 				data = (ticker, date)
 				self.db.execute(SQL, data)
-				if len(self.db.fetchall()) > 0:
+				if self.db.fetchall() != []:
 					open_price = self.db.fetchall()[0][0]
 					portfolio_value += open_price * portfolio[ticker]
 			if portfolio_value != 0:				

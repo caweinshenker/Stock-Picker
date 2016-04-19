@@ -1,10 +1,19 @@
-/*============
-  Main
- =============
+/*
+==============
+Main
+==============
 */
 
 .container-fluid{
 	width: inherit;
+	margin-left: 0;
+}
+
+
+.search-form{
+	position: fixed;
+	left: 700px;
+	top: 30px;
 }
 	
 
@@ -43,4 +52,3 @@ img{
 	position: fixed;
 	width: 450px;
 }
-

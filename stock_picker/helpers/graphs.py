@@ -53,7 +53,6 @@ class Volume_Graph(Open_Close_Graph):
 		dates = []
 		volumes = []
 		for row in self.data:
-			print(row)
 			dates.append(row[0])
 			volumes.append(row[1])
 		plt.rcParams.update({'font.size': 10})
