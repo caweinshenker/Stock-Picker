@@ -1,19 +1,11 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF-8">
-		<!-- Latest compiled and minified CSS -->
-		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+	{% block head%}
 
-		<!-- jQuery library -->
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+                {%include '_head.html' %}
+                <link rel = "stylesheet" type="text/css" href="../static/css/stock.css">
 
-		<!-- Latest compiled JavaScript -->
-		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-		<link rel="stylesheet" type="text/css" href="../static/css/styles.css">
-		<link rel="stylesheet" type="text/css" href="../static/css/stock.css">
-		
-	</head>
+        {% endblock %}
 
 	{% block body %}	
 	<body>	
@@ -24,7 +16,8 @@
 			<div class="container-fluid">
 				<h1>{{ticker}}--{{company}}</h1>
 				<div id="price-graph">
-					<img src="{{url_for('fig',dates = dates, opens = opens, closes = closes, ticker = ticker)}}" alt="Image placeholder" height = "500px">
+					<img src="{{url_for('prices_fig', ticker = ticker)}}" alt="Open/Close graph" height = "500px">
+					<img src="{{url_for('volume_fig', ticker = ticker)}}" alt="Volumes graph" height = "500px">
 				</div>
 				<div id = "non-graph" class = "container-fluid">
 					{% if no_results %}
@@ -37,6 +30,7 @@
 							<li> Close: {{close_price}} </li>
 							<li> High: {{high}} </li>
 							<li> Low: {{low}} </li>
+							<li> Volume: {{volume}}</li>
 						</ul>
 					</div>
 					{% endif %}
@@ -53,6 +47,22 @@
 		<div class = "col-md-8 footer">
 		</div>
 		<div class="col-md-2">
+		<!--	<div id = "non-graph" class = "container-fluid">
+				{% if no_results %}
+					<h3>No results for {{date}}</h3>
+				{% elif validated %}
+				<div id = "stock-info">
+					<h3> {{date}}</h3>
+					<ul class="info">
+						<li> Open: {{open_price}} </li>
+						<li> Close: {{close_price}} </li>
+						<li> High: {{high}} </li>
+						<li> Low: {{low}} </li>
+						<li> Volume: {{volume}}</li>
+					</ul>
+				</div>
+				{% endif %}
+			</div>	-->
 		</div>
 	</body>	
 	{% endblock %}

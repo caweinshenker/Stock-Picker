@@ -2,13 +2,16 @@ html,body {
   height:100%;
 }
 
-/*
-h1 {
-  font-family: Arial,sans-serif;
-  font-size:80px;
-  color:#DDCCEE;
+@import url(https://fonts.googleapis.com/css?family=Lora);
+body {
+  background-color:#fff;
+  font-seize:1em;
+  font-family: 'Lora', serif;
 }
-*/
+section {width:100%; padding:2% 0px;}
+a, a:hover {text-decoration:none;}
+.item {margin:0px auto;}
+
 
 .lead {
 	color:#DDCCEE;

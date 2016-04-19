@@ -14,6 +14,8 @@ echo Installing Flask-WTF
 pip install Flask-WTF --user
 echo Installing Flask-Uploads
 pip install Flask-Uploads --user
+echo installing Flask-Scss
+pip install Flask-Scss --user
 echo Installing wtforms_components
 pip install wtforms_components --user
 echo Augmenting PYTHONPATH to support installations
