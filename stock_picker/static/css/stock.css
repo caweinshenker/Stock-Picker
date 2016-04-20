@@ -34,8 +34,6 @@
 
 
 h1{
-	position: relative;
-	left: 10;
 }
 
 img{
@@ -44,6 +42,15 @@ img{
 	position: fixed;
 	width: 450px;
 }
+
+
+.article{
+	float: right;
+	width: 100%;
+	size: 10px;
+		
+}
+
 
 .non-graph{
 	width: 50%;
@@ -55,3 +62,4 @@ img{
 .info ul, li{
 	list-style-type: none;
 }
+

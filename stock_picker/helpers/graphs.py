@@ -49,7 +49,6 @@ class Open_Close_Graph:
 class Volume_Graph(Open_Close_Graph):
 	
 	def make_graph(self):
-		print("here!")
 		dates = []
 		volumes = []
 		for row in self.data:

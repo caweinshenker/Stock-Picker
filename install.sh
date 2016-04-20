@@ -18,5 +18,7 @@ echo installing Flask-Scss
 pip install Flask-Scss --user
 echo Installing wtforms_components
 pip install wtforms_components --user
+echo Installing nytimesarticle API
+pip install nytimesarticle --user
 echo Augmenting PYTHONPATH to support installations
 echo 'export PYTHONPATH="${PYTHONPATH}:~/.local/lib/python3.4/site-packages"' >> ~/.bashrc

@@ -18,6 +18,8 @@ from parser import Parser
 from forms  import UploadForm, PickForm, StockForm, SearchForm
 from pagination import Pagination
 from database import Db
+from nyt_parser import NYT_Parser
+
 
 #configuration
 app = Flask(__name__)
@@ -25,6 +27,8 @@ app.config['UPLOADED_TEXT_DEST'] = 'uploads/'
 DEBUG = True
 txtfiles = UploadSet('text', ('txt',))
 app.secret_key = 'secret'
+reload(sys)
+sys.setdefaultencoding('utf8')
 configure_uploads(app, (txtfiles,))
 PER_PAGE = 30
 app.config.from_object(__name__)
@@ -70,13 +74,20 @@ def show_stock(ticker = None):
 		price_SQL = "SELECT open_price, close_price, high, low FROM stock_prices WHERE ticker = %s AND pdate = %s;"
 		volume_SQL = "SELECT volume FROM stock_volumes where ticker = %s AND vdate = %s;"
 		db.execute(price_SQL, data)
-		results = list(db.fetchall()[0])
+		price_results = db.fetchall()
 		db.execute(volume_SQL, data)
-		results.append(db.fetchall()[0][0])
-		if len(results) < 1:
+		volume_results= db.fetchall()
+		if len(price_results) == 0 or len(volume_results) == 0:
 			return render_template('stock.html', date = date, company = company, no_results = True, form = StockForm(), ticker = ticker)
 		else:
-			return render_template('stock.html', no_results = False, company = company, date = str(form.date_field.data).split()[0], validated = True, form = StockForm(), ticker = ticker, open_price = results[0], close_price = results[1], high = results[2], low = results[3], volume = results[4])
+			results = list(price_results[0])
+			results.extend(list(volume_results[0]))
+			nyt = NYT_Parser()
+			nyt.find_articles(company, date)
+			articles = nyt.get_news()
+			print(articles) 	
+			return render_template('stock.html', no_results = False, company = company, date = str(form.date_field.data).split()[0], validated = True, form = StockForm(), ticker = ticker, open_price = results[0], close_price = results[1], high = results[2], low = results[3], volume = results[4], articles = articles)
+		
 	else:
 		return render_template('stock.html', form = form, company = company, ticker = ticker) 
 

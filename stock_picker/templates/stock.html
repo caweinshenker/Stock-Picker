@@ -2,67 +2,62 @@
 <html>
 	{% block head %}
 
+		<link rel = "stylesheet" type="text/css" href="../static/css/stock.css">
                 {% include '_head.html' %}
-                <link rel = "stylesheet" type="text/css" href="../static/css/stock.css">
-
+                
         {% endblock %}
 
 	{% block body %}	
 	<body>	
-		<div class="col-md-2">
-			{% include '_nav.html' %}	
-		</div>
-		<div class="col-md-8">
-			<div class="container-fluid">
-				<h1>{{ticker}}--{{company}}</h1>
-				<div id="price-graph">
-					<img src="{{url_for('prices_fig', ticker = ticker)}}" alt="Open/Close graph" height = "500px">
-					<img src="{{url_for('volume_fig', ticker = ticker)}}" alt="Volumes graph" height = "500px">
-				</div>
-				<div id = "non-graph" class = "container-fluid">
-					{% if no_results %}
-						<h3>No results for {{date}}</h3>
-					{% elif validated %}
-					<div id = "stock-info">
-						<h3> {{date}}</h3>
-						<ul class="info">
-							<li> Open: {{open_price}} </li>
-							<li> Close: {{close_price}} </li>
-							<li> High: {{high}} </li>
-							<li> Low: {{low}} </li>
-							<li> Volume: {{volume}}</li>
-						</ul>
-					</div>
-					{% endif %}
-					<div id = "results-form">
-						<form action = "{{url_for('show_stock', ticker = ticker)}}" method = "post" enctype = 'multipart/form-data'>
-							{{form.hidden_tag()}}
-							{{form.date_field.label}}: {{form.date_field}}
-							{{form.submit}}
-						</form>
-					</div>
-				</div>
+		<div class="container-fluid">
+			<div class="col-md-2">
+				{% include '_nav.html' %}	
 			</div>
-		</div>
-		<div class = "col-md-8 footer">
-		</div>
-		<div class="col-md-2">
-		<!--	<div id = "non-graph" class = "container-fluid">
-				{% if no_results %}
-					<h3>No results for {{date}}</h3>
-				{% elif validated %}
-				<div id = "stock-info">
-					<h3> {{date}}</h3>
-					<ul class="info">
-						<li> Open: {{open_price}} </li>
-						<li> Close: {{close_price}} </li>
-						<li> High: {{high}} </li>
-						<li> Low: {{low}} </li>
-						<li> Volume: {{volume}}</li>
-					</ul>
+			<div class="col-md-8">
+					<h1>{{ticker}}--{{company}}</h1>
+					<div id="price-graph">
+						<img src="{{url_for('prices_fig', ticker = ticker)}}" alt="Open/Close graph" height = "500px">
+						<img src="{{url_for('volume_fig', ticker = ticker)}}" alt="Volumes graph" height = "500px">
+					</div>
+					<div id = "non-graph" class = "container-fluid">
+						{% if no_results %}
+							<h3>No results for {{date}}</h3>
+						{% elif validated %}
+						<div id = "stock-info">
+							<h3> {{date}}</h3>
+							<ul class="info">
+								<li> Open: {{open_price}} </li>
+								<li> Close: {{close_price}} </li>
+								<li> High: {{high}} </li>
+								<li> Low: {{low}} </li>
+								<li> Volume: {{volume}}</li>
+							</ul>
+						</div>
+						{% endif %}
+						<div id = "results-form">
+							<form action = "{{url_for('show_stock', ticker = ticker)}}" method = "post" enctype = 'multipart/form-data'>
+								{{form.hidden_tag()}}
+								{{form.date_field.label}}: {{form.date_field}}
+								{{form.submit}}
+							</form>
+						</div>
+					</div>
 				</div>
+			<div class="col-md-2">
+				{% if validated %}
+					<h1> Articles </h1>
+					{% if articles.count == 0  %}
+					<p class = "no-results">No articles for {{company}} on {{date}}</p>
+					{% else  %}
+						{%for article in articles %}
+							<div class = "article">
+								<span>{{article['date']}}<span> 
+								<a href = "{{article['url']}}">{{article['headline']}}</a>
+							</div>
+						{%endfor%}
+					{% endif %}
 				{% endif %}
-			</div>	-->
+			</div>
 		</div>
 	</body>	
 	{% endblock %}
