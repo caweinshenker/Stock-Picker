@@ -12,8 +12,6 @@ class NYT_Parser:
 		Accept a year in 'YYYY-MM-DD' format and a search query and return a list of parsed articles in dictionaries
 		'''
 		date = int("".join(date.split("-")))
-		print(company)
-		print(date)
 		articles = self.api.search(q = company, fq = {'source':['Reuters', 'AP', 'The New York Times']}, begin_date = date, sort = 'oldest')
 		self.__parse_articles(articles)
 

@@ -149,9 +149,10 @@ class Parser:
 			for ticker in self.portfolio.keys():
 				data = (ticker, date)
 				self.db.execute(SQL, data)
-				if self.db.fetchall() != []:
-					open_price = self.db.fetchall()[0][0]
-					portfolio_value += open_price * portfolio[ticker]
+				results = self.db.fetchall()
+				if len(results) > 0:
+					open_price = results[0][0]
+					portfolio_value += float(open_price) * self.portfolio[ticker][4]
 			if portfolio_value != 0:				
 				value_at_date[date] = portfolio_value
 			else:

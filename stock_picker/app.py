@@ -85,7 +85,6 @@ def show_stock(ticker = None):
 			nyt = NYT_Parser()
 			nyt.find_articles(company, date)
 			articles = nyt.get_news()
-			print(articles) 	
 			return render_template('stock.html', no_results = False, company = company, date = str(form.date_field.data).split()[0], validated = True, form = StockForm(), ticker = ticker, open_price = results[0], close_price = results[1], high = results[2], low = results[3], volume = results[4], articles = articles)
 		
 	else:
