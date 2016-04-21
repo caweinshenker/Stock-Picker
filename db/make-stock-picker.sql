@@ -8,12 +8,6 @@ drop table stock_prices;
 delete from stock_dividends;
 drop table stock_dividends;
 
-/*
-delete from companies;
-drop table companies;
-*/
-
-
 delete from stock_volumes;
 drop table stock_volumes;
 
@@ -31,21 +25,6 @@ CREATE TABLE stocks(
   end_date       date, 
   PRIMARY KEY    (ticker, stock_index)
 );
-
-/*
-Add this table if Yahoo Finance actually cooperates
-
-CREATE TABLE companies(
-  ticker         varchar(10) NOT NULL,
-  name           varchar(200) NOT NULL,
-  sector         varchar(100),
-  industry       varchar(100),
-  full_time_emps integer,
-  PRIMARY KEY    (ticker, name),
-  FOREIGN KEY (ticker) REFERENCES stocks(ticker) ON DELETE SET NULL ON UPDATE SET NULL
-);   
-*/
-
 
 CREATE TABLE stock_prices(
   ticker         varchar(10) NOT NULL,
@@ -82,7 +61,6 @@ CREATE TABLE text(
   title          varchar(100),
   text_type      varchar(100),
   pub_date       varchar(100), 
-  von_value      numeric(3)
 );
 
 
