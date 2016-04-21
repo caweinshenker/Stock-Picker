@@ -1,31 +1,25 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF-8">
-		<!-- Latest compiled and minified CSS -->
-		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-
-		<!-- jQuery library -->
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-
-		<!-- Latest compiled JavaScript -->
-		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-		<link rel="stylesheet" type="text/css" href="../static/css/styles.css">
+		
+	{% block head %}
+		
+		{% include '_head.html' %}
 		<link rel="stylesheet" type="text/css" href="../static/css/stock_index.css">
 		
-	</head>
+	{% endblock %}
 
 	{% block body %}	
-	<body>	
-		<div class="col-md-2">
-			{% include '_nav.html' %}	
-		</div>
-		<div class="col-md-8">
-			<div class="container-fluid">
+	<body>
+		<div class="container-fluid">	
+			<div class="col-md-2">
+				{% include '_nav.html' %}	
+			</div>
+			<div class="col-md-8">
 				<h1>Portfolio for {{parser.text.split("/")[1].split(".")[0].capitalize()}}: {{parser.start_date}}--{{parser.end_date}}</h1>
-				<h1> Start value: {{parser.start_value}}</h1>
-				<h1> End value: {{parser.end_value}}</h1>
-				<h1> Net change: {{parser.net_change}}</h1>
+				<img src="{{url_for('.portfolio_fig', textname=textname, parser = parser)}}" alt="Portfolio graph" height = "500px"> 
+				<p> Start value: {{parser.start_value}}</p>
+				<p> End value: {{parser.end_value}}</p>
+				<p> Net change: {{parser.net_change}}</p>
 				<div id="portfolio-graph">
 				</div>
 				{% for stock, count in parser.portfolio.items() %}
@@ -35,10 +29,8 @@
 					</div>
 				{% endfor %}
 			</div>
-		</div>
-		<div class = "col-md-8 footer">
-		</div>
-		<div class="col-md-2">
+			<div class="col-md-2">
+			</div>
 		</div>
 	</body>	
 	{% endblock %}

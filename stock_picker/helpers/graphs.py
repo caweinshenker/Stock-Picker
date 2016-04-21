@@ -4,8 +4,10 @@ import StringIO
 import psycopg2
 import psycopg2.extras
 import datetime
+from parser import Parser
 
-class Open_Close_Graph:
+
+class Open_Close_Graph(object):
 
 	"""
 	Create a graph of a stock's open and close prices
@@ -46,6 +48,9 @@ class Open_Close_Graph:
 			return None
 
 
+
+
+
 class Volume_Graph(Open_Close_Graph):
 	
 	def make_graph(self):
@@ -65,3 +70,50 @@ class Volume_Graph(Open_Close_Graph):
 		self.img.seek(0)
 		plt.close()
 
+
+class Dividends_Graph(Open_Close_Graph):
+	
+	def make_graph(self):
+		dates = []
+		dividends = []	
+		for row in self.data:
+			dates.append(row[0])
+			dividends.append(row[1])
+		plt.rcParams.update({'font.size': 10})
+		plt.title('Dividend Values')
+		plt.plot(dates, dividends, 'y-')
+		plt.xlabel('Date')
+		plt.ylabel('Volume')
+		fig = plt.gcf()
+		self.img = StringIO.StringIO()
+		fig.savefig(self.img)
+		self.img.seek(0)
+		plt.close()
+
+
+class Portfolio_Graph(Open_Close_Graph):
+	
+	def __init__(self, parser):
+		self.parser = Parser
+		self.img = None
+	
+	def make_graph(self):
+		dates = []
+		values = []
+		for date, value_at_date in self.parser.portfolio.items():
+			dates.append(date)
+			values.append(value_at_date)	
+		plt.rcParams.update({'font.size': 10})
+		plt.title('Portfolio Value')
+		plt.plot(dates, volumes, 'm-', markersize=2)
+		plt.xlabel('Date')
+		plt.ylabel('Value (USD)')
+		print("here")
+		fig = plt.gcf()
+		self.img = StringIO.StringIO()
+		fig.savefig(self.img)
+		self.img.seek(0)
+		plt.close()
+		print("Here!")
+
+	 	

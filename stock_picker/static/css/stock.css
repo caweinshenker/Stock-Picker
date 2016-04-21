@@ -14,9 +14,6 @@
 	height: 100%;
 }
 
-.container h1{
-	margin: auto;
-}
 
 #stock-info{
 	width: 50%;
@@ -33,7 +30,11 @@
 }
 
 
-h1{
+.col-md-3 h1{
+	border: 1px solid black;
+	position: relative; 
+	left: 50px;
+	margin: auto auto;
 }
 
 img{
@@ -44,11 +45,12 @@ img{
 }
 
 
+
 .article{
-	float: right;
-	width: 100%;
+	/*float: right;*/
+	width: 80%;
 	size: 10px;
-		
+	margin: 20px 5px 20px 5px;	
 }
 
 

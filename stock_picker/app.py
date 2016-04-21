@@ -13,7 +13,7 @@ import StringIO
 import psycopg2.extras
 import getpass
 sys.path.insert(0, 'helpers/')
-from graphs import Open_Close_Graph, Volume_Graph
+from graphs import Open_Close_Graph, Volume_Graph, Portfolio_Graph, Dividends_Graph
 from parser import Parser
 from forms  import UploadForm, PickForm, StockForm, SearchForm
 from pagination import Pagination
@@ -113,6 +113,17 @@ def volume_fig(ticker = None):
 	img = volume_graph.get_fig()
 	return send_file(img, mimetype='image/png')
 
+@app.route('/index/<textname>/portfolio_fig', methods =['GET', 'POST'])
+def portfolio_fig(textname = None):
+	print("Making portfolio graph")
+	parser = request.args.get('parser', '')
+	print(parser.investment)
+	portfolio_graph = Portfolio_Graph(parser)
+	portfolio_graph.make_graph()
+	img = portfolio_graph.get_fig()
+	return send_file(img, mimetype='image/png')
+
+
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():	
@@ -142,7 +153,7 @@ def pick():
 		end_date = str(form.end_date.data).split()[0]
 		investment = form.money.data
 		parser = Parser(textfile, investment, start_date, end_date)
-		return render_template('text_result.html', parser = parser)
+		return render_template('text_result.html',textname = textname, parser = parser)
 	else:
 		print("Nope")
 		return render_template('pick.html', form = form)   	
@@ -154,8 +165,10 @@ def about():
 
 @app.route('/pick/<textname>')
 def show_text_result(textname = None, textfile = None, start_date = None, end_date = None, investment = None):
-	parser = Parser(textfile, investment, start_date, end_date)	
-	return render_template('templates/text_result.html', parser = parser)
+	parser = Parser(textfile, investment, start_date, end_date)
+	print("bouta parse")
+	print(textname)	
+	return render_template('templates/text_result.html', textname = textname, parser = parser)
 
 	
 if __name__=='__main__':
