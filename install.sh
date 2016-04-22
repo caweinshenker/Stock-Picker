@@ -20,5 +20,8 @@ echo Installing wtforms_components
 pip install wtforms_components --user
 echo Installing nytimesarticle API
 pip install nytimesarticle --user
+echo Installing google-api-python-client
+pip install google-api-python-client --user
+pip install Google-Search-API --user
 echo Augmenting PYTHONPATH to support installations
 echo 'export PYTHONPATH="${PYTHONPATH}:~/.local/lib/python3.4/site-packages"' >> ~/.bashrc
