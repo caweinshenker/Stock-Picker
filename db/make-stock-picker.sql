@@ -60,7 +60,7 @@ CREATE TABLE text(
   description    text,
   title          varchar(100),
   text_type      varchar(100),
-  pub_date       varchar(100), 
+  pub_date       varchar(100) 
 );
 
 
