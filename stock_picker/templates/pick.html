@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+		<!-- jQuery library -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+
+		<!-- Latest compiled JavaScript -->
+		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../static/css/styles.css">
+		<link rel="stylesheet" type="text/css" href="../static/css/pick.css">	
+	</head>
+
+	{% block body %}	
+	<body>
+		<div class = "container-fluid">		
+			<div class="col-md-2">
+				{% include '_nav.html' %}
+			</div>
+				<div class="col-md-8">
+					<div class="container form">
+						<h1>Pick</h1>
+						<form action="{{url_for('pick')}}" method='post' enctype = "multipart/form-data">
+							{{form.hidden_tag()}}
+							{{form.text.label}}: {{form.text}}</br>
+							{{form.money.label}}: {{form.money}}</br>
+							{{form.start_date.label}}: {{form.start_date}}<br/>
+							{{form.end_date.label}}: {{form.end_date}}<br/>
+							{{form.submit.label}}: {{form.submit}}<br/>
+						</form> 
+					</div>
+				</div>
+			<div class = "col-md-8 footer">
+			</div>
+			<div class="col-md-2">
+			</div>
+		</div>
+	</body>	
+	{% endblock %}
+</html>
+

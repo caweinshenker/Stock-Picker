@@ -1,0 +1,67 @@
+/*============
+  Main
+ =============
+*/
+
+.container-fluid{
+	width: inherit;
+}
+	
+
+.container{
+	width: 80%;
+	margin: 50px 250px 0 200px;
+	height: 100%;
+}
+
+
+#stock-info{
+	width: 50%;
+	background-color: red;
+
+}
+
+.stock_entry{
+	width: 80%;
+}
+
+.ticker{
+	color: blue;
+}
+
+
+.col-md-3 h1{
+	border: 1px solid black;
+	position: relative; 
+	left: 50px;
+	margin: auto auto;
+}
+
+img{
+	left: 700px;
+	top: 125px;
+	position: fixed;
+	width: 450px;
+}
+
+
+
+.article{
+	/*float: right;*/
+	width: 80%;
+	size: 10px;
+	margin: 20px 5px 20px 5px;	
+}
+
+
+.non-graph{
+	width: 50%;
+	position: relative;
+	left: 100px;
+}
+
+
+.info ul, li{
+	list-style-type: none;
+}
+

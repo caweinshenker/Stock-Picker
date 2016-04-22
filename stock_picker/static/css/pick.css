@@ -1,0 +1,53 @@
+/*============
+  Main
+ =============
+*/
+html{
+	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+}
+
+*, *:before, *:after{
+	box-sizing: inherit;
+}
+
+.container{
+	width: 80%;
+	margin: 50px 250px 0 200px;
+	height: 100%;
+}
+
+
+
+.form{
+	width: 30%;
+	margin: 5% 40% 5% 40%;
+
+}
+
+.form h1{
+	position: relative;
+	left: 50px;
+	margin: 0 auto 2% auto;
+}
+
+label{
+	margin-top: 15px; 
+}
+
+input{
+	display: block;
+	margin-top: 5px;
+}
+
+img{
+	left: 700px;
+	top: 125px;
+	position: fixed;
+	width: 450px;
+}
+
+ul{
+	list-style-type: none;
+}

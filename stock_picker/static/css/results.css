@@ -1,0 +1,15 @@
+
+.portfolio-info{
+	color: green;
+	position:relative;
+	top: 200px;
+
+}
+
+.portfolio{
+	display: inline-block;
+}
+
+.portfolio h4{
+	margin-bottom: 30px;
+}

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+		<!-- jQuery library -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+
+		<!-- Latest compiled JavaScript -->
+		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../static/css/styles.css">
+		<link rel="stylesheet" type="text/css" href="../static/css/home.css">
+		
+	</head>
+	
+	<body>
+	{% block body %}
+
+		<div class="col-md-2">
+		</div>
+		<div class="col-md-8">
+			<div class="container">
+				<img class="main-image" src="https://www.printmag.com/wp-content/uploads/10d.-vonnegut-signature.jpg">
+
+
+				<h1>About</h1>
+				<ul class="nav">
+					<li><a href="{{url_for('show_stocks')}}">Browse</a></li>
+					<li><a href="{{url_for('upload')}}">Upload</a></li>
+					<li><a href="{{url_for('pick')}}">Pick</a></li>
+					<li><a href="{{url_for('about')}}">About</a></li>
+				</ul>
+			</div>
+		</div>
+		<div class = "col-md-8 footer">
+		</div>
+		<div class="col-md-2">
+		</div>
+	{% endblock %}	
+	</body>
+
+</html>
+

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+<<<<<<< HEAD
 	<head>
 		<meta charset="UTF-8">
 		<!-- Latest compiled and minified CSS -->
@@ -14,6 +15,15 @@
 		<link rel="stylesheet" type="text/css" href="../static/css/index.css">
 		
 	</head>
+=======
+	
+	{%block head%}
+	
+		{%include '_head.html' %}
+		<link rel = "stylesheet" type="text/css" href="../static/css/index.css">
+
+	{% endblock %}
+>>>>>>> flask
 
 	{% block body %}	
 	<body>	
@@ -28,7 +38,11 @@
 					{{search.submit}}	
 				</form>
 			</div>
+<<<<<<< HEAD
 			<img src="http://htmlgiant.com/wp-content/uploads/2011/04/vonnegut.jpg">	
+=======
+			<img src="http://i.imgur.com/AxoYtnx.png">	
+>>>>>>> flask
 			<div class="container-fluid">
 				<h1>Entries</h1>
 				<ul class="entries">

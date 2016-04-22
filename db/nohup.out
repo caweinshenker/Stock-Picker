@@ -1,0 +1,10 @@
+invalid input syntax for type date: "DDDDate"
+LINE 1: ...ck_dividends(ticker, ddate, price) VALUES ('DDD', 'DDDDate',...
+                                                             ^
+
+Traceback (most recent call last):
+  File "dividend_seed.py", line 59, in <module>
+    main(sys.argv)
+  File "dividend_seed.py", line 58, in main
+    print("Complete: " + str(argv[1]) + " " +  str(argv[2]))
+IndexError: list index out of range

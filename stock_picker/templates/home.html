@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+	{%block head%}
+
+                {%include '_head.html' %}
+                <link rel = "stylesheet" type="text/css" href="../static/css/home.css">
+
+        {% endblock %}
+		
+	<body>
+	{% block body %}
+
+		<div class="col-md-2">
+		</div>
+		<div class="col-md-8">
+			<div class="container">
+				<img class="main-image" src="https://news.artnet.com/wp-content/news-upload/2015/03/troutstomb.jpg">
+				<h1>Stock Picker</h1>
+				<ul class="nav">
+					<li><a href="{{url_for('show_stocks')}}">Browse</a></li>
+					<li><a href="{{url_for('upload')}}">Upload</a></li>
+					<li><a href="{{url_for('pick')}}">Pick</a></li>
+					<li><a href="{{url_for('about')}}">About</a></li>
+				</ul>
+			</div>
+		</div>
+		<div class = "col-md-8 footer">
+		</div>
+		<div class="col-md-2">
+		</div>
+	{% endblock %}	
+	</body>
+
+</html>
+

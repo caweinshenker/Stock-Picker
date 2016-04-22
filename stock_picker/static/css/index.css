@@ -1,0 +1,54 @@
+/*
+==============
+Main
+==============
+*/
+
+.container-fluid{
+	width: inherit;
+	margin-left: 0;
+}
+
+
+.search-form{
+	position: fixed;
+	left: 700px;
+	top: 30px;
+}
+	
+
+.container{
+	width: 100%;
+	margin: 50px 250px 0 50px;
+	height: 100%;
+}
+
+.container h1{
+	margin: auto;
+}
+
+
+.stock_entry{
+	width: 80%;
+}
+
+.ticker{
+	color: blue;
+}
+
+ul, li{
+	list-style-type: none;
+}
+
+
+h1{
+	position: relative;
+	left: 10;
+}
+
+img{
+	left: 700px;
+	top: 125px;
+	position: fixed;
+	width: 450px;
+}
