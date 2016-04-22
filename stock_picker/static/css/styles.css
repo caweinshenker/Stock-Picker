@@ -33,7 +33,11 @@ body {
   font-family: 'Lora', serif;
 }
 
+label{
+	margin: 0 auto;
+	text-align: center;
 
+}
 
 
 section {width:100%; padding:2% 0px;}

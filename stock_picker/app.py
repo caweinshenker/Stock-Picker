@@ -8,6 +8,8 @@ import sys
 import os
 import datetime
 import numpy
+import ast
+import collections
 import psycopg2
 import StringIO
 import psycopg2.extras
@@ -73,10 +75,13 @@ def show_stock(ticker = None):
 		data = (ticker, date)
 		price_SQL = "SELECT open_price, close_price, high, low FROM stock_prices WHERE ticker = %s AND pdate = %s;"
 		volume_SQL = "SELECT volume FROM stock_volumes where ticker = %s AND vdate = %s;"
+		dividend_SQL = "SELECT price from stock_dividends where ticker = %s and ddate = %s;"
 		db.execute(price_SQL, data)
 		price_results = db.fetchall()
 		db.execute(volume_SQL, data)
 		volume_results= db.fetchall()
+		db.execute(dividend_SQL, data)
+		dividend_results = db.fetchall()
 		if len(price_results) == 0 or len(volume_results) == 0:
 			return render_template('stock.html', date = date, company = company, no_results = True, form = StockForm(), ticker = ticker)
 		else:
@@ -102,6 +107,20 @@ def prices_fig(ticker = None):
 	img = open_close.get_fig()
 	return send_file(img, mimetype='image/png') 
 
+@app.route('/index/<ticker>/dividend_fig')
+def dividends_fig(ticker = None):
+	db = Db()
+	SQL = "SELECT ddate, price FROM stock_dividends WHERE ticker = %s ORDER BY DDATE;"
+	data = (ticker,)
+	db.execute(SQL, data)
+	results = db.fetchall()
+	if len(results) > 0 and len(results[0]):
+		dividend_graph = Dividends_Graph(ticker, results)
+		dividend_graph.make_graph()
+		img = dividend_graph.get_fig()
+		return send_file(img, mimetype='image/png') 
+
+
 @app.route('/index/<ticker>/volume_fig')
 def volume_fig(ticker = None):
 	db = Db()
@@ -112,18 +131,6 @@ def volume_fig(ticker = None):
 	volume_graph.make_graph()
 	img = volume_graph.get_fig()
 	return send_file(img, mimetype='image/png')
-
-@app.route('/index/<textname>/portfolio_fig', methods =['GET', 'POST'])
-def portfolio_fig(textname = None):
-	print("Making portfolio graph")
-	parser = request.args.get('parser', '')
-	print(parser.investment)
-	portfolio_graph = Portfolio_Graph(parser)
-	portfolio_graph.make_graph()
-	img = portfolio_graph.get_fig()
-	return send_file(img, mimetype='image/png')
-
-
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():	
@@ -153,11 +160,29 @@ def pick():
 		end_date = str(form.end_date.data).split()[0]
 		investment = form.money.data
 		parser = Parser(textfile, investment, start_date, end_date)
-		return render_template('text_result.html',textname = textname, parser = parser)
+		start_value = parser.start_value
+		end_value = parser.end_value
+		portfolio = parser.portfolio_growth
+		net_change = end_value - start_value
+		stocks = parser.portfolio		
+		return render_template('text_result.html',textname = textname, portfolio = portfolio, stocks = stocks, start_date = start_date, end_date = end_date, investment = investment, net_change = net_change, start_value = start_value, end_value = end_value)
 	else:
 		print("Nope")
 		return render_template('pick.html', form = form)   	
 	
+@app.route('/index/<textname>/portfolio_fig', methods =['GET', 'POST'])
+def portfolio_fig(textname = None):
+	print("Making portfolio graph")
+	portfolio = ast.literal_eval(request.args.get('portfolio'))
+	portfolio = collections.OrderedDict(sorted(portfolio.items()))
+	portfolio_graph = Portfolio_Graph(portfolio)
+	portfolio_graph.make_graph()
+	img = portfolio_graph.get_fig()
+	return send_file(img, mimetype='image/png')
+
+
+
+
 @app.route('/about')
 def about():
 	#TODO
@@ -166,8 +191,6 @@ def about():
 @app.route('/pick/<textname>')
 def show_text_result(textname = None, textfile = None, start_date = None, end_date = None, investment = None):
 	parser = Parser(textfile, investment, start_date, end_date)
-	print("bouta parse")
-	print(textname)	
 	return render_template('templates/text_result.html', textname = textname, parser = parser)
 
 	

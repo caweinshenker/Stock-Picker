@@ -5,6 +5,7 @@ import psycopg2
 import sys
 import csv
 import re
+import collections
 import random
 
 
@@ -142,7 +143,7 @@ class Parser:
 	def __portfolio_growth(self):
 		dp = Date_Parser(self.start_date, self.end_date)
 		date_range = dp.get_date_range()
-		value_at_date = {}
+		value_at_date = {} 
 		SQL = "Select open_price FROM stock_prices WHERE ticker = %s AND pdate = %s;" 			
 		for date in date_range:
 			portfolio_value = 0

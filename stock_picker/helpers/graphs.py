@@ -3,7 +3,8 @@ import matplotlib.patches as mpatches
 import StringIO
 import psycopg2
 import psycopg2.extras
-import datetime
+import datetime as dt
+from datetime import date, timedelta
 from parser import Parser
 
 
@@ -83,7 +84,7 @@ class Dividends_Graph(Open_Close_Graph):
 		plt.title('Dividend Values')
 		plt.plot(dates, dividends, 'y-')
 		plt.xlabel('Date')
-		plt.ylabel('Volume')
+		plt.ylabel('Dividend Price (USD)')
 		fig = plt.gcf()
 		self.img = StringIO.StringIO()
 		fig.savefig(self.img)
@@ -93,27 +94,25 @@ class Dividends_Graph(Open_Close_Graph):
 
 class Portfolio_Graph(Open_Close_Graph):
 	
-	def __init__(self, parser):
-		self.parser = Parser
+	def __init__(self, portfolio):
+		self.portfolio = portfolio
 		self.img = None
 	
 	def make_graph(self):
 		dates = []
 		values = []
-		for date, value_at_date in self.parser.portfolio.items():
-			dates.append(date)
+		for day, value_at_date in self.portfolio.items():
+			dates.append(dt.datetime.strptime(day, '%Y-%m-%d'))
 			values.append(value_at_date)	
 		plt.rcParams.update({'font.size': 10})
 		plt.title('Portfolio Value')
-		plt.plot(dates, volumes, 'm-', markersize=2)
+		plt.plot(dates, values, 'b-')
 		plt.xlabel('Date')
 		plt.ylabel('Value (USD)')
-		print("here")
 		fig = plt.gcf()
 		self.img = StringIO.StringIO()
 		fig.savefig(self.img)
 		self.img.seek(0)
 		plt.close()
-		print("Here!")
 
 	 	

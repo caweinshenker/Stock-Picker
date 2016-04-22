@@ -17,6 +17,7 @@
 					<div id="price-graph">
 						<img src="{{url_for('prices_fig', ticker = ticker)}}" alt="Open/Close graph" height = "500px">
 						<img src="{{url_for('volume_fig', ticker = ticker)}}" alt="Volumes graph" height = "500px">
+						<img src="{{url_for('dividends_fig', ticker = ticker)}}" alt="" height="500px">
 					</div>
 					<div id = "non-graph" class = "container-fluid">
 						{% if no_results %}
