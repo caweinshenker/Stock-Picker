@@ -9,12 +9,12 @@ class Db():
 		self.cur = self.__connect_db()
 			
 	def __init_db(self): 
-		 try:  
-		 	connectionString = 'dbname = caweinsh_sp3 user=caweinsh password=f6nt0d host=localhost'
+		try:  
+			connectionString = 'dbname = caweinsh_sp3 user=caweinsh password=f6nt0d host=localhost'
 			conn = psycopg2.connect(connectionString)
-		 except Exception as e: 
+		except Exception as e: 
 			 print(str(e))
-		 return conn
+		return conn
 		
 	def __del__(self):
 		self.conn.commit()

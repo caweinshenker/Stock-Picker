@@ -19,11 +19,11 @@ class Parser:
 		self.investment = investment
 		self.start_date = start_date
 		self.end_date = end_date
-		self.tickerDict = self.__parse_text()
-		self.proportionate_list = self.__build_proportionate_list()
+		#self.tickerDict = self.__parse_banana()
+		#self.proportionate_list = self.__build_proportionate_list()
 		self.start_value = 0
 		self.end_value = 0
-		self.portfolio = self.__make_portfolio(self.investment, self.start_date, self.end_date)
+		self.portfolio = self.__parse_text()
 		self.net_change = self.__net_change()
 
 		self.portfolio_growth = self.__portfolio_growth()
@@ -39,13 +39,13 @@ class Parser:
 		tickerList = [row[0] for row in tickerRawData]
 		trie = SortedStringTrie.fromkeys(tickerList, 0)
 		return trie
-
-	def __parse_text(self): 
-        	tickerDict = {} 
-        	with open(self.text, "r") as text:
-                	for line in text:
-                        	line = re.sub('[^A-Za-z0-9]+', '', line)
-                        	line = line.replace(" ", "")
+	
+	def __parse_banana(self): 
+		tickerDict = {} 
+		with open(self.text, "r") as text:
+			for line in text:
+				line = re.sub('[^A-Za-z0-9]+', '', line)
+				line = line.replace(" ", "")
 				word = line.upper()
 				wordLen = len(word)
 				if(len(word) > 0):
@@ -77,7 +77,63 @@ class Parser:
 							subString = "" + word[index]
 						successfulParse = False
 		return tickerDict
-
+	
+	def __parse_text(self):
+		portfolio = {}
+		budgetDepleted = False
+		with open(self.text, "r") as text:
+			budget = self.investment
+			for line in text:
+				tickerTestIndex = 0
+				while ((tickerTestIndex < len(line)) & (budgetDepleted == False)):
+					lindex = tickerTestIndex
+					curTicker = "" + line[lindex]
+					line = re.sub('[^A-Za-z0-9]+', '', line)
+					line = line.replace(" ", "")
+					line = line.upper()
+					testTicker = curTicker
+					while((testTicker in self.trie) & (lindex+1 < len(line))):
+						print(testTicker)
+						curTicker = testTicker
+						lindex += 1
+						testTicker = testTicker + line[lindex]
+					if (curTicker in self.trie):
+						selectTickerSatisfyingQuery = "SELECT ticker FROM stock_prices WHERE ticker = %s AND pdate = %s"
+						data = (curTicker, self.start_date)
+						self.db.execute(selectTickerSatisfyingQuery, data)
+						selectTickerSatisfying = self.db.fetchall()
+						canBuyTicker = (len(selectTickerSatisfying) > 0)
+						data = (curTicker, self.end_date)
+						self.db.execute(selectTickerSatisfyingQuery, data)
+						selectTickerSatisfying = self.db.fetchall()
+						canSellTicker = (len(selectTickerSatisfying) > 0)
+						if(canBuyTicker == True & canSellTicker == True):
+							curTickerBuyPriceQuery = "SELECT open_price FROM stock_prices WHERE ticker = %s AND pdate = %s"
+							data = (curTicker, self.start_date)
+							self.db.execute(curTickerBuyPriceQuery, data)
+							buyPrice = self.db.fetchall()[0][0]
+							curTickerSellPriceQuery = "SELECT open_price FROM stock_prices WHERE ticker = %s and pdate = %s"
+							data = (curTicker, self.end_date)
+							self.db.execute(curTickerSellPriceQuery, data)
+							sellPrice = self.db.fetchall()[0][0]
+							if((budget - sellPrice) < 0):
+								budgetDepleted = True
+								break
+							else:
+								budget = budget - sellPrice
+							if(curTicker in portfolio.keys()):
+								portfolio[curTicker][4] += 1
+								print(portfolio[curTicker])
+							else:
+								portfolio[curTicker] = [self.start_date, self.end_date, float(buyPrice), float(sellPrice), 1]
+					tickerTestIndex += 1
+					print(tickerTestIndex)
+		return portfolio
+					
+				
+				
+				
+		
 	def __build_proportionate_list(self):
 		proportionate_list = []
 		for key in self.tickerDict:
@@ -89,7 +145,7 @@ class Parser:
 
 
 	
-	def __make_portfolio(self, capitalInvested, buyDate, sellDate):	
+	def __make_banana(self, capitalInvested, buyDate, sellDate):	
 		random.seed(0)
 		portfolio = {}
 		budget = capitalInvested
@@ -159,4 +215,11 @@ class Parser:
 			else:
 				date_range.remove(date) 
 		return value_at_date		
-					
+		
+'''
+def main():
+	p = Parser("../uploads/Donald-Trump-Art-of-the-Deal.txt", 100000, "2010-05-05", "2011-05-05")
+	print(p.portfolio)
+#	print(p.portfolio_growth)
+	
+main()	 '''		
