@@ -3,9 +3,13 @@ import csv
 import psycopg2
 import getpass
 
-def main():
+'''Put the contents of the stock database into /csvs/'''
+
+def main(argv):
+
+	dbName = argv[1]
 	try:
-		conn = psycopg2.connect(database = "max_stock", user = "maxmir", password = getpass.getpass())
+		conn = psycopg2.connect(database = dbName, user = "maxmir", password = getpass.getpass())
 	except StandardError as e:
 		print(str(e))
 		exit
@@ -78,4 +82,4 @@ def main():
 
 	cur.close()
 	conn.close()
-main()
+main(argv)

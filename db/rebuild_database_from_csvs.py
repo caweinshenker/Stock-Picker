@@ -4,12 +4,13 @@ import psycopg2
 import getpass
 import os
 
-def main():
+''' Populates database tables from /csvs/ '''
 
-	os.system('psql -d max_stocks2 -f make-stock-picker.sql')
+def main(argv):
 
+	dbName = argv[1]
 	try:
-		conn = psycopg2.connect(database = "max_stocks2", user = "maxmir", password = getpass.getpass())
+		conn = psycopg2.connect(database = dbName, user = "maxmir", password = getpass.getpass())
 	except StandardError as e:
 		print(str(e))
 		exit
@@ -26,7 +27,6 @@ def main():
 			if(line[4] == ""): 
 				line[4] = None
 			data = (line[0], line[1], line[2], line[3], line[4],)
-			#print("attempting to add: " + str(data))
 			try:
 				cur.execute(SQLQuery, data)
 			except psycopg2.IntegrityError as e:
@@ -86,4 +86,5 @@ def main():
 	conn.commit()	
 	cur.close()
 	conn.close()
-main()
+
+main(sys.argv)
