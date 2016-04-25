@@ -5,7 +5,7 @@
 		
 		{% include '_head.html' %}
 		<link rel="stylesheet" type="text/css" href="../static/css/results.css">
-		
+		<script src="https://code.highcharts.com/stock/highstock.js"></script>	
 	{% endblock %}
 
 	{% block body %}	
@@ -16,7 +16,32 @@
 			</div>
 			<div class="col-md-8">
 				<h1>Portfolio for {{textname}}: {{start_date}}--{{end_date}}</h1>
-				<img src="{{url_for('.portfolio_fig', textname=textname, portfolio =portfolio)}}" alt="Portfolio graph" height = "500px"> 
+					<div id="portfolio-graph">
+						<script>
+                                                        $(function() {
+                                                                // Create the chart
+                                                                $('#portfolio-graph').highcharts('StockChart', {
+
+
+                                                                    rangeSelector : {
+                                                                        selected : 1
+                                                                    },
+
+                                                                    title : {
+                                                                        text : 'Stock Price'
+                                                                    },
+
+                                                                    series : [{
+                                                                        name : 'portfolio value',
+                                                                        data : {{growth_array|tojson}},
+                                                                        tooltip: {
+                                                                            valueDecimals: 2
+                                                                        }
+                                                                    }]
+                                                                });
+                                                            });
+                                                </script>
+                                        </div>
 				{% for stock, count in stocks.items() %}
 					<div id= "portfolio">
 						<h4>{{stock}} Shares: {{count[4]}}, intial valuation: {{count[4] * count[2]}} end valuation: {{count[4] * count[3]}}</h4>				

@@ -19,11 +19,11 @@ class Parser:
 		self.investment = investment
 		self.start_date = start_date
 		self.end_date = end_date
-		#self.tickerDict = self.__parse_banana()
-		#self.proportionate_list = self.__build_proportionate_list()
+		self.tickerDict = self.__parse_banana()
+		self.proportionate_list = self.__build_proportionate_list()
 		self.start_value = 0
 		self.end_value = 0
-		self.portfolio = self.__parse_text()
+		self.portfolio = self.__make_banana()
 		self.net_change = self.__net_change()
 
 		self.portfolio_growth = self.__portfolio_growth()
@@ -145,15 +145,15 @@ class Parser:
 
 
 	
-	def __make_banana(self, capitalInvested, buyDate, sellDate):	
+	def __make_banana(self):	
 		random.seed(0)
 		portfolio = {}
-		budget = capitalInvested
+		budget = self.investment
 		canBuyMoreStocks = True
 		while((budget > 0) and (canBuyMoreStocks)):
 			randomTicker = random.choice(self.proportionate_list)
 			randomTicker = re.sub('[^A-Za-z0-9]+', '', randomTicker)
-			curTickerBuyDate = buyDate
+			curTickerBuyDate = self.start_date
 			selectTickerSatisfyingQuery = "SELECT ticker FROM stock_prices WHERE ticker = %s AND pdate = %s"
 			data = (randomTicker, curTickerBuyDate)
 			self.db.execute(selectTickerSatisfyingQuery, data)
@@ -166,7 +166,7 @@ class Parser:
 				self.db.execute(selectTickerSatisfyingQuery, data)
 				selectTickerSatisfying = self.db.fetchall()
 				canBuyTicker = (len(selectTickerSatisfying) > 0)
-			curTickerSellDate = sellDate
+			curTickerSellDate = self.end_date
 			curTickerBuyPriceQuery = "SELECT open_price FROM stock_prices WHERE ticker = %s AND pdate = %s"
 			data = (randomTicker, curTickerBuyDate)
 			self.db.execute(curTickerBuyPriceQuery, data)
@@ -200,7 +200,7 @@ class Parser:
 		dp = Date_Parser(self.start_date, self.end_date)
 		date_range = dp.get_date_range()
 		value_at_date = {} 
-		SQL = "Select open_price FROM stock_prices WHERE ticker = %s AND pdate = %s;" 			
+		SQL = "Select pdate, open_price FROM stock_prices WHERE ticker = %s AND pdate = %s ORDER BY pdate;" 			
 		for date in date_range:
 			portfolio_value = 0
 			for ticker in self.portfolio.keys():
@@ -208,18 +208,10 @@ class Parser:
 				self.db.execute(SQL, data)
 				results = self.db.fetchall()
 				if len(results) > 0:
-					open_price = results[0][0]
+					open_price = results[0][1]
 					portfolio_value += float(open_price) * self.portfolio[ticker][4]
 			if portfolio_value != 0:				
-				value_at_date[date] = portfolio_value
+				value_at_date[results[0][0]] = portfolio_value
 			else:
 				date_range.remove(date) 
-		return value_at_date		
-		
-'''
-def main():
-	p = Parser("../uploads/Donald-Trump-Art-of-the-Deal.txt", 100000, "2010-05-05", "2011-05-05")
-	print(p.portfolio)
-#	print(p.portfolio_growth)
-	
-main()	 '''		
+		return value_at_date			
