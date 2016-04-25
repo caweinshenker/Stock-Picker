@@ -2,20 +2,19 @@
 #all the imports
 from flask import Flask, g, request, session, redirect, url_for, abort, render_template, flash, send_file
 from flask.ext.uploads import UploadSet, configure_uploads
-from math import ceil
 from werkzeug import secure_filename
+import time
+from datetime import datetime
 import sys
 import os
 import datetime
-import numpy
+import json
 import ast
 import collections
 import psycopg2
-import StringIO
 import psycopg2.extras
 import getpass
 sys.path.insert(0, 'helpers/')
-from graphs import Open_Close_Graph, Volume_Graph, Portfolio_Graph, Dividends_Graph
 from parser import Parser
 from forms  import UploadForm, PickForm, StockForm, SearchForm
 from pagination import Pagination
@@ -70,67 +69,42 @@ def show_stock(ticker = None):
 	data = (ticker,)
 	db.execute(SQL, data)
 	company = db.fetchall()[0][0]
+	price_SQL = "SELECT open_price, close_price, high, low, pdate FROM stock_prices WHERE ticker = %s ORDER BY pdate;"
+	volume_SQL = "SELECT volume, vdate FROM stock_volumes where ticker = %s ORDER BY vdate;"
+	dividend_SQL = "SELECT price, ddate from stock_dividends where ticker = %s ORDER BY ddate;"
+	price_dates = []
+	open_prices = []
+	high_prices = []
+	low_prices  = []
+	close_prices = []
+	volumes = []
+	dividends = []	
+	db.execute(price_SQL, data)	
+	for row in db.fetchall():
+		date_js = int(time.mktime(row[4].timetuple())) * 1000
+		open_prices.append([date_js, float(row[0])])
+		high_prices.append([date_js, float(row[2])])
+		low_prices.append([date_js,  float(row[3])])
+		close_prices.append([date_js, float(row[1])])
+	db.execute(volume_SQL, data)
+	for row in db.fetchall():
+		date_js = int(time.mktime(row[1].timetuple())) * 1000
+		volumes.append([date_js, float(row[0])])
+	db.execute(dividend_SQL, data)
+	for row in db.fetchall():
+		date_js = int(time.mktime(row[1].timetuple())) * 1000
+		dividends.append([date_js, float(row[0])])
+	print(len(dividends))
 	if form.validate_on_submit():
-		date = str(form.date_field.data).split()[0]	
-		data = (ticker, date)
-		price_SQL = "SELECT open_price, close_price, high, low FROM stock_prices WHERE ticker = %s AND pdate = %s;"
-		volume_SQL = "SELECT volume FROM stock_volumes where ticker = %s AND vdate = %s;"
-		dividend_SQL = "SELECT price from stock_dividends where ticker = %s and ddate = %s;"
-		db.execute(price_SQL, data)
-		price_results = db.fetchall()
-		db.execute(volume_SQL, data)
-		volume_results= db.fetchall()
-		db.execute(dividend_SQL, data)
-		dividend_results = db.fetchall()
-		if len(price_results) == 0 or len(volume_results) == 0:
-			return render_template('stock.html', date = date, company = company, no_results = True, form = StockForm(), ticker = ticker)
-		else:
-			results = list(price_results[0])
-			results.extend(list(volume_results[0]))
-			nyt = NYT_Parser()
-			nyt.find_articles(company, date)
-			articles = nyt.get_news()
-			return render_template('stock.html', no_results = False, company = company, date = str(form.date_field.data).split()[0], validated = True, form = StockForm(), ticker = ticker, open_price = results[0], close_price = results[1], high = results[2], low = results[3], volume = results[4], articles = articles)
-		
+		date = str(form.date_field.data).split()[0]
+		nyt = NYT_Parser()
+		nyt.find_articles(company, date)
+		articles = nyt.get_news()
+		return render_template('stock.html', form = form, open_prices = open_prices,close_prices = close_prices, volumes = volumes, dividends = dividends, company = company, ticker = ticker, validated = True, articles = articles) 
 	else:
-		return render_template('stock.html', form = form, company = company, ticker = ticker) 
+		return render_template('stock.html', form = form, open_prices = open_prices,close_prices = close_prices, volumes = volumes, dividends = dividends, company = company, ticker = ticker) 
 
 
-@app.route('/index/<ticker>/fig')
-def prices_fig(ticker = None):
-	db = Db()
-	SQL = ("SELECT * FROM stock_prices WHERE ticker=%s ORDER BY pdate;")
-	data = (ticker,)
-	db.execute(SQL, data)
-	open_close = Open_Close_Graph(ticker, db.fetchall())
-	open_close.make_graph()
-	img = open_close.get_fig()
-	return send_file(img, mimetype='image/png') 
-
-@app.route('/index/<ticker>/dividend_fig')
-def dividends_fig(ticker = None):
-	db = Db()
-	SQL = "SELECT ddate, price FROM stock_dividends WHERE ticker = %s ORDER BY DDATE;"
-	data = (ticker,)
-	db.execute(SQL, data)
-	results = db.fetchall()
-	if len(results) > 0 and len(results[0]):
-		dividend_graph = Dividends_Graph(ticker, results)
-		dividend_graph.make_graph()
-		img = dividend_graph.get_fig()
-		return send_file(img, mimetype='image/png') 
-
-
-@app.route('/index/<ticker>/volume_fig')
-def volume_fig(ticker = None):
-	db = Db()
-	SQL = ("Select vdate, volume FROM stock_volumes WHERE ticker = %s ORDER BY vdate;")
-	data = (ticker,)
-	db.execute(SQL, data)
-	volume_graph = Volume_Graph(ticker, db.fetchall())
-	volume_graph.make_graph()
-	img = volume_graph.get_fig()
-	return send_file(img, mimetype='image/png')
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():	
@@ -164,24 +138,18 @@ def pick():
 		end_value = parser.end_value
 		portfolio = parser.portfolio_growth
 		net_change = end_value - start_value
-		stocks = parser.portfolio		
-		return render_template('text_result.html',textname = textname, portfolio = portfolio, stocks = stocks, start_date = start_date, end_date = end_date, investment = investment, net_change = net_change, start_value = start_value, end_value = end_value)
+		stocks = parser.portfolio
+		growth = collections.OrderedDict(sorted(parser.portfolio_growth.items()))
+		#growth = parser.portfolio_growth.items()
+		growth_array = []
+		for key, value in growth.items():
+			date_js = int(time.mktime(key.timetuple())) * 1000
+			growth_array.append([date_js, float("{0:.2f}".format(value))])
+		print(growth_array)
+		return render_template('text_result.html',textname = textname, portfolio = portfolio, stocks = stocks, start_date = start_date, end_date = end_date, investment = investment, net_change = net_change, start_value = start_value, end_value = end_value, growth_array=growth_array)
 	else:
-		print("Nope")
 		return render_template('pick.html', form = form)   	
 	
-@app.route('/index/<textname>/portfolio_fig', methods =['GET', 'POST'])
-def portfolio_fig(textname = None):
-	print("Making portfolio graph")
-	portfolio = ast.literal_eval(request.args.get('portfolio'))
-	portfolio = collections.OrderedDict(sorted(portfolio.items()))
-	portfolio_graph = Portfolio_Graph(portfolio)
-	portfolio_graph.make_graph()
-	img = portfolio_graph.get_fig()
-	return send_file(img, mimetype='image/png')
-
-
-
 
 @app.route('/about')
 def about():

@@ -30,7 +30,7 @@ body {
 	background: linear-gradient(to right, rgba(212,228,239,1) 0%, rgba(134,174,204,1) 100%);
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d4e4ef', endColorstr='#86aecc', GradientType=1 );
   font-size:1.5em;
-  font-family: 'Lora', serif;
+  /*font-family: 'Lora', serif;
 }
 
 label{

@@ -2,8 +2,8 @@
 <html>
 	{% block head %}
 		 {% include '_head.html' %}
-                 <link rel = "stylesheet" type="text/css" href="../static/css/stock.css">
-
+                <link rel = "stylesheet" type="text/css" href="../static/css/stock.css">
+		<script src="https://code.highcharts.com/stock/highstock.js"></script>
         {% endblock %}
 
 	{% block body %}	
@@ -14,35 +14,102 @@
 			</div>
 			<div class="col-md-7">
 					<h1>{{ticker}}--{{company}}</h1>
-					<div id="price-graph">
-						<img src="{{url_for('prices_fig', ticker = ticker)}}" alt="Open/Close graph" height = "500px">
-						<img src="{{url_for('volume_fig', ticker = ticker)}}" alt="Volumes graph" height = "500px">
-						<img src="{{url_for('dividends_fig', ticker = ticker)}}" alt="" height="500px">
+					<div id="price-graph">	
+						 <script>
+							$(function() {
+								// Create the chart
+								$('#price-graph').highcharts('StockChart', {
+
+								    	
+								    rangeSelector : {
+									selected : 1
+								    },
+
+								    title : {
+									text : '{{company}} Stock Price'
+								    },
+
+								    series : [{
+									name : 'open',
+									data : {{open_prices|tojson}},
+									tooltip: {
+									    valueDecimals: 2
+									}
+								    },{
+									name: 'close',
+									data : {{close_prices|tojson}},
+									tooltip: {
+										valueDecimals:2
+									}
+									}]
+								});
+							    });
+						</script>		
 					</div>
-					<div id = "non-graph" class = "container-fluid">
-						{% if no_results %}
-							<h3>No results for {{date}}</h3>
-						{% elif validated %}
-						<div id = "stock-info">
-							<h3> {{date}}</h3>
-							<ul class="info">
-								<li> Open: {{open_price}} </li>
-								<li> Close: {{close_price}} </li>
-								<li> High: {{high}} </li>
-								<li> Low: {{low}} </li>
-								<li> Volume: {{volume}}</li>
-							</ul>
-						</div>
-						{% endif %}
-						<div id = "results-form">
-							<form action = "{{url_for('show_stock', ticker = ticker)}}" method = "post" enctype = 'multipart/form-data'>
-								{{form.hidden_tag()}}
-								{{form.date_field.label}}: {{form.date_field}}
-								{{form.submit}}
-							</form>
-						</div>
+					<div id="volume-graph">
+						<script>
+							$(function() {
+								// Create the chart
+								$('#volume-graph').highcharts('StockChart', {
+
+
+								    rangeSelector : {
+									selected : 1
+								    },
+
+								    title : {
+									text : 'Volume'
+								    },
+
+								    series : [{
+									name : 'trade volume',
+									data : {{volumes|tojson}},
+									tooltip: {
+									    valueDecimals: 2
+									}
+								    }]
+								});
+							    });
+						</script>
+
 					</div>
+					{% if dividends |length == 0 %}
+						<div id="dividends-graph">
+							<script>
+								$(function() {
+									// Create the chart
+									$('#dividends-graph').highcharts('StockChart', {
+
+
+									    rangeSelector : {
+										selected : 1
+									    },
+
+									    title : {
+										text : 'Dividends'
+									    },
+
+									    series : [{
+										name : 'dividend value',
+										data : {{dividends|tojson}},
+										tooltip: {
+										    valueDecimals: 2
+										}
+									    }]
+									});
+								    });
+							</script>
+						</div>
+					{% endif %}
+				<div id="results-form">
+					<form action= "{{url_for('show_stock', ticker = ticker)}}" method="post" enctype="mulitpart/form-data">
+						{{form.hidden_tag()}}
+						{{form.date_field.label}}: {{form.date_field}}
+						{{form.submit}}
+					</form>
 				</div>
+
+			</div>
 			<div class="col-md-3">
 				{% if validated %}
 					<h1> Articles </h1>

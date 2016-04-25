@@ -158,8 +158,6 @@ class Parser:
 	def __make_portfolio(self):
 		'''Builds a stock portfolio by selecting randomly from a list of stock tickers
                    and purchasing until the budget is expended'''	
-		#for debugging:
-		#random.seed(0)
 		portfolio = {}
 		budget = self.investment
 		canBuyMoreStocks = True
@@ -215,7 +213,7 @@ class Parser:
 		dp = Date_Parser(self.start_date, self.end_date)
 		date_range = dp.get_date_range()
 		value_at_date = {} 
-		SQL = "Select open_price FROM stock_prices WHERE ticker = %s AND pdate = %s;" 			
+		SQL = "Select pdate, open_price FROM stock_prices WHERE ticker = %s AND pdate = %s ORDER BY pdate;" 			
 		for date in date_range:
 			portfolio_value = 0
 			for ticker in self.portfolio.keys():
@@ -223,10 +221,10 @@ class Parser:
 				self.db.execute(SQL, data)
 				results = self.db.fetchall()
 				if len(results) > 0:
-					open_price = results[0][0]
+					open_price = results[0][1]
 					portfolio_value += float(open_price) * self.portfolio[ticker][4]
 			if portfolio_value != 0:				
-				value_at_date[date] = portfolio_value
+				value_at_date[results[0][0]] = portfolio_value
 			else:
 				date_range.remove(date) 
 		return value_at_date		

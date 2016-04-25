@@ -1,42 +1,29 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF-8">
-		<!-- Latest compiled and minified CSS -->
-		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-
-		<!-- jQuery library -->
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-
-		<!-- Latest compiled JavaScript -->
-		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-		<link rel="stylesheet" type="text/css" href="../static/css/styles.css">
-		<link rel="stylesheet" type="text/css" href="../static/css/home.css">
+	{%block head %}
+		{%include '_head.html' %}
+		<link rel = "stylesheet" type="text/css" href='../static/css/about.css'>
+	{% endblock %}
 		
-	</head>
-	
 	<body>
 	{% block body %}
-
-		<div class="col-md-2">
-		</div>
-		<div class="col-md-8">
-			<div class="container">
-				<img class="main-image" src="https://www.printmag.com/wp-content/uploads/10d.-vonnegut-signature.jpg">
-
-
-				<h1>About</h1>
-				<ul class="nav">
-					<li><a href="{{url_for('show_stocks')}}">Browse</a></li>
-					<li><a href="{{url_for('upload')}}">Upload</a></li>
-					<li><a href="{{url_for('pick')}}">Pick</a></li>
-					<li><a href="{{url_for('about')}}">About</a></li>
-				</ul>
+		<div class="container-fluid">
+			<img id="main-image" src="http://i.imgur.com/TL0941D.jpg">
+			<div class="col-md-2">
+				{%include '_nav.html' %}
 			</div>
-		</div>
-		<div class = "col-md-8 footer">
-		</div>
-		<div class="col-md-2">
+			<div class="col-md-8">					
+					<h2>The Sirens of Titan</h2>
+					<p> This app is inspired in part by the Siren's of Titan, the 1959 novel by late American Author Kurt Vonnegut. In the novel, one of the main chracters, Malachi Constant, inherits the fortune his father made through a harebrained investment scheme. Constant's father, a deeply religious Christian, opened his King James Bible and scoured the words looking for sequences of letters with corresponding stock abbreviations. Constant's father then bought as many stocks as he could, eventually becoming the richest man in America. We wanted to generalize this scheme to any text, and create some regular stock application functionality in the process.</p>
+					<h2> How it Works</h2>
+					<p> Navigate to the browse page to see historical stock data scraped from Yahoo Finance, or upload a file to our database, then set some investment parameters and see whether getting super fundamentalist about the text of your choice would have been lucrative!</p> 
+					<h2>Tech</h2>
+					<p>The app is built using Flask, with a PSQL database and default Bootstrap for styling. The gorgeous charts are courtesy of the Highcharts highstocks extension.</p>
+					<h2>Team</h2>
+					<p>Colin Weinshenker, Max Miroff, Don Andes</p> 
+			</div>
+			<div class="col-md-2">
+			</div>
 		</div>
 	{% endblock %}	
 	</body>
