@@ -8,19 +8,13 @@ class Db():
 
 	def __init__(self):
 		'''init with default connection parameters'''
-		self.conn = self.__init_db()
-		self.cur = self.__connect_db()
 		self.connectionString = 'dbname = caweinsh_sp3 user=caweinsh password=f6nt0d host=localhost'
-
-	def __init__(self, connectionString):
-		'''init with custom connection parameters'''
 		self.conn = self.__init_db()
 		self.cur = self.__connect_db()
-		self.connectionString = connectionString
-			
+					
 	def __init_db(self): 
 		try:  
-			conn = psycopg2.connect(connectionString)
+			conn = psycopg2.connect(self.connectionString)
 		except Exception as e: 
 			 print(str(e))
 		return conn

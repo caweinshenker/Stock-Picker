@@ -94,7 +94,6 @@ def show_stock(ticker = None):
 	for row in db.fetchall():
 		date_js = int(time.mktime(row[1].timetuple())) * 1000
 		dividends.append([date_js, float(row[0])])
-	print(len(dividends))
 	if form.validate_on_submit():
 		date = str(form.date_field.data).split()[0]
 		nyt = NYT_Parser()
@@ -145,7 +144,6 @@ def pick():
 		for key, value in growth.items():
 			date_js = int(time.mktime(key.timetuple())) * 1000
 			growth_array.append([date_js, float("{0:.2f}".format(value))])
-		print(growth_array)
 		return render_template('text_result.html',textname = textname, portfolio = portfolio, stocks = stocks, start_date = start_date, end_date = end_date, investment = investment, net_change = net_change, start_value = start_value, end_value = end_value, growth_array=growth_array)
 	else:
 		return render_template('pick.html', form = form)   	
