@@ -2,7 +2,7 @@
 <html>
 	{% block head %}
 		 {% include '_head.html' %}
-                 <link rel = "stylesheet" type="text/css" href="../static/css/stock.css">
+                <link rel = "stylesheet" type="text/css" href="../static/css/stock.css">
 		<script src="https://code.highcharts.com/stock/highstock.js"></script>
         {% endblock %}
 
@@ -20,7 +20,7 @@
 								// Create the chart
 								$('#price-graph').highcharts('StockChart', {
 
-
+								    	
 								    rangeSelector : {
 									selected : 1
 								    },
@@ -73,33 +73,34 @@
 						</script>
 
 					</div>
-					<div id="dividends-graph">
-						<script>
-							$(function() {
-								// Create the chart
-								$('#dividends-graph').highcharts('StockChart', {
+					{% if dividends |length == 0 %}
+						<div id="dividends-graph">
+							<script>
+								$(function() {
+									// Create the chart
+									$('#dividends-graph').highcharts('StockChart', {
 
 
-								    rangeSelector : {
-									selected : 1
-								    },
+									    rangeSelector : {
+										selected : 1
+									    },
 
-								    title : {
-									text : 'Dividends'
-								    },
+									    title : {
+										text : 'Dividends'
+									    },
 
-								    series : [{
-									name : 'dividend value',
-									data : {{dividends|tojson}},
-									tooltip: {
-									    valueDecimals: 2
-									}
-								    }]
-								});
-							    });
-						</script>
-
-					</div>
+									    series : [{
+										name : 'dividend value',
+										data : {{dividends|tojson}},
+										tooltip: {
+										    valueDecimals: 2
+										}
+									    }]
+									});
+								    });
+							</script>
+						</div>
+					{% endif %}
 				<div id="results-form">
 					<form action= "{{url_for('show_stock', ticker = ticker)}}" method="post" enctype="mulitpart/form-data">
 						{{form.hidden_tag()}}

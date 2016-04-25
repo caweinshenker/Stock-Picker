@@ -87,7 +87,6 @@ def show_stock(ticker = None):
 		low_prices.append([date_js,  float(row[3])])
 		close_prices.append([date_js, float(row[1])])
 	db.execute(volume_SQL, data)
-	print(open_prices)
 	for row in db.fetchall():
 		date_js = int(time.mktime(row[1].timetuple())) * 1000
 		volumes.append([date_js, float(row[0])])
@@ -95,6 +94,7 @@ def show_stock(ticker = None):
 	for row in db.fetchall():
 		date_js = int(time.mktime(row[1].timetuple())) * 1000
 		dividends.append([date_js, float(row[0])])
+	print(len(dividends))
 	if form.validate_on_submit():
 		date = str(form.date_field.data).split()[0]
 		nyt = NYT_Parser()
