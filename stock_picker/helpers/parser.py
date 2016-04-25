@@ -8,7 +8,9 @@ import re
 import collections
 import random
 
-
+''' Given a text, investment amount, start date, and end date, generates a stock portfolio from
+    that text by finding stock tickers in lines of the text. Inspired by Kurt Vonnegut's
+    "The Sirens of Titan." '''
 
 class Parser:
 
@@ -40,7 +42,8 @@ class Parser:
 		trie = SortedStringTrie.fromkeys(tickerList, 0)
 		return trie
 	
-	def __parse_banana(self): 
+	def __parse_text(self): 
+		'''Read the text line by line. Construct a dictionary tracking ticker occurrences in the text.'''
 		tickerDict = {} 
 		with open(self.text, "r") as text:
 			for line in text:
@@ -79,6 +82,9 @@ class Parser:
 		return tickerDict
 	
 	def __parse_text(self):
+		'''Read the text line by line. Try to construct vali tickers out of line of text.
+                   Buy those tickers until the end of the text is reached, or until money runs out.
+                   Return a dictionary of purchased tickers and relevant information'''
 		portfolio = {}
 		budgetDepleted = False
 		with open(self.text, "r") as text:
@@ -135,6 +141,9 @@ class Parser:
 				
 		
 	def __build_proportionate_list(self):
+		'''Build a list out of the tickerDict where ticker entries are proportional to their
+                   occurrences in tickerDict, e.g. if tickerDict contains key: AS value: 5, fill the
+                   proportionate_list with [AS, AS, AS, AS, AS] '''
 		proportionate_list = []
 		for key in self.tickerDict:
 			count = self.tickerDict[key]
@@ -145,8 +154,9 @@ class Parser:
 
 
 	
-	def __make_banana(self):	
-		random.seed(0)
+	def __make_portfolio(self):
+		'''Builds a stock portfolio by selecting randomly from a list of stock tickers
+                   and purchasing until the budget is expended'''	
 		portfolio = {}
 		budget = self.investment
 		canBuyMoreStocks = True
@@ -188,6 +198,7 @@ class Parser:
 		
 
 	def __net_change(self):
+		'''Return the net change of the portfolio'''
 		self.start_value = 0
 		self.end_value = 0
 		for ticker in self.portfolio:
@@ -197,6 +208,7 @@ class Parser:
 		
 
 	def __portfolio_growth(self):
+		'''Return a dictionary of portfolio values on dates between start_date and end_date'''
 		dp = Date_Parser(self.start_date, self.end_date)
 		date_range = dp.get_date_range()
 		value_at_date = {} 

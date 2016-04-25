@@ -5,7 +5,7 @@ import requests
 from time import sleep
 
 """
-Pull a csv of of dividend data from Yahoo Finance API
+Handle dumping database to csv and rebuilding database from csv
 """
 
 
