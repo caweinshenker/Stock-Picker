@@ -1,12 +1,13 @@
 from math import ceil
 
+'''Paginates stock index page'''
 
 class Pagination(object):
 	
 	def __init_(self, page, per_page, total_count):
 		self.page = page
 		self.per_page = per_page
-		self. total_count = total_count
+		self.total_count = total_count
 
 	@property
 	def pages(self):

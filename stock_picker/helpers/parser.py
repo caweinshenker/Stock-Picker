@@ -21,6 +21,7 @@ class Parser:
 		self.investment = investment
 		self.start_date = start_date
 		self.end_date = end_date
+		#optional for alternate parsing algorithm:
 		#self.tickerDict = self.__parse_text_to_tickerDict()
 		#self.proportionate_list = self.__build_proportionate_list()
 		self.start_value = 0
@@ -42,7 +43,7 @@ class Parser:
 		trie = SortedStringTrie.fromkeys(tickerList, 0)
 		return trie
 	
-	def __parse_text(self): 
+	def __parse_text_to_tickerDict(self): 
 		'''Read the text line by line. Construct a dictionary tracking ticker occurrences in the text.'''
 		tickerDict = {} 
 		with open(self.text, "r") as text:
@@ -82,7 +83,7 @@ class Parser:
 		return tickerDict
 	
 	def __parse_text(self):
-		'''Read the text line by line. Try to construct vali tickers out of line of text.
+		'''Read the text line by line. Try to construct valid tickers out of lines of text.
                    Buy those tickers until the end of the text is reached, or until money runs out.
                    Return a dictionary of purchased tickers and relevant information'''
 		portfolio = {}
@@ -230,10 +231,3 @@ class Parser:
 				date_range.remove(date) 
 		return value_at_date		
 		
-'''
-def main():
-	p = Parser("../uploads/Donald-Trump-Art-of-the-Deal.txt", 100000, "2010-05-05", "2011-05-05")
-	print(p.portfolio)
-#	print(p.portfolio_growth)
-	
-main()	 '''		

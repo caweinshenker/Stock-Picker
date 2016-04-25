@@ -8,3 +8,84 @@ Traceback (most recent call last):
   File "dividend_seed.py", line 58, in main
     print("Complete: " + str(argv[1]) + " " +  str(argv[2]))
 IndexError: list index out of range
+Traceback (most recent call last):
+  File "price_seed.py", line 136, in main
+    conn = psycopg2.connect(database = argv[1], user = argv[2], password = getpass.getpass())
+  File "/usr/lib64/python3.4/site-packages/psycopg2/__init__.py", line 164, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, async=async)
+psycopg2.OperationalError: FATAL:  password authentication failed for user "2016-04-04"
+
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "price_seed.py", line 149, in <module>
+    main(sys.argv)
+  File "price_seed.py", line 137, in main
+    except StandardError as e:
+NameError: name 'StandardError' is not defined
+Traceback (most recent call last):
+  File "price_seed.py", line 136, in main
+    conn = psycopg2.connect(database = argv[1], user = argv[2], password = getpass.getpass())
+  File "/usr/lib64/python3.4/getpass.py", line 78, in unix_getpass
+    passwd = _raw_input(prompt, stream, input=input)
+  File "/usr/lib64/python3.4/getpass.py", line 147, in _raw_input
+    line = input.readline()
+KeyboardInterrupt
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "price_seed.py", line 149, in <module>
+    main(sys.argv)
+  File "price_seed.py", line 137, in main
+    except StandardError as e:
+NameError: name 'StandardError' is not defined
+Traceback (most recent call last):
+  File "price_seed.py", line 136, in main
+    conn = psycopg2.connect(database = argv[1], user = argv[2], password = getpass.getpass())
+  File "/usr/lib64/python3.4/site-packages/psycopg2/__init__.py", line 164, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, async=async)
+psycopg2.OperationalError: FATAL:  password authentication failed for user "2016-04-04"
+
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "price_seed.py", line 149, in <module>
+    main(sys.argv)
+  File "price_seed.py", line 137, in main
+    except StandardError as e:
+NameError: name 'StandardError' is not defined
+Traceback (most recent call last):
+  File "price_seed.py", line 136, in main
+    conn = psycopg2.connect(database = argv[1], user = argv[2], password = getpass.getpass())
+  File "/usr/lib64/python3.4/getpass.py", line 78, in unix_getpass
+    passwd = _raw_input(prompt, stream, input=input)
+  File "/usr/lib64/python3.4/getpass.py", line 147, in _raw_input
+    line = input.readline()
+KeyboardInterrupt
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "price_seed.py", line 149, in <module>
+    main(sys.argv)
+  File "price_seed.py", line 137, in main
+    except StandardError as e:
+NameError: name 'StandardError' is not defined
+Traceback (most recent call last):
+  File "price_seed.py", line 7, in <module>
+    import yahoo_finance
+  File "/home/f85/maxmir/.local/lib/python3.4/site-packages/yahoo_finance/__init__.py", line 1, in <module>
+    import yahoo_finance.yql
+  File "/home/f85/maxmir/.local/lib/python3.4/site-packages/yahoo_finance/yql.py", line 37, in <module>
+    from http.client import HTTPConnection
+  File "/usr/lib64/python3.4/http/client.py", line 1186, in <module>
+    import ssl
+  File "/usr/lib64/python3.4/ssl.py", line 312, in <module>
+    class _ASN1Object(namedtuple("_ASN1Object", "nid shortname longname oid")):
+  File "/usr/lib64/python3.4/collections/__init__.py", line 366, in namedtuple
+    exec(class_definition, namespace)
+  File "<string>", line 1, in <module>
+KeyboardInterrupt

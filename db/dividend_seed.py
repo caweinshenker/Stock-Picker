@@ -7,9 +7,9 @@ import getpass
 import sys
 import csv
 """
-This file seeds the database with data from dividend data from the Quandl API
-
-UPDATED: 2013-04-04 2016-04-04
+This file seeds the database with dividend data obtained with get_dividend_csv. Then, it parses the .csv file and adds it to a list.
+Finally, list information is added to the database. Run it with commandline argv[1] = database name and
+argv[2] = username for database
 """
 
 def parse_dividend_csv(filename):
@@ -29,6 +29,7 @@ def parse_dividend_csv(filename):
 	return dividend_data
 
 def input_data_to_database(dividend_data, cur, conn):
+	''' put data from our generated list into the database '''
 	for entry in dividend_data:
 		SQL = "INSERT INTO stock_dividends(ticker, ddate, price) VALUES (%s, %s, %s)"
 		execute(cur, conn, entry, SQL)
@@ -44,9 +45,8 @@ def execute(cur, conn, data, SQL):
 		pass
 
 def main(argv):
-	
 	try:
-		conn = psycopg2.connect(database = "caweinsh_sp3", user = "caweinsh", password = getpass.getpass())
+		conn = psycopg2.connect(database = argv[1], user = argv[2], password = getpass.getpass())
 	except StandardError as e:
 		print(str(e))
 		exit

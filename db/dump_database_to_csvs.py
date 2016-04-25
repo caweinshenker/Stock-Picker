@@ -7,9 +7,12 @@ import getpass
 
 def main(argv):
 
+	assert(len(argv) == 3), "Specify database and user name. Example: python dump_database_to_csvs.py DATABASENAME USERNAME"
+
 	dbName = argv[1]
+	userName = argv[2]
 	try:
-		conn = psycopg2.connect(database = dbName, user = "maxmir", password = getpass.getpass())
+		conn = psycopg2.connect(database = dbName, user = userName, password = getpass.getpass())
 	except StandardError as e:
 		print(str(e))
 		exit
@@ -26,7 +29,7 @@ def main(argv):
 
 	stockData = cur.fetchall()
 	writeFileName = "csvs/stock_prices.csv"
-	with open(writeFileName, 'w', newline='') as csvfile:
+	with open(writeFileName, 'w') as csvfile:
 		csvwriter = csv.writer(csvfile, delimiter=' ', quotechar='|', quoting=csv.QUOTE_MINIMAL)
 		for entry in stockData:
 			csvwriter.writerow([entry[0], entry[1], entry[2], entry[3], entry[4], entry[5]])
@@ -42,7 +45,7 @@ def main(argv):
 
 	stockData = cur.fetchall()
 	writeFileName = "csvs/stock_volumes.csv"		
-	with open(writeFileName, 'w', newline='') as csvfile:
+	with open(writeFileName, 'w') as csvfile:
 		csvwriter = csv.writer(csvfile, delimiter=' ', quotechar='|', quoting=csv.QUOTE_MINIMAL)
 		for entry in stockData:
 			csvwriter.writerow([entry[0], entry[1], entry[2]])
@@ -58,7 +61,7 @@ def main(argv):
 
 	stockData = cur.fetchall()
 	writeFileName = "csvs/stocks.csv"
-	with open(writeFileName, 'w', newline='') as csvfile:
+	with open(writeFileName, 'w') as csvfile:
 		csvwriter = csv.writer(csvfile, delimiter=' ', quotechar='|', quoting=csv.QUOTE_MINIMAL)
 		for entry in stockData:
 			csvwriter.writerow([entry[0], entry[1], entry[2], entry[3], entry[4]])
@@ -74,7 +77,7 @@ def main(argv):
 
 	stockData = cur.fetchall()
 	writeFileName = "csvs/stock_dividends.csv"
-	with open(writeFileName, 'w', newline='') as csvfile:
+	with open(writeFileName, 'w') as csvfile:
 		csvwriter = csv.writer(csvfile, delimiter=' ', quotechar='|', quoting=csv.QUOTE_MINIMAL)
 		for entry in stockData:
 			csvwriter.writerow([entry[0], entry[1], entry[2]])
@@ -82,4 +85,4 @@ def main(argv):
 
 	cur.close()
 	conn.close()
-main(argv)
+main(sys.argv)

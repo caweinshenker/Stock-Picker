@@ -9,6 +9,8 @@ from yahoo_finance import *
 MUST RUN IN PYTHON3!!!!
 
 This file seeds the database with stock entities from csv files
+argv[1] = database name
+argv[2] = username
 """
 
 #Stocks files
@@ -92,10 +94,10 @@ def execute(cur, conn, data, SQL):
 		sys.exit(0)
 
 
-def main():
+def main(argv):
 	#Establish database connection
 	try:
-		conn = psycopg2.connect(database = "caweinsh_sp3", user = "caweinsh", password = getpass.getpass())
+		conn = psycopg2.connect(database = argv[1], user = argv[2], password = getpass.getpass())
 	except StandardError as e:
 		print(str(e))
 		sys.exit(1)
@@ -110,4 +112,4 @@ def main():
 	cur.close()	
 	conn.close()
 
-main()
+main(sys.argv)

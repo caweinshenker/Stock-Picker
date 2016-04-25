@@ -1,5 +1,7 @@
 from datetime import date, timedelta as td
 
+'''Handle manipulation of date strings to conform with postgresql requirements'''
+
 class Date_Parser:
 	
 	def __init__(self, start_date, end_date):
