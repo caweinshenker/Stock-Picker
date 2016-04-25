@@ -139,7 +139,6 @@ def pick():
 		net_change = end_value - start_value
 		stocks = parser.portfolio
 		growth = collections.OrderedDict(sorted(parser.portfolio_growth.items()))
-		#growth = parser.portfolio_growth.items()
 		growth_array = []
 		for key, value in growth.items():
 			date_js = int(time.mktime(key.timetuple())) * 1000

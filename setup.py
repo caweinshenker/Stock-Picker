@@ -4,7 +4,7 @@ import sys
 """
 NOTE: this will take a LONG time, but not as long as make-all.py
 Populate the database from valid /csvs/ to build a full stock-picker database.
-argv[1] = database name
+argv[1] = database name (MUST BE A NEW DATABASE!)
 argv[2] = username
 """
 
@@ -14,6 +14,7 @@ def main(argv):
 
 	print("Installing requisite dependencies")
 	os.system("chmod u+x install.sh")
+	os.system("./install.sh")
 
 	print('Initializing database construction and population')
 	print('Initializing database "' + argv[1] + '" for user: ' + argv[2])

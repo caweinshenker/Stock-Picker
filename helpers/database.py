@@ -6,9 +6,9 @@ import getpass
 
 class Db():
 
-	def __init__(self):
+	def __init__(self, connectionString = 'dbname = caweinsh_sp3 user=caweinsh password=f6nt0d host=localhost'):
 		'''init with default connection parameters'''
-		self.connectionString = 'dbname = caweinsh_sp3 user=caweinsh password=f6nt0d host=localhost'
+		self.connectionString = connectionString
 		self.conn = self.__init_db()
 		self.cur = self.__connect_db()
 					

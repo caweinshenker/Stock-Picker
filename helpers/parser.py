@@ -100,7 +100,6 @@ class Parser:
 					line = line.upper()
 					testTicker = curTicker
 					while((testTicker in self.trie) & (lindex+1 < len(line))):
-						print(testTicker)
 						curTicker = testTicker
 						lindex += 1
 						testTicker = testTicker + line[lindex]
@@ -130,11 +129,9 @@ class Parser:
 								budget = budget - sellPrice
 							if(curTicker in portfolio.keys()):
 								portfolio[curTicker][4] += 1
-								print(portfolio[curTicker])
 							else:
 								portfolio[curTicker] = [self.start_date, self.end_date, float(buyPrice), float(sellPrice), 1]
 					tickerTestIndex += 1
-					print(tickerTestIndex)
 		return portfolio
 					
 				
