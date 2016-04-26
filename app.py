@@ -1,3 +1,11 @@
+
+"""
+This is the main routes code for the app
+Each @app.route entry corresponds to an accessible link on the site
+Running this code basically opens a listener
+The routes should be self explanatory re. the app
+"""
+
 #!flask/bin/python
 #all the imports
 from flask import Flask, g, request, session, redirect, url_for, abort, render_template, flash, send_file
@@ -20,7 +28,6 @@ from forms  import UploadForm, PickForm, StockForm, SearchForm
 from pagination import Pagination
 from database import Db
 from nyt_parser import NYT_Parser
-
 
 #configuration
 app = Flask(__name__)

@@ -14,11 +14,11 @@ def main(argv):
 		conn = psycopg2.connect(database = dbName, user = userName, password = getpass.getpass())
 	except StandardError as e:
 		print(str(e))
-		exit
+		sys.exit(0)
 	cur = conn.cursor()
 
 	#create stocks
-	readFileName = "csvs/stocks.csv"
+	readFileName = "/csvs/stocks.csv"
 	with open(readFileName, 'r') as csvfile:
 		csvreader = csv.reader(csvfile, delimiter=' ', quotechar='|', quoting=csv.QUOTE_MINIMAL)
 		SQLQuery = "INSERT INTO stocks(ticker, stock_index, company_name, start_date, end_date) VALUES (%s, %s, %s, %s, %s);"
@@ -45,7 +45,7 @@ def main(argv):
 				break
 	conn.commit()
 	#create stock_prices
-	readFileName = "csvs/stock_prices.csv"
+	readFileName = "/csvs/stock_prices.csv"
 	with open(readFileName, 'r') as csvfile:
 		csvreader = csv.reader(csvfile, delimiter=' ', quotechar='|', quoting=csv.QUOTE_MINIMAL)
 		for line in csvreader:
@@ -59,7 +59,7 @@ def main(argv):
 
 	conn.commit()
 	#create stock_volumes
-	readFileName = "csvs/stock_volumes.csv"
+	readFileName = "/csvs/stock_volumes.csv"
 	with open(readFileName, 'r') as csvfile:
 		csvreader = csv.reader(csvfile, delimiter=' ', quotechar='|', quoting=csv.QUOTE_MINIMAL)
 		for line in csvreader:
@@ -72,7 +72,7 @@ def main(argv):
 				continue
 	conn.commit()
 	#create stock_dividends
-	readFileName = "csvs/stock_dividends.csv"
+	readFileName = "/csvs/stock_dividends.csv"
 	with open(readFileName, 'r') as csvfile:
 		csvreader = csv.reader(csvfile, delimiter=' ', quotechar='|', quoting=csv.QUOTE_MINIMAL)
 		for line in csvreader:

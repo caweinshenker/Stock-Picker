@@ -22,6 +22,9 @@ echo Installing nytimesarticle API
 pip install nytimesarticle --user
 echo Installing google-api-python-client
 pip install google-api-python-client --user
+echo Installing Google-Search-API
 pip install Google-Search-API --user
+echo Installing pytrie
+pip install pytrie --user
 echo Augmenting PYTHONPATH to support installations
 echo 'export PYTHONPATH="${PYTHONPATH}:~/.local/lib/python3.4/site-packages"' >> ~/.bashrc
